@@ -199,7 +199,7 @@ namespace Microsoft.Xna.Framework.Graphics
             _targetBlendState[2] = new TargetBlendState(this);
             _targetBlendState[3] = new TargetBlendState(this);
 
-			_blendFactor = Color.White;
+            _blendFactor = Color.White;
             _multiSampleMask = Int32.MaxValue;
             _independentBlendEnable = false;
         }
@@ -236,12 +236,12 @@ namespace Microsoft.Xna.Framework.Graphics
             AlphaBlend = new BlendState("BlendState.AlphaBlend", Blend.One, Blend.InverseSourceAlpha);
             NonPremultiplied = new BlendState("BlendState.NonPremultiplied", Blend.SourceAlpha, Blend.InverseSourceAlpha);
             Opaque = new BlendState("BlendState.Opaque", Blend.One, Blend.Zero);
-		}
+        }
 
-	    internal BlendState Clone()
-	    {
-	        return new BlendState(this);
-	    }
+        internal BlendState Clone()
+        {
+            return new BlendState(this);
+        }
 
         partial void PlatformDispose();
 
@@ -249,8 +249,13 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             if (!IsDisposed)
             {
-                for (int i = 0; i < _targetBlendState.Length; ++i)
-                    _targetBlendState[i] = null;
+                // Sipak workaround for accessing referenced objects during finalization,
+                // which is wrong with how Mono.Switch configures the garbage collector.
+                if (disposing)
+                {
+                    for (int i = 0; i < _targetBlendState.Length; ++i)
+                        _targetBlendState[i] = null;
+                }
 
                 PlatformDispose();
             }
