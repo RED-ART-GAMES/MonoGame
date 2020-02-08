@@ -433,7 +433,13 @@ namespace Microsoft.Xna.Framework
 
             // Advance the accumulated elapsed time.
             var currentTicks = _gameTimer.Elapsed.Ticks;
-            _accumulatedElapsedTime += TimeSpan.FromTicks(currentTicks - _previousTicks);
+            long platformFrameTicks = Platform.GetLastFrameTicks();
+            if (platformFrameTicks >= 0) {
+                _accumulatedElapsedTime += TimeSpan.FromTicks(platformFrameTicks);
+            }
+            else {
+                _accumulatedElapsedTime += TimeSpan.FromTicks(currentTicks - _previousTicks);
+            }
             _previousTicks = currentTicks;
 
             // If we're in the fixed timestep mode and not enough time has elapsed

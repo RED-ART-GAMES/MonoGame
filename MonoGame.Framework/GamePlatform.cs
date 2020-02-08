@@ -241,6 +241,13 @@ namespace Microsoft.Xna.Framework
         /// </summary>
         public virtual void ResetElapsedTime() {}
 
+        /// <summary>
+        /// Gets last frame duration in ticks, or -1 if not available on the platform and standard
+        /// timer measurements should be used instead.
+        /// </summary>
+        public virtual long GetLastFrameTicks() { return -1; }
+
+
         public virtual void Present() { }
 
         protected virtual void OnIsMouseVisibleChanged() {}
