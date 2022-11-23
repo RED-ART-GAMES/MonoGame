@@ -7,3 +7,6 @@
 [submodule "ThirdParty/SDL_GameControllerDB"]
 	path = ThirdParty/SDL_GameControllerDB
 	url = https://github.com/gabomdq/SDL_GameControllerDB.git
+[submodule "Switch"]
+	path = Switch
+	url = git@github.com:RED-ART-GAMES/MonoGame.Switch_Stouie.git
