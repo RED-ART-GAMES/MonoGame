@@ -18,11 +18,6 @@ namespace Microsoft.Xna.Framework.Media
         private static bool _isShuffled;
 		private static readonly MediaQueue _queue = new MediaQueue();
 
-#if WINDOWS_PHONE
-        // PlayingInternal should default to true to be to work with the user's default playing music
-        private static bool playingInternal = true;
-#endif
-
 		public static event EventHandler<EventArgs> ActiveSongChanged;
         public static event EventHandler<EventArgs> MediaStateChanged;
 
@@ -71,11 +66,7 @@ namespace Microsoft.Xna.Framework.Media
                 if (_state != value)
                 {
                     _state = value;
-#if WINDOWS_PHONE
-                    // Playing music using XNA, we shouldn't fire extra state changed events
-                    if (!playingInternal)
-#endif
-                        EventHelpers.Raise(null, MediaStateChanged, EventArgs.Empty);
+                    EventHelpers.Raise(null, MediaStateChanged, EventArgs.Empty);
                 }
             }
         }
@@ -127,6 +118,9 @@ namespace Microsoft.Xna.Framework.Media
         /// </summary>
         public static void Play(Song song, TimeSpan? startPosition)
         {
+            if (song == null)
+                throw new ArgumentNullException("song", "This method does not accept null for this parameter.");
+
             var previousSong = _queue.Count > 0 ? _queue[0] : null;
             _queue.Clear();
             _numSongsInQueuePlayed = 0;
@@ -141,6 +135,9 @@ namespace Microsoft.Xna.Framework.Media
 
 		public static void Play(SongCollection collection, int index = 0)
 		{
+            if (collection == null)
+                throw new ArgumentNullException("collection", "This method does not accept null for this parameter.");
+
             _queue.Clear();
             _numSongsInQueuePlayed = 0;
 
@@ -177,17 +174,6 @@ namespace Microsoft.Xna.Framework.Media
 				}
 			}
 
-#if WINDOWS_PHONE
-            if (IsRepeating)
-            {
-                System.Windows.Deployment.Current.Dispatcher.BeginInvoke(() =>
-                {
-                    _mediaElement.Position = TimeSpan.Zero;
-                    _mediaElement.Play();
-                });
-            }
-#endif
-			
 			MoveNext();
 		}
 
@@ -243,4 +229,3 @@ namespace Microsoft.Xna.Framework.Media
 		}
     }
 }
-

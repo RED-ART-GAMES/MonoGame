@@ -5,7 +5,8 @@
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
-using Microsoft.Xna.Framework.Utilities;
+using Microsoft.Xna.Framework.Graphics.PackedVector;
+using MonoGame.Framework.Utilities;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
@@ -35,6 +36,7 @@ namespace Microsoft.Xna.Framework.Graphics
 				return new Rectangle(0, 0, this.width, this.height);
             }
         }
+
         /// <summary>
         /// Creates a new texture of the given size
         /// </summary>
@@ -45,6 +47,7 @@ namespace Microsoft.Xna.Framework.Graphics
             : this(graphicsDevice, width, height, false, SurfaceFormat.Color, SurfaceType.Texture, false, 1)
         {
         }
+
         /// <summary>
         /// Creates a new texture of a given size with a surface format and optional mipmaps 
         /// </summary>
@@ -57,6 +60,7 @@ namespace Microsoft.Xna.Framework.Graphics
             : this(graphicsDevice, width, height, mipmap, format, SurfaceType.Texture, false, 1)
         {
         }
+
         /// <summary>
         /// Creates a new texture array of a given size with a surface format and optional mipmaps.
         /// Throws ArgumentException if the current GraphicsDevice can't work with texture arrays
@@ -115,6 +119,9 @@ namespace Microsoft.Xna.Framework.Graphics
             PlatformConstruct(width, height, mipmap, format, type, shared);
         }
 
+        /// <summary>
+        /// Gets the width of the texture in pixels.
+        /// </summary>
         public int Width
         {
             get
@@ -123,6 +130,9 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
+        /// <summary>
+        /// Gets the height of the texture in pixels.
+        /// </summary>
         public int Height
         {
             get
@@ -130,6 +140,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 return height;
             }
         }
+
         /// <summary>
         /// Changes the pixels of the texture
         /// Throws ArgumentNullException if data is null
@@ -148,6 +159,7 @@ namespace Microsoft.Xna.Framework.Graphics
             ValidateParams(level, arraySlice, rect, data, startIndex, elementCount, out checkedRect);
             PlatformSetData(level, arraySlice, checkedRect, data, startIndex, elementCount);
         }
+
         /// <summary>
         /// Changes the pixels of the texture
         /// </summary>
@@ -161,8 +173,12 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             Rectangle checkedRect;
             ValidateParams(level, 0, rect, data, startIndex, elementCount, out checkedRect);
-            PlatformSetData(level, 0, checkedRect, data, startIndex, elementCount);
+            if (rect.HasValue)
+                PlatformSetData(level, 0, checkedRect, data, startIndex, elementCount);
+            else
+                PlatformSetData(level, data, startIndex, elementCount);
         }
+
         /// <summary>
         /// Changes the texture's pixels
         /// </summary>
@@ -176,6 +192,7 @@ namespace Microsoft.Xna.Framework.Graphics
             ValidateParams(0, 0, null, data, startIndex, elementCount, out checkedRect);
             PlatformSetData(0, data, startIndex, elementCount);
         }
+
 		/// <summary>
         /// Changes the texture's pixels
         /// </summary>
@@ -187,6 +204,7 @@ namespace Microsoft.Xna.Framework.Graphics
             ValidateParams(0, 0, null, data, 0, data.Length, out checkedRect);
             PlatformSetData(0, data, 0, data.Length);
         }
+
         /// <summary>
         /// Retrieves the contents of the texture
         /// Throws ArgumentException if data is null, data.length is too short or
@@ -205,6 +223,7 @@ namespace Microsoft.Xna.Framework.Graphics
             ValidateParams(level, arraySlice, rect, data, startIndex, elementCount, out checkedRect);
             PlatformGetData(level, arraySlice, checkedRect, data, startIndex, elementCount);
         }
+
         /// <summary>
         /// Retrieves the contents of the texture
         /// Throws ArgumentException if data is null, data.length is too short or
@@ -220,6 +239,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             this.GetData(level, 0, rect, data, startIndex, elementCount);
         }
+
         /// <summary>
         /// Retrieves the contents of the texture
         /// Throws ArgumentException if data is null, data.length is too short or
@@ -233,6 +253,7 @@ namespace Microsoft.Xna.Framework.Graphics
 		{
 			this.GetData(0, null, data, startIndex, elementCount);
 		}
+
         /// <summary>
         /// Retrieves the contents of the texture
         /// Throws ArgumentException if data is null, data.length is too short or
@@ -246,19 +267,57 @@ namespace Microsoft.Xna.Framework.Graphics
 		        throw new ArgumentNullException("data");
 			this.GetData(0, null, data, 0, data.Length);
 		}
-		
+
         /// <summary>
-        /// Creates a Texture2D from a stream, supported formats bmp, gif, jpg, png, tif and dds (only for simple textures).
+        /// Creates a <see cref="Texture2D"/> from a file, supported formats bmp, gif, jpg, png, tif and dds (only for simple textures).
         /// May work with other formats, but will not work with tga files.
+        /// This internally calls <see cref="FromStream"/>.
         /// </summary>
-        /// <param name="graphicsDevice">The graphics device where the texture will be created.</param>
-        /// <param name="stream">The stream from which to read the image data.</param>
-        /// <returns>The <see cref="SurfaceFormat.Color"/> texture created from the image stream.</returns>
+        /// <param name="graphicsDevice">The graphics device to use to create the texture.</param>
+        /// <param name="path">The path to the image file.</param>
+        /// <param name="colorProcessor">Function that is applied to the data in RGBA format before the texture is sent to video memory. Could be null(no processing then).</param>
+        /// <returns>The <see cref="Texture2D"/> created from the given file.</returns>
+        /// <remarks>Note that different image decoders may generate slight differences between platforms, but perceptually 
+        /// the images should be identical.
+        /// </remarks>
+        public static Texture2D FromFile(GraphicsDevice graphicsDevice, string path, Action<byte[]> colorProcessor)
+        {
+            if (path == null)
+                throw new ArgumentNullException("path");
+
+            using (var stream = File.OpenRead(path))
+                return FromStream(graphicsDevice, stream, colorProcessor);
+        }
+
+        /// <summary>
+        /// Creates a <see cref="Texture2D"/> from a file, supported formats bmp, gif, jpg, png, tif and dds (only for simple textures).
+        /// May work with other formats, but will not work with tga files.
+        /// This internally calls <see cref="FromStream"/>.
+        /// </summary>
+        /// <param name="graphicsDevice">The graphics device to use to create the texture.</param>
+        /// <param name="path">The path to the image file.</param>
+        /// <returns>The <see cref="Texture2D"/> created from the given file.</returns>
         /// <remarks>Note that different image decoders may generate slight differences between platforms, but perceptually 
         /// the images should be identical.  This call does not premultiply the image alpha, but areas of zero alpha will
         /// result in black color data.
         /// </remarks>
-        public static Texture2D FromStream(GraphicsDevice graphicsDevice, Stream stream)
+        public static Texture2D FromFile(GraphicsDevice graphicsDevice, string path)
+        {
+            return FromFile(graphicsDevice, path, DefaultColorProcessors.ZeroTransparentPixels);
+        }
+
+        /// <summary>
+        /// Creates a <see cref="Texture2D"/> from a stream, supported formats bmp, gif, jpg, png, tif and dds (only for simple textures).
+        /// May work with other formats, but will not work with tga files.
+        /// </summary>
+        /// <param name="graphicsDevice">The graphics device to use to create the texture.</param>
+        /// <param name="stream">The stream from which to read the image data.</param>
+        /// <param name="colorProcessor">Function that is applied to the data in RGBA format before the texture is sent to video memory. Could be null(no processing then).</param>
+        /// <returns>The <see cref="Texture2D"/> created from the image stream.</returns>
+        /// <remarks>Note that different image decoders may generate slight differences between platforms, but perceptually 
+        /// the images should be identical.
+        /// </remarks>
+        public static Texture2D FromStream(GraphicsDevice graphicsDevice, Stream stream, Action<byte[]> colorProcessor)
 		{
             if (graphicsDevice == null)
                 throw new ArgumentNullException("graphicsDevice");
@@ -267,12 +326,30 @@ namespace Microsoft.Xna.Framework.Graphics
 
             try
             {
-                return PlatformFromStream(graphicsDevice, stream);
-            }catch(Exception e)
+                return PlatformFromStream(graphicsDevice, stream, colorProcessor);
+            }
+            catch(Exception e)
             {
                 throw new InvalidOperationException("This image format is not supported", e);
             }
         }
+
+        /// <summary>
+        /// Creates a <see cref="Texture2D"/> from a stream, supported formats bmp, gif, jpg, png, tif and dds (only for simple textures).
+        /// May work with other formats, but will not work with tga files.
+        /// </summary>
+        /// <param name="graphicsDevice">The graphics device to use to create the texture.</param>
+        /// <param name="stream">The stream from which to read the image data.</param>
+        /// <returns>The <see cref="Texture2D"/> created from the image stream.</returns>
+        /// <remarks>Note that different image decoders may generate slight differences between platforms, but perceptually 
+        /// the images should be identical.  This call does not premultiply the image alpha, but areas of zero alpha will
+        /// result in black color data.
+        /// </remarks>
+        public static Texture2D FromStream(GraphicsDevice graphicsDevice, Stream stream)
+        {
+            return FromStream(graphicsDevice, stream, DefaultColorProcessors.ZeroTransparentPixels);
+        }
+
         /// <summary>
         /// Converts the texture to a JPG image
         /// </summary>
@@ -283,6 +360,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             PlatformSaveAsJpeg(stream, width, height);
         }
+
         /// <summary>
         /// Converts the texture to a PNG image
         /// </summary>
@@ -318,11 +396,11 @@ namespace Microsoft.Xna.Framework.Graphics
             var textureBounds = new Rectangle(0, 0, Math.Max(width >> level, 1), Math.Max(height >> level, 1));
             checkedRect = rect ?? textureBounds;
             if (level < 0 || level >= LevelCount)
-                throw new ArgumentException("level must be smaller than the number of levels in this texture.");
+                throw new ArgumentException("level must be smaller than the number of levels in this texture.", "level");
             if (arraySlice > 0 && !GraphicsDevice.GraphicsCapabilities.SupportsTextureArrays)
                 throw new ArgumentException("Texture arrays are not supported on this graphics device", "arraySlice");
             if (arraySlice < 0 || arraySlice >= ArraySize)
-                throw new ArgumentException("arraySlice must be smaller than the ArraySize of this texture and larger than 0.");
+                throw new ArgumentException("arraySlice must be smaller than the ArraySize of this texture and larger than 0.", "arraySlice");
             if (!textureBounds.Contains(checkedRect) || checkedRect.Width <= 0 || checkedRect.Height <= 0)
                 throw new ArgumentException("Rectangle must be inside the texture bounds", "rect");
             if (data == null)
@@ -339,20 +417,35 @@ namespace Microsoft.Xna.Framework.Graphics
             int dataByteSize;
             if (Format.IsCompressedFormat())
             {
-                // round x and y down to next multiple of four; width and height up to next multiple of four
-                var roundedWidth = (checkedRect.Width + 3) & ~0x3;
-                var roundedHeight = (checkedRect.Height + 3) & ~0x3;
-                checkedRect = new Rectangle(checkedRect.X & ~0x3, checkedRect.Y & ~0x3,
+                int blockWidth, blockHeight;
+                Format.GetBlockSize(out blockWidth, out blockHeight);
+                int blockWidthMinusOne = blockWidth - 1;
+                int blockHeightMinusOne = blockHeight - 1;
+                // round x and y down to next multiple of block size; width and height up to next multiple of block size
+                var roundedWidth = (checkedRect.Width + blockWidthMinusOne) & ~blockWidthMinusOne;
+                var roundedHeight = (checkedRect.Height + blockHeightMinusOne) & ~blockHeightMinusOne;
+                checkedRect = new Rectangle(checkedRect.X & ~blockWidthMinusOne, checkedRect.Y & ~blockHeightMinusOne,
 #if OPENGL
                     // OpenGL only: The last two mip levels require the width and height to be
                     // passed as 2x2 and 1x1, but there needs to be enough data passed to occupy
-                    // a 4x4 block.
-                    checkedRect.Width < 4 && textureBounds.Width < 4 ? textureBounds.Width : roundedWidth,
-                    checkedRect.Height < 4 && textureBounds.Height < 4 ? textureBounds.Height : roundedHeight);
+                    // a full block.
+                    checkedRect.Width < blockWidth && textureBounds.Width < blockWidth ? textureBounds.Width : roundedWidth,
+                    checkedRect.Height < blockHeight && textureBounds.Height < blockHeight ? textureBounds.Height : roundedHeight);
 #else
                     roundedWidth, roundedHeight);
 #endif
-                dataByteSize = roundedWidth * roundedHeight * fSize / 16;
+                if (Format == SurfaceFormat.RgbPvrtc2Bpp || Format == SurfaceFormat.RgbaPvrtc2Bpp)
+                {
+                    dataByteSize = (Math.Max(checkedRect.Width, 16) * Math.Max(checkedRect.Height, 8) * 2 + 7) / 8;
+                }
+                else if (Format == SurfaceFormat.RgbPvrtc4Bpp || Format == SurfaceFormat.RgbaPvrtc4Bpp)
+                {
+                    dataByteSize = (Math.Max(checkedRect.Width, 8) * Math.Max(checkedRect.Height, 8) * 4 + 7) / 8;
+                }
+                else
+                {
+                    dataByteSize = roundedWidth * roundedHeight * fSize / (blockWidth * blockHeight);
+                }
             }
             else
             {
@@ -363,5 +456,166 @@ namespace Microsoft.Xna.Framework.Graphics
                                             "elementCount * sizeof(T) is {0}, but data size is {1}.",
                                             elementCount * tSize, dataByteSize), "elementCount");
         }
-	}
+
+        internal Color[] GetColorData()
+        {
+            int colorDataLength = Width * Height;
+            var colorData = new Color[colorDataLength];
+
+            switch (Format)
+            {
+                case SurfaceFormat.Single:
+                    var floatData = new float[colorDataLength];
+                    GetData(floatData);
+
+                    for (int i = 0; i < colorDataLength; i++)
+                    {
+                        float brightness = floatData[i];
+                        // Export as a greyscale image.
+                        colorData[i] = new Color(brightness, brightness, brightness);
+                    }
+                    break;
+
+                case SurfaceFormat.Color:
+                    GetData(colorData);
+                    break;
+
+                case SurfaceFormat.Alpha8:
+                    var alpha8Data = new Alpha8[colorDataLength];
+                    GetData(alpha8Data);
+
+                    for (int i = 0; i < colorDataLength; i++)
+                    {
+                        colorData[i] = new Color(alpha8Data[i].ToVector4());
+                    }
+
+                    break;
+
+                case SurfaceFormat.Bgr565:
+                    var bgr565Data = new Bgr565[colorDataLength];
+                    GetData(bgr565Data);
+
+                    for (int i = 0; i < colorDataLength; i++)
+                    {
+                        colorData[i] = new Color(bgr565Data[i].ToVector4());
+                    }
+
+                    break;
+
+                case SurfaceFormat.Bgra4444:
+                    var bgra4444Data = new Bgra4444[colorDataLength];
+                    GetData(bgra4444Data);
+
+                    for (int i = 0; i < colorDataLength; i++)
+                    {
+                        colorData[i] = new Color(bgra4444Data[i].ToVector4());
+                    }
+
+                    break;
+
+                case SurfaceFormat.Bgra5551:
+                    var bgra5551Data = new Bgra5551[colorDataLength];
+                    GetData(bgra5551Data);
+
+                    for (int i = 0; i < colorDataLength; i++)
+                    {
+                        colorData[i] = new Color(bgra5551Data[i].ToVector4());
+                    }
+                    break;
+
+                case SurfaceFormat.HalfSingle:
+                    var halfSingleData = new HalfSingle[colorDataLength];
+                    GetData(halfSingleData);
+
+                    for (int i = 0; i < colorDataLength; i++)
+                    {
+                        colorData[i] = new Color(halfSingleData[i].ToVector4());
+                    }
+
+                    break;
+
+                case SurfaceFormat.HalfVector2:
+                    var halfVector2Data = new HalfVector2[colorDataLength];
+                    GetData(halfVector2Data);
+
+                    for (int i = 0; i < colorDataLength; i++)
+                    {
+                        colorData[i] = new Color(halfVector2Data[i].ToVector4());
+                    }
+
+                    break;
+
+                case SurfaceFormat.HalfVector4:
+                    var halfVector4Data = new HalfVector4[colorDataLength];
+                    GetData(halfVector4Data);
+
+                    for (int i = 0; i < colorDataLength; i++)
+                    {
+                        colorData[i] = new Color(halfVector4Data[i].ToVector4());
+                    }
+
+                    break;
+
+                case SurfaceFormat.NormalizedByte2:
+                    var normalizedByte2Data = new NormalizedByte2[colorDataLength];
+                    GetData(normalizedByte2Data);
+
+                    for (int i = 0; i < colorDataLength; i++)
+                    {
+                        colorData[i] = new Color(normalizedByte2Data[i].ToVector4());
+                    }
+
+                    break;
+
+                case SurfaceFormat.NormalizedByte4:
+                    var normalizedByte4Data = new NormalizedByte4[colorDataLength];
+                    GetData(normalizedByte4Data);
+
+                    for (int i = 0; i < colorDataLength; i++)
+                    {
+                        colorData[i] = new Color(normalizedByte4Data[i].ToVector4());
+                    }
+
+                    break;
+
+                case SurfaceFormat.Rg32:
+                    var rg32Data = new Rg32[colorDataLength];
+                    GetData(rg32Data);
+
+                    for (int i = 0; i < colorDataLength; i++)
+                    {
+                        colorData[i] = new Color(rg32Data[i].ToVector4());
+                    }
+
+                    break;
+
+                case SurfaceFormat.Rgba64:
+                    var rgba64Data = new Rgba64[colorDataLength];
+                    GetData(rgba64Data);
+
+                    for (int i = 0; i < colorDataLength; i++)
+                    {
+                        colorData[i] = new Color(rgba64Data[i].ToVector4());
+                    }
+
+                    break;
+
+                case SurfaceFormat.Rgba1010102:
+                    var rgba1010102Data = new Rgba1010102[colorDataLength];
+                    GetData(rgba1010102Data);
+
+                    for (int i = 0; i < colorDataLength; i++)
+                    {
+                        colorData[i] = new Color(rgba1010102Data[i].ToVector4());
+                    }
+
+                    break;
+
+                default:
+                    throw new Exception("Texture surface format not supported");
+            }
+
+            return colorData;
+        }
+    }
 }

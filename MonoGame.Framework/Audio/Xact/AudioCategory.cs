@@ -124,11 +124,21 @@ namespace Microsoft.Xna.Framework.Audio
                 sound.Stop(options);
         }
 
+        /// <summary>
+        /// Set the volume for this <see cref="AudioCategory"/>.
+        /// </summary>
+        /// <param name="volume">The new volume of the category.</param>
+        /// <exception cref="ArgumentException">If the volume is less than zero.</exception>
         public void SetVolume(float volume)
         {
             if (volume < 0)
                 throw new ArgumentException("The volume must be positive.");
-            
+
+            // Updating all the sounds in a category can be
+            // very expensive... so avoid it if we can.
+            if (_volume[0] == volume)
+                return;
+
             _volume[0] = volume;
 
             foreach (var sound in _sounds)

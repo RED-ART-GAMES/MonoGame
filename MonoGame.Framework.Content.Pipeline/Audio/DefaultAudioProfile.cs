@@ -22,16 +22,17 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Audio
                     platform == TargetPlatform.Windows ||
                     platform == TargetPlatform.WindowsPhone8 ||
                     platform == TargetPlatform.WindowsStoreApp ||
-                    platform == TargetPlatform.iOS;
+                    platform == TargetPlatform.iOS ||
+                    platform == TargetPlatform.Web;
         }
 
         public override ConversionQuality ConvertAudio(TargetPlatform platform, ConversionQuality quality, AudioContent content)
         {
-            // Default to PCM data.
+            // Default to PCM data, or ADPCM if the source is ADPCM.
             var targetFormat = ConversionFormat.Pcm;
-            if (quality != ConversionQuality.Best)
+            if (quality != ConversionQuality.Best || content.Format.Format == 2 || content.Format.Format == 17)
             {
-                if (platform == TargetPlatform.iOS || platform == TargetPlatform.MacOSX)
+                if (platform == TargetPlatform.iOS || platform == TargetPlatform.MacOSX || platform == TargetPlatform.DesktopGL)
                     targetFormat = ConversionFormat.ImaAdpcm;
                 else
                     targetFormat = ConversionFormat.Adpcm;
@@ -52,6 +53,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Audio
 
             else if (platform == TargetPlatform.DesktopGL)
                 targetFormat = ConversionFormat.Vorbis;
+            else if (platform == TargetPlatform.Web)
+                targetFormat = ConversionFormat.Mp3;
 
             // Get the song output path with the target format extension.
             outputFileName = Path.ChangeExtension(outputFileName, AudioHelper.GetExtension(targetFormat));
@@ -167,10 +170,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Audio
             if (formatName == "wav")
             {
                 audioFileType = AudioFileType.Wav;
-
-                // A quirk of XNA?
-                if (bitsPerSample == 32)
-                    format = -2;
             }
             else if (formatName == "mp3")
             {
@@ -199,7 +198,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Audio
             // XNA seems to calculate the block alignment directly from 
             // the bits per sample and channel count regardless of the 
             // format of the audio data.
-            if (bitsPerSample > 0)
+            // ffprobe doesn't report blockAlign for ADPCM and we cannot calculate it like this
+            if (bitsPerSample > 0 && (format != 2 && format != 17))
                 blockAlign = (bitsPerSample * channelCount) / 8;
 
             // XNA seems to only be accurate to the millisecond.
@@ -316,8 +316,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Audio
                         // format when converting to PCM.
                         if (content.Format.BitsPerSample == 8)
                             ffmpegCodecName = "pcm_u8";
-                        else if (content.Format.BitsPerSample == 32)
-                            ffmpegCodecName = "pcm_s32le";
+                        else if (content.Format.BitsPerSample == 32 && content.Format.Format == 3)
+                            ffmpegCodecName = "pcm_f32le";
                         else
                             ffmpegCodecName = "pcm_s16le";
                         ffmpegMuxerName = "wav";
@@ -349,6 +349,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Audio
                         // Vorbis
                         ffmpegCodecName = "libvorbis";
                         ffmpegMuxerName = "ogg";
+                        //format = 0x0000; /* WAVE_FORMAT_UNKNOWN */
+                        break;
+                    case ConversionFormat.Mp3:
+                        // Vorbis
+                        ffmpegCodecName = "libmp3lame";
+                        ffmpegMuxerName = "mp3";
                         //format = 0x0000; /* WAVE_FORMAT_UNKNOWN */
                         break;
                     default:
@@ -405,14 +411,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Audio
                 byte[] data = StripRiffWaveHeader(rawData, out riffAudioFormat);
 
                 // deal with adpcm
-                if (audioFormat.Format == 2)
+                if (audioFormat.Format == 2 || audioFormat.Format == 17)
                 {
                     // riff contains correct blockAlign
                     audioFormat = riffAudioFormat;
 
                     // fix loopLength -> has to be multiple of sample per block
                     // see https://msdn.microsoft.com/de-de/library/windows/desktop/ee415711(v=vs.85).aspx
-                    ushort samplesPerBlock = (ushort)(audioFormat.BlockAlign * 2 / audioFormat.ChannelCount - 12); // from https://github.com/sharpdx/SharpDX/blob/master/Source/SharpDX/Multimedia/WaveFormatAdpcm.cs
+                    int samplesPerBlock = SampleAlignment(audioFormat);
                     loopLength = (int)(audioFormat.SampleRate * duration.TotalSeconds);
                     int remainder = loopLength % samplesPerBlock;
                     loopLength += samplesPerBlock - remainder;
@@ -426,6 +432,20 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Audio
             }
 
             return quality;
+        }
+
+        // Converts block alignment in bytes to sample alignment, primarily for compressed formats
+        // Calculation of sample alignment from http://kcat.strangesoft.net/openal-extensions/SOFT_block_alignment.txt
+        static int SampleAlignment(AudioFormat format)
+        {
+            switch (format.Format)
+            {
+                case 2:     // MS-ADPCM
+                    return (format.BlockAlign / format.ChannelCount - 7) * 2 + 2;
+                case 17:    // IMA/ADPCM
+                    return (format.BlockAlign / format.ChannelCount - 4) / 4 * 8 + 1;
+            }
+            return 0;
         }
     }
 }
