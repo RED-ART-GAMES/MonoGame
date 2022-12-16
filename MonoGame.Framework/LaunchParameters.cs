@@ -6,9 +6,6 @@ using System.Collections.Generic;
 
 namespace Microsoft.Xna.Framework
 {
-    /// <summary>
-    /// The parameters for launching a <see cref="Game"/>.
-    /// </summary>
     public class LaunchParameters : Dictionary<string, string>
     {
     }

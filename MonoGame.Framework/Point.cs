@@ -4,7 +4,6 @@
 
 using System;
 using System.Diagnostics;
-using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 
 namespace Microsoft.Xna.Framework
@@ -13,12 +12,13 @@ namespace Microsoft.Xna.Framework
     /// Describes a 2D-point.
     /// </summary>
     [DataContract]
+    [Serializable]
     [DebuggerDisplay("{DebugDisplayString,nq}")]
     public struct Point : IEquatable<Point>
     {
         #region Private Fields
 
-        private static readonly Point zeroPoint = new Point();
+        private static Point zeroPoint = new Point();
 
         #endregion
 
@@ -68,7 +68,7 @@ namespace Microsoft.Xna.Framework
         #region Constructors
 
         /// <summary>
-        /// Constructs a point with X and Y from two values.
+        /// Creates a new instance of <see cref="Point"/> struct, with the specified position.
         /// </summary>
         /// <param name="x">The x coordinate in 2d-space.</param>
         /// <param name="y">The y coordinate in 2d-space.</param>
@@ -76,16 +76,6 @@ namespace Microsoft.Xna.Framework
         {
             this.X = x;
             this.Y = y;
-        }
-
-        /// <summary>
-        /// Constructs a point with X and Y set to the same value.
-        /// </summary>
-        /// <param name="value">The x and y coordinates in 2d-space.</param>
-        public Point(int value)
-        {
-            this.X = value;
-            this.Y = value;
         }
 
         #endregion
@@ -188,14 +178,7 @@ namespace Microsoft.Xna.Framework
         /// <returns>Hash code of this <see cref="Point"/>.</returns>
         public override int GetHashCode()
         {
-            unchecked
-            {
-                var hash = 17;
-                hash = hash * 23 + X.GetHashCode();
-                hash = hash * 23 + Y.GetHashCode();
-                return hash;
-            }
-
+            return X ^ Y;
         }
 
         /// <summary>
@@ -209,24 +192,12 @@ namespace Microsoft.Xna.Framework
         }
 
         /// <summary>
-        /// Gets a <see cref="Vector2"/> representation for this object.
+        /// Gets a two-component <see cref="Vector2"/> representation for this object.
         /// </summary>
-        /// <returns>A <see cref="Vector2"/> representation for this object.</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        /// <returns>A two-component <see cref="Vector2"/> representation for this object.</returns>
         public Vector2 ToVector2()
         {
             return new Vector2(X, Y);
-        }
-
-        /// <summary>
-        /// Deconstruction method for <see cref="Point"/>.
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        public void Deconstruct(out int x, out int y)
-        {
-            x = X;
-            y = Y;
         }
 
         #endregion

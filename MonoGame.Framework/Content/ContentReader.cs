@@ -5,7 +5,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using MonoGame.Framework.Utilities;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Utilities;
 
 namespace Microsoft.Xna.Framework.Content
 {
@@ -14,6 +15,7 @@ namespace Microsoft.Xna.Framework.Content
         private ContentManager contentManager;
         private Action<IDisposable> recordDisposableObject;
         private ContentTypeReaderManager typeReaderManager;
+        private GraphicsDevice graphicsDevice;
         private string assetName;
         private List<KeyValuePair<int, Action<object>>> sharedResourceFixups;
         private ContentTypeReader[] typeReaders;
@@ -28,9 +30,18 @@ namespace Microsoft.Xna.Framework.Content
             }
         }
 
-        internal ContentReader(ContentManager manager, Stream stream, string assetName, int version, Action<IDisposable> recordDisposableObject)
+        internal GraphicsDevice GraphicsDevice
+        {
+            get
+            {
+                return this.graphicsDevice;
+            }
+        }
+
+        internal ContentReader(ContentManager manager, Stream stream, GraphicsDevice graphicsDevice, string assetName, int version, Action<IDisposable> recordDisposableObject)
             : base(stream)
         {
+            this.graphicsDevice = graphicsDevice;
             this.recordDisposableObject = recordDisposableObject;
             this.contentManager = manager;
             this.assetName = assetName;
@@ -63,19 +74,6 @@ namespace Microsoft.Xna.Framework.Content
             // Read shared resources
             ReadSharedResources();
             
-            return result;
-        }
-
-        internal object ReadAsset<T>(T existingInstance)
-        {
-            InitializeTypeReaders();
-
-            // Read primary object
-            object result = ReadObject<T>(existingInstance);
-
-            // Read shared resources
-            ReadSharedResources();
-
             return result;
         }
 
@@ -149,7 +147,7 @@ namespace Microsoft.Xna.Framework.Content
 
         public T ReadObject<T>()
         {
-            return InnerReadObject(default(T));
+            return ReadObject(default(T));
         }
 
         public T ReadObject<T>(ContentTypeReader typeReader)

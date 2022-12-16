@@ -1,17 +1,21 @@
-﻿// MonoGame - Copyright (C) The MonoGame Team
-// This file is subject to the terms and conditions defined in
-// file 'LICENSE.txt', which is part of this source code package.
-
-using System;
+﻿using System;
 using System.Diagnostics;
 
 #if OPENGL
-#if DESKTOPGL || GLES
-using MonoGame.OpenGL;
-using GLPixelFormat = MonoGame.OpenGL.PixelFormat;
-using PixelFormat = MonoGame.OpenGL.PixelFormat;
-#elif ANGLE
+#if MONOMAC
+using MonoMac.OpenGL;
+#elif WINDOWS || LINUX
 using OpenTK.Graphics;
+using OpenTK.Graphics.OpenGL;
+#elif GLES
+#if ANGLE
+using OpenTK.Graphics;
+#endif
+using OpenTK.Graphics.ES20;
+using VertexPointerType = OpenTK.Graphics.ES20.All;
+using ColorPointerType = OpenTK.Graphics.ES20.All;
+using NormalPointerType = OpenTK.Graphics.ES20.All;
+using TexCoordPointerType = OpenTK.Graphics.ES20.All;
 #endif
 #endif
 
@@ -20,6 +24,19 @@ namespace Microsoft.Xna.Framework.Graphics
     static class GraphicsExtensions
     {
 #if OPENGL
+        public static All OpenGL11(CullMode cull)
+        {
+            switch (cull)
+            {
+                case CullMode.CullClockwiseFace:
+                    return All.Cw;
+                case CullMode.CullCounterClockwiseFace:
+                    return All.Ccw;
+                default:
+                    throw new ArgumentException();
+            }
+        }
+
         public static int OpenGLNumberOfElements(this VertexElementFormat elementFormat)
         {
             switch (elementFormat)
@@ -46,7 +63,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     return 2;
 
                 case VertexElementFormat.Short4:
-                    return 4;
+                    return 2;
 
                 case VertexElementFormat.NormalizedShort2:
                     return 2;
@@ -142,7 +159,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 case VertexElementFormat.NormalizedShort4:
                     return VertexAttribPointerType.Short;
                 
-#if WINDOWS || DESKTOPGL
+#if MONOMAC || WINDOWS || LINUX
                case VertexElementFormat.HalfVector2:
                     return VertexAttribPointerType.HalfFloat;
 
@@ -322,7 +339,12 @@ namespace Microsoft.Xna.Framework.Graphics
 			switch (function) {
 			case BlendFunction.Add:
 				return BlendEquationMode.FuncAdd;
-#if WINDOWS || DESKTOPGL || IOS
+#if IOS
+			case BlendFunction.Max:
+				return (BlendEquationMode)All.MaxExt;
+			case BlendFunction.Min:
+				return (BlendEquationMode)All.MinExt;
+#elif MONOMAC || WINDOWS || LINUX
 			case BlendFunction.Max:
 				return BlendEquationMode.Max;
 			case BlendFunction.Min:
@@ -341,14 +363,10 @@ namespace Microsoft.Xna.Framework.Graphics
 		public static BlendingFactorSrc GetBlendFactorSrc (this Blend blend)
 		{
 			switch (blend) {
-            case Blend.BlendFactor:
-                return BlendingFactorSrc.ConstantColor;
 			case Blend.DestinationAlpha:
 				return BlendingFactorSrc.DstAlpha;
 			case Blend.DestinationColor:
 				return BlendingFactorSrc.DstColor;
-            case Blend.InverseBlendFactor:
-                return BlendingFactorSrc.OneMinusConstantColor;
 			case Blend.InverseDestinationAlpha:
 				return BlendingFactorSrc.OneMinusDstAlpha;
 			case Blend.InverseDestinationColor:
@@ -356,7 +374,11 @@ namespace Microsoft.Xna.Framework.Graphics
 			case Blend.InverseSourceAlpha:
 				return BlendingFactorSrc.OneMinusSrcAlpha;
 			case Blend.InverseSourceColor:
-                return BlendingFactorSrc.OneMinusSrcColor;
+#if MONOMAC || WINDOWS || LINUX
+				return (BlendingFactorSrc)All.OneMinusSrcColor;
+#else
+				return BlendingFactorSrc.OneMinusSrcColor;
+#endif
 			case Blend.One:
 				return BlendingFactorSrc.One;
 			case Blend.SourceAlpha:
@@ -364,75 +386,59 @@ namespace Microsoft.Xna.Framework.Graphics
 			case Blend.SourceAlphaSaturation:
 				return BlendingFactorSrc.SrcAlphaSaturate;
 			case Blend.SourceColor:
+#if MONOMAC || WINDOWS || LINUX
+				return (BlendingFactorSrc)All.SrcColor;
+#else
 				return BlendingFactorSrc.SrcColor;
+#endif
 			case Blend.Zero:
 				return BlendingFactorSrc.Zero;
-            default:
-                throw new ArgumentOutOfRangeException("blend", "The specified blend function is not implemented.");
-            }
+			default:
+				return BlendingFactorSrc.One;
+			}
 
 		}
 
 		public static BlendingFactorDest GetBlendFactorDest (this Blend blend)
 		{
 			switch (blend) {
-            case Blend.BlendFactor:
-                return BlendingFactorDest.ConstantColor;
-            case Blend.DestinationAlpha:
-                return BlendingFactorDest.DstAlpha;
-            case Blend.DestinationColor:
-                return BlendingFactorDest.DstColor;
-            case Blend.InverseBlendFactor:
-                return BlendingFactorDest.OneMinusConstantColor;
-            case Blend.InverseDestinationAlpha:
+			case Blend.DestinationAlpha:
+				return BlendingFactorDest.DstAlpha;
+//			case Blend.DestinationColor:
+//				return BlendingFactorDest.DstColor;
+			case Blend.InverseDestinationAlpha:
 				return BlendingFactorDest.OneMinusDstAlpha;
-            case Blend.InverseDestinationColor:
-                return BlendingFactorDest.OneMinusDstColor;
-            case Blend.InverseSourceAlpha:
-                return BlendingFactorDest.OneMinusSrcAlpha;
+//			case Blend.InverseDestinationColor:
+//				return BlendingFactorDest.OneMinusDstColor;
+			case Blend.InverseSourceAlpha:
+				return BlendingFactorDest.OneMinusSrcAlpha;
 			case Blend.InverseSourceColor:
+#if MONOMAC || WINDOWS
+				return (BlendingFactorDest)All.OneMinusSrcColor;
+#else
 				return BlendingFactorDest.OneMinusSrcColor;
+#endif
 			case Blend.One:
 				return BlendingFactorDest.One;
 			case Blend.SourceAlpha:
 				return BlendingFactorDest.SrcAlpha;
-            case Blend.SourceAlphaSaturation:
-                return BlendingFactorDest.SrcAlphaSaturate;
-            case Blend.SourceColor:
-			    return BlendingFactorDest.SrcColor;
+//			case Blend.SourceAlphaSaturation:
+//				return BlendingFactorDest.SrcAlphaSaturate;
+			case Blend.SourceColor:
+#if MONOMAC || WINDOWS
+				return (BlendingFactorDest)All.SrcColor;
+#else
+				return BlendingFactorDest.SrcColor;
+#endif
 			case Blend.Zero:
 				return BlendingFactorDest.Zero;
 			default:
-				throw new ArgumentOutOfRangeException("blend", "The specified blend function is not implemented.");
+				return BlendingFactorDest.One;
 			}
 
 		}
 
-        public static DepthFunction GetDepthFunction(this CompareFunction compare)
-        {
-            switch (compare)
-            {
-                default:
-                case CompareFunction.Always:
-                    return DepthFunction.Always;
-                case CompareFunction.Equal:
-                    return DepthFunction.Equal;
-                case CompareFunction.Greater:
-                    return DepthFunction.Greater;
-                case CompareFunction.GreaterEqual:
-                    return DepthFunction.Gequal;
-                case CompareFunction.Less:
-                    return DepthFunction.Less;
-                case CompareFunction.LessEqual:
-                    return DepthFunction.Lequal;
-                case CompareFunction.Never:
-                    return DepthFunction.Never;
-                case CompareFunction.NotEqual:
-                    return DepthFunction.Notequal;
-            }
-        }
-
-#if WINDOWS || DESKTOPGL || ANGLE
+#if WINDOWS || LINUX || ANGLE
         /// <summary>
         /// Convert a <see cref="SurfaceFormat"/> to an OpenTK.Graphics.ColorFormat.
         /// This is used for setting up the backbuffer format of the OpenGL context.
@@ -455,7 +461,6 @@ namespace Microsoft.Xna.Framework.Graphics
                     return new ColorFormat(8, 8, 8, 0);
                 case SurfaceFormat.Bgra32:
                 case SurfaceFormat.Color:
-                case SurfaceFormat.ColorSRgb:
                     return new ColorFormat(8, 8, 8, 8);
                 case SurfaceFormat.Rgba1010102:
                     return new ColorFormat(10, 10, 10, 2);
@@ -495,42 +500,23 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 #endif
-
-        const SurfaceFormat InvalidFormat = (SurfaceFormat)int.MaxValue;
+		
+		
 		internal static void GetGLFormat (this SurfaceFormat format,
-            GraphicsDevice graphicsDevice,
-            out PixelInternalFormat glInternalFormat,
-            out PixelFormat glFormat,
-            out PixelType glType)
+		                                 out PixelInternalFormat glInternalFormat,
+		                                 out PixelFormat glFormat,
+		                                 out PixelType glType)
 		{
 			glInternalFormat = PixelInternalFormat.Rgba;
 			glFormat = PixelFormat.Rgba;
 			glType = PixelType.UnsignedByte;
-
-		    var supportsSRgb = graphicsDevice.GraphicsCapabilities.SupportsSRgb;
-            var supportsS3tc = graphicsDevice.GraphicsCapabilities.SupportsS3tc;
-            var supportsPvrtc = graphicsDevice.GraphicsCapabilities.SupportsPvrtc;
-            var supportsEtc1 = graphicsDevice.GraphicsCapabilities.SupportsEtc1;
-            var supportsEtc2 = graphicsDevice.GraphicsCapabilities.SupportsEtc2;
-            var supportsAtitc = graphicsDevice.GraphicsCapabilities.SupportsAtitc;
-            var supportsFloat = graphicsDevice.GraphicsCapabilities.SupportsFloatTextures;
-            var supportsHalfFloat = graphicsDevice.GraphicsCapabilities.SupportsHalfFloatTextures;
-            var supportsNormalized = graphicsDevice.GraphicsCapabilities.SupportsNormalized;
-            var isGLES2 = GL.BoundApi == GL.RenderApi.ES && graphicsDevice.glMajorVersion == 2;
-
+			
 			switch (format) {
 			case SurfaceFormat.Color:
 				glInternalFormat = PixelInternalFormat.Rgba;
 				glFormat = PixelFormat.Rgba;
 				glType = PixelType.UnsignedByte;
 				break;
-            case SurfaceFormat.ColorSRgb:
-                if (!supportsSRgb)
-                    goto case SurfaceFormat.Color;
-                glInternalFormat = PixelInternalFormat.Srgb;
-                glFormat = PixelFormat.Rgba;
-                glType = PixelType.UnsignedByte;
-                break;
 			case SurfaceFormat.Bgr565:
 				glInternalFormat = PixelInternalFormat.Rgb;
 				glFormat = PixelFormat.Rgb;
@@ -555,66 +541,31 @@ namespace Microsoft.Xna.Framework.Graphics
 				glFormat = PixelFormat.Luminance;
 				glType = PixelType.UnsignedByte;
 				break;
+#if !IOS && !ANDROID && !ANGLE
 			case SurfaceFormat.Dxt1:
-                if (!supportsS3tc)
-                    goto case InvalidFormat;
 				glInternalFormat = PixelInternalFormat.CompressedRgbS3tcDxt1Ext;
-                glFormat = (PixelFormat)GLPixelFormat.CompressedTextureFormats;
+				glFormat = (PixelFormat)All.CompressedTextureFormats;
 				break;
-            case SurfaceFormat.Dxt1SRgb:
-                if (!supportsSRgb)
-                    goto case SurfaceFormat.Dxt1;
-                glInternalFormat = PixelInternalFormat.CompressedSrgbS3tcDxt1Ext;
-                glFormat = (PixelFormat)GLPixelFormat.CompressedTextureFormats;
-                break;
             case SurfaceFormat.Dxt1a:
-                if (!supportsS3tc)
-                    goto case InvalidFormat;
                 glInternalFormat = PixelInternalFormat.CompressedRgbaS3tcDxt1Ext;
-                glFormat = (PixelFormat)GLPixelFormat.CompressedTextureFormats;
+                glFormat = (PixelFormat)All.CompressedTextureFormats;
                 break;
             case SurfaceFormat.Dxt3:
-                if (!supportsS3tc)
-                    goto case InvalidFormat;
 				glInternalFormat = PixelInternalFormat.CompressedRgbaS3tcDxt3Ext;
-                glFormat = (PixelFormat)GLPixelFormat.CompressedTextureFormats;
+				glFormat = (PixelFormat)All.CompressedTextureFormats;
 				break;
-            case SurfaceFormat.Dxt3SRgb:
-                if (!supportsSRgb)
-                    goto case SurfaceFormat.Dxt3;
-                glInternalFormat = PixelInternalFormat.CompressedSrgbAlphaS3tcDxt3Ext;
-                glFormat = (PixelFormat)GLPixelFormat.CompressedTextureFormats;
-                break;
 			case SurfaceFormat.Dxt5:
-                if (!supportsS3tc)
-                    goto case InvalidFormat;
 				glInternalFormat = PixelInternalFormat.CompressedRgbaS3tcDxt5Ext;
-                glFormat = (PixelFormat)GLPixelFormat.CompressedTextureFormats;
+				glFormat = (PixelFormat)All.CompressedTextureFormats;
 				break;
-            case SurfaceFormat.Dxt5SRgb:
-                if (!supportsSRgb)
-                    goto case SurfaceFormat.Dxt5;
-                glInternalFormat = PixelInternalFormat.CompressedSrgbAlphaS3tcDxt5Ext;
-                glFormat = (PixelFormat)GLPixelFormat.CompressedTextureFormats;
-                break;
-#if !IOS && !ANDROID && !ANGLE
-            case SurfaceFormat.Rgba1010102:
-                glInternalFormat = PixelInternalFormat.Rgb10A2ui;
-                glFormat = PixelFormat.Rgba;
-                glType = PixelType.UnsignedInt1010102;
-                break;
-#endif
-            case SurfaceFormat.Single:
-                if (!supportsFloat)
-                    goto case InvalidFormat;
-                glInternalFormat = PixelInternalFormat.R32f;
-                glFormat = PixelFormat.Red;
-                glType = PixelType.Float;
-                break;
+			
+			case SurfaceFormat.Single:
+				glInternalFormat = PixelInternalFormat.R32f;
+				glFormat = PixelFormat.Red;
+				glType = PixelType.Float;
+				break;
 
             case SurfaceFormat.HalfVector2:
-                if (!supportsHalfFloat)
-                    goto case InvalidFormat;
                 glInternalFormat = PixelInternalFormat.Rg16f;
 				glFormat = PixelFormat.Rg;
 				glType = PixelType.HalfFloat;
@@ -623,32 +574,24 @@ namespace Microsoft.Xna.Framework.Graphics
             // HdrBlendable implemented as HalfVector4 (see http://blogs.msdn.com/b/shawnhar/archive/2010/07/09/surfaceformat-hdrblendable.aspx)
             case SurfaceFormat.HdrBlendable:
             case SurfaceFormat.HalfVector4:
-                if (!supportsHalfFloat)
-                    goto case InvalidFormat;
                 glInternalFormat = PixelInternalFormat.Rgba16f;
                 glFormat = PixelFormat.Rgba;
                 glType = PixelType.HalfFloat;
                 break;
 
             case SurfaceFormat.HalfSingle:
-                if (!supportsHalfFloat)
-                    goto case InvalidFormat;
                 glInternalFormat = PixelInternalFormat.R16f;
                 glFormat = PixelFormat.Red;
-                glType = isGLES2 ? PixelType.HalfFloatOES : PixelType.HalfFloat;
+                glType = PixelType.HalfFloat;
                 break;
 
             case SurfaceFormat.Vector2:
-                if (!supportsFloat)
-                    goto case InvalidFormat;
                 glInternalFormat = PixelInternalFormat.Rg32f;
                 glFormat = PixelFormat.Rg;
                 glType = PixelType.Float;
                 break;
 
             case SurfaceFormat.Vector4:
-                if (!supportsFloat)
-                    goto case InvalidFormat;
                 glInternalFormat = PixelInternalFormat.Rgba32f;
                 glFormat = PixelFormat.Rgba;
                 glType = PixelType.Float;
@@ -667,107 +610,77 @@ namespace Microsoft.Xna.Framework.Graphics
                 break;
 
             case SurfaceFormat.Rg32:
-                if (!supportsNormalized)
-                    goto case InvalidFormat;
                 glInternalFormat = PixelInternalFormat.Rg16ui;
                 glFormat = PixelFormat.Rg;
                 glType = PixelType.UnsignedShort;
                 break;
 
             case SurfaceFormat.Rgba64:
-                if (!supportsNormalized)
-                    goto case InvalidFormat;
-                glInternalFormat = PixelInternalFormat.Rgba16;
+                glInternalFormat = PixelInternalFormat.Rgba16ui;
                 glFormat = PixelFormat.Rgba;
                 glType = PixelType.UnsignedShort;
                 break;
-            case SurfaceFormat.RgbaAtcExplicitAlpha:
-                if (!supportsAtitc)
-                    goto case InvalidFormat;
-				glInternalFormat = PixelInternalFormat.AtcRgbaExplicitAlphaAmd;
-				glFormat = PixelFormat.CompressedTextureFormats;
+
+            case SurfaceFormat.Rgba1010102:
+                glInternalFormat = PixelInternalFormat.Rgb10A2ui;
+                glFormat = PixelFormat.Rgba;
+                glType = PixelType.UnsignedInt1010102;
+                break;
+#endif
+				
+#if ANDROID
+			case SurfaceFormat.Dxt1:
+                // 0x83F0 is the RGB version, 0x83F1 is the RGBA version (1-bit alpha)
+                // XNA uses the RGB version.
+                glInternalFormat = (PixelInternalFormat)0x83F0; 
+				glFormat = (PixelFormat)All.CompressedTextureFormats;
 				break;
-            case SurfaceFormat.RgbaAtcInterpolatedAlpha:
-                if (!supportsAtitc)
-                    goto case InvalidFormat;
-				glInternalFormat = PixelInternalFormat.AtcRgbaInterpolatedAlphaAmd;
-				glFormat = PixelFormat.CompressedTextureFormats;
+            case SurfaceFormat.Dxt1a:
+                // 0x83F0 is the RGB version, 0x83F1 is the RGBA version (1-bit alpha)
+                glInternalFormat = (PixelInternalFormat)0x83F1;
+                glFormat = (PixelFormat)All.CompressedTextureFormats;
+                break;
+            case SurfaceFormat.Dxt3:
+                glInternalFormat = (PixelInternalFormat)0x83F2;
+				glFormat = (PixelFormat)All.CompressedTextureFormats;
 				break;
+			case SurfaceFormat.Dxt5:
+                glInternalFormat = (PixelInternalFormat)0x83F3;
+				glFormat = (PixelFormat)All.CompressedTextureFormats;
+				break;
+#endif
+                    
+
+#if IOS || ANDROID
             case SurfaceFormat.RgbEtc1:
-                if (!supportsEtc1)
-                    goto case InvalidFormat;
-                glInternalFormat = PixelInternalFormat.Etc1; // GL_ETC1_RGB8_OES
-                glFormat = PixelFormat.CompressedTextureFormats;
-                break;
-            case SurfaceFormat.Rgb8Etc2:
-                if (!supportsEtc2)
-                    goto case InvalidFormat;
-                glInternalFormat = PixelInternalFormat.Etc2Rgb8; // GL_COMPRESSED_RGB8_ETC2
-                glFormat = PixelFormat.CompressedTextureFormats;
-                break;
-            case SurfaceFormat.Srgb8Etc2:
-                if (!supportsEtc2)
-                    goto case InvalidFormat;
-                glInternalFormat = PixelInternalFormat.Etc2Srgb8; // GL_COMPRESSED_SRGB8_ETC2
-                glFormat = PixelFormat.CompressedTextureFormats;
-                break;
-            case SurfaceFormat.Rgb8A1Etc2:
-                if (!supportsEtc2)
-                    goto case InvalidFormat;
-                glInternalFormat = PixelInternalFormat.Etc2Rgb8A1; // GL_COMPRESSED_RGB8_PUNCHTHROUGH_ALPHA1_ETC2
-                glFormat = PixelFormat.CompressedTextureFormats;
-                break;
-            case SurfaceFormat.Srgb8A1Etc2:
-                if (!supportsEtc2)
-                    goto case InvalidFormat;
-                glInternalFormat = PixelInternalFormat.Etc2Srgb8A1; // GL_COMPRESSED_SRGB8_PUNCHTHROUGH_ALPHA1_ETC2
-                glFormat = PixelFormat.CompressedTextureFormats;
-                break;
-            case SurfaceFormat.Rgba8Etc2:
-                if (!supportsEtc2)
-                    goto case InvalidFormat;
-                glInternalFormat = PixelInternalFormat.Etc2Rgba8Eac; // GL_COMPRESSED_RGBA8_ETC2_EAC
-                glFormat = PixelFormat.CompressedTextureFormats;
-                break;
-            case SurfaceFormat.SRgb8A8Etc2:
-                if (!supportsEtc2)
-                    goto case InvalidFormat;
-                glInternalFormat = PixelInternalFormat.Etc2SRgb8A8Eac; // GL_COMPRESSED_SRGB8_ALPHA8_ETC2_EAC
-                glFormat = PixelFormat.CompressedTextureFormats;
+                glInternalFormat = (PixelInternalFormat)0x8D64; // GL_ETC1_RGB8_OES
+                glFormat = (PixelFormat)All.CompressedTextureFormats;
                 break;
 			case SurfaceFormat.RgbPvrtc2Bpp:
-                if (!supportsPvrtc)
-                    goto case InvalidFormat;
-				glInternalFormat = PixelInternalFormat.CompressedRgbPvrtc2Bppv1Img;
-				glFormat = PixelFormat.CompressedTextureFormats;
+				glInternalFormat = (PixelInternalFormat)All.CompressedRgbPvrtc2Bppv1Img;
+				glFormat = (PixelFormat)All.CompressedTextureFormats;
 				break;
 			case SurfaceFormat.RgbPvrtc4Bpp:
-                if (!supportsPvrtc)
-                    goto case InvalidFormat;
-				glInternalFormat = PixelInternalFormat.CompressedRgbPvrtc4Bppv1Img;
-				glFormat = PixelFormat.CompressedTextureFormats;
+				glInternalFormat = (PixelInternalFormat)All.CompressedRgbPvrtc4Bppv1Img;
+				glFormat = (PixelFormat)All.CompressedTextureFormats;
 				break;
 			case SurfaceFormat.RgbaPvrtc2Bpp:
-                if (!supportsPvrtc)
-                    goto case InvalidFormat;
-				glInternalFormat = PixelInternalFormat.CompressedRgbaPvrtc2Bppv1Img;
-				glFormat = PixelFormat.CompressedTextureFormats;
+				glInternalFormat = (PixelInternalFormat)All.CompressedRgbaPvrtc2Bppv1Img;
+				glFormat = (PixelFormat)All.CompressedTextureFormats;
 				break;
 			case SurfaceFormat.RgbaPvrtc4Bpp:
-                if (!supportsPvrtc)
-                    goto case InvalidFormat;
-				glInternalFormat = PixelInternalFormat.CompressedRgbaPvrtc4Bppv1Img;
-				glFormat = PixelFormat.CompressedTextureFormats;
+				glInternalFormat = (PixelInternalFormat)All.CompressedRgbaPvrtc4Bppv1Img;
+				glFormat = (PixelFormat)All.CompressedTextureFormats;
 				break;
-            case InvalidFormat: 
-            default:
-                    throw new NotSupportedException(string.Format("The requested SurfaceFormat `{0}` is not supported.", format));
+#endif
+			default:
+				throw new NotSupportedException();
 			}
 		}
 
 #endif // OPENGL
 
-                    public static int GetSyncInterval(this PresentInterval interval)
+        public static int GetFrameLatency(this PresentInterval interval)
         {
             switch (interval)
             {
@@ -782,62 +695,25 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        public static bool IsCompressedFormat(this SurfaceFormat format)
-        {
-            switch (format)
-            {
-                case SurfaceFormat.Dxt1:
-                case SurfaceFormat.Dxt1a:
-                case SurfaceFormat.Dxt1SRgb:
-                case SurfaceFormat.Dxt3:
-                case SurfaceFormat.Dxt3SRgb:
-                case SurfaceFormat.Dxt5:
-                case SurfaceFormat.Dxt5SRgb:
-                case SurfaceFormat.RgbaAtcExplicitAlpha:
-                case SurfaceFormat.RgbaAtcInterpolatedAlpha:
-                case SurfaceFormat.RgbaPvrtc2Bpp:
-                case SurfaceFormat.RgbaPvrtc4Bpp:
-                case SurfaceFormat.RgbEtc1:
-                case SurfaceFormat.Rgb8Etc2:
-                case SurfaceFormat.Srgb8Etc2:
-                case SurfaceFormat.Rgb8A1Etc2:
-                case SurfaceFormat.Srgb8A1Etc2:
-                case SurfaceFormat.Rgba8Etc2:
-                case SurfaceFormat.SRgb8A8Etc2:
-                case SurfaceFormat.RgbPvrtc2Bpp:
-                case SurfaceFormat.RgbPvrtc4Bpp:
-                    return true;
-            }
-            return false;
-        }
-
         public static int GetSize(this SurfaceFormat surfaceFormat)
         {
             switch (surfaceFormat)
             {
                 case SurfaceFormat.Dxt1:
-                case SurfaceFormat.Dxt1SRgb:
                 case SurfaceFormat.Dxt1a:
                 case SurfaceFormat.RgbPvrtc2Bpp:
                 case SurfaceFormat.RgbaPvrtc2Bpp:
-                case SurfaceFormat.RgbPvrtc4Bpp:
-                case SurfaceFormat.RgbaPvrtc4Bpp:
                 case SurfaceFormat.RgbEtc1:
-                case SurfaceFormat.Rgb8Etc2:
-                case SurfaceFormat.Srgb8Etc2:
-                case SurfaceFormat.Rgb8A1Etc2:
-                case SurfaceFormat.Srgb8A1Etc2:
-                    // One texel in DXT1, PVRTC (2bpp and 4bpp) and ETC1 is a minimum 4x4 block (8x4 for PVRTC 2bpp), which is 8 bytes
+                case SurfaceFormat.PlayStation4_BC1Unorm:
+                    // One texel in DXT1, PVRTC 2bpp and ETC1 is a minimum 4x4 block, which is 8 bytes
                     return 8;
                 case SurfaceFormat.Dxt3:
-                case SurfaceFormat.Dxt3SRgb:
                 case SurfaceFormat.Dxt5:
-                case SurfaceFormat.Dxt5SRgb:
-                case SurfaceFormat.RgbaAtcExplicitAlpha:
-                case SurfaceFormat.RgbaAtcInterpolatedAlpha:
-                case SurfaceFormat.Rgba8Etc2:
-                case SurfaceFormat.SRgb8A8Etc2:
-                    // One texel in DXT3 and DXT5 is a minimum 4x4 block, which is 16 bytes
+                case SurfaceFormat.RgbPvrtc4Bpp:
+                case SurfaceFormat.RgbaPvrtc4Bpp:
+                case SurfaceFormat.PlayStation4_BC2Unorm:
+                case SurfaceFormat.PlayStation4_BC3Unorm:
+                    // One texel in DXT3, DXT5 and PVRTC 4bpp is a minimum 4x4 block, which is 16 bytes
                     return 16;
                 case SurfaceFormat.Alpha8:
                     return 1;
@@ -848,16 +724,13 @@ namespace Microsoft.Xna.Framework.Graphics
                 case SurfaceFormat.NormalizedByte2:
                     return 2;
                 case SurfaceFormat.Color:
-                case SurfaceFormat.ColorSRgb:
                 case SurfaceFormat.Single:
                 case SurfaceFormat.Rg32:
                 case SurfaceFormat.HalfVector2:
                 case SurfaceFormat.NormalizedByte4:
                 case SurfaceFormat.Rgba1010102:
                 case SurfaceFormat.Bgra32:
-                case SurfaceFormat.Bgra32SRgb:
                 case SurfaceFormat.Bgr32:
-                case SurfaceFormat.Bgr32SRgb:
                     return 4;
                 case SurfaceFormat.HalfVector4:
                 case SurfaceFormat.Rgba64:
@@ -913,43 +786,6 @@ namespace Microsoft.Xna.Framework.Graphics
             return 0;
         }
 
-        public static void GetBlockSize(this SurfaceFormat surfaceFormat, out int width, out int height)
-        {
-            switch (surfaceFormat)
-            {
-                case SurfaceFormat.RgbPvrtc2Bpp:
-                case SurfaceFormat.RgbaPvrtc2Bpp:
-                    width = 8;
-                    height = 4;
-                    break;
-                case SurfaceFormat.Dxt1:
-                case SurfaceFormat.Dxt1SRgb:
-                case SurfaceFormat.Dxt1a:
-                case SurfaceFormat.Dxt3:
-                case SurfaceFormat.Dxt3SRgb:
-                case SurfaceFormat.Dxt5:
-                case SurfaceFormat.Dxt5SRgb:
-                case SurfaceFormat.RgbPvrtc4Bpp:
-                case SurfaceFormat.RgbaPvrtc4Bpp:
-                case SurfaceFormat.RgbEtc1:
-                case SurfaceFormat.Rgb8Etc2:
-                case SurfaceFormat.Srgb8Etc2:
-                case SurfaceFormat.Rgb8A1Etc2:
-                case SurfaceFormat.Srgb8A1Etc2:
-                case SurfaceFormat.Rgba8Etc2:
-                case SurfaceFormat.SRgb8A8Etc2:
-                case SurfaceFormat.RgbaAtcExplicitAlpha:
-                case SurfaceFormat.RgbaAtcInterpolatedAlpha:
-                    width = 4;
-                    height = 4;
-                    break;
-                default:
-                    width = 1;
-                    height = 1;
-                    break;
-            }
-        }
-
 #if OPENGL
 
         public static int GetBoundTexture2D()
@@ -964,8 +800,11 @@ namespace Microsoft.Xna.Framework.Graphics
 		[DebuggerHidden]
         public static void CheckGLError()
         {
-           var error = GL.GetError();
-            //Console.WriteLine(error);
+#if GLES
+            var error = GL.GetErrorCode();
+#else
+            var error = GL.GetError();
+#endif
             if (error != ErrorCode.NoError)
                 throw new MonoGameGLException("GL.GetError() returned " + error.ToString());
         }
@@ -990,7 +829,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 #endif
-            }
+    }
 
     internal class MonoGameGLException : Exception
     {

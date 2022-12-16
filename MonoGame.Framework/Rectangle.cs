@@ -12,6 +12,7 @@ namespace Microsoft.Xna.Framework
     /// Describes a 2D-rectangle. 
     /// </summary>
     [DataContract]
+    [Serializable]
     [DebuggerDisplay("{DebugDisplayString,nq}")]
     public struct Rectangle : IEquatable<Rectangle>
     {
@@ -187,20 +188,6 @@ namespace Microsoft.Xna.Framework
             this.Height = height;
         }
 
-        /// <summary>
-        /// Creates a new instance of <see cref="Rectangle"/> struct, with the specified
-        /// location and size.
-        /// </summary>
-        /// <param name="location">The x and y coordinates of the top-left corner of the created <see cref="Rectangle"/>.</param>
-        /// <param name="size">The width and height of the created <see cref="Rectangle"/>.</param>
-        public Rectangle(Point location,Point size)
-        {
-            this.X = location.X;
-            this.Y = location.Y;
-            this.Width = size.X;
-            this.Height = size.Y;
-        }
-
         #endregion
 
         #region Operators
@@ -339,15 +326,7 @@ namespace Microsoft.Xna.Framework
         /// <returns>Hash code of this <see cref="Rectangle"/>.</returns>
         public override int GetHashCode()
         {
-            unchecked
-            {
-                var hash = 17;
-                hash = hash * 23 + X.GetHashCode();
-                hash = hash * 23 + Y.GetHashCode();
-                hash = hash * 23 + Width.GetHashCode();
-                hash = hash * 23 + Height.GetHashCode();
-                return hash;
-            }
+            return (X ^ Y ^ Width ^ Height);
         }
 
         /// <summary>
@@ -377,10 +356,10 @@ namespace Microsoft.Xna.Framework
         }
 
         /// <summary>
-        /// Gets whether or not the other <see cref="Rectangle"/> intersects with this rectangle.
+        /// Gets whether or not a specified <see cref="Rectangle"/> intersects with this <see cref="Rectangle"/>.
         /// </summary>
-        /// <param name="value">The other rectangle for testing.</param>
-        /// <returns><c>true</c> if other <see cref="Rectangle"/> intersects with this rectangle; <c>false</c> otherwise.</returns>
+        /// <param name="value">Other <see cref="Rectangle"/>.</param>
+        /// <returns><c>true</c> if other <see cref="Rectangle"/> intersects with this <see cref="Rectangle"/>; <c>false</c> otherwise.</returns>
         public bool Intersects(Rectangle value)
         {
             return value.Left < Right &&
@@ -391,10 +370,10 @@ namespace Microsoft.Xna.Framework
 
 
         /// <summary>
-        /// Gets whether or not the other <see cref="Rectangle"/> intersects with this rectangle.
+        /// Gets whether or not a specified <see cref="Rectangle"/> intersects with this <see cref="Rectangle"/>.
         /// </summary>
-        /// <param name="value">The other rectangle for testing.</param>
-        /// <param name="result"><c>true</c> if other <see cref="Rectangle"/> intersects with this rectangle; <c>false</c> otherwise. As an output parameter.</param>
+        /// <param name="value">Other <see cref="Rectangle"/>.</param>
+        /// <param name="result"><c>true</c> if other <see cref="Rectangle"/> intersects with this <see cref="Rectangle"/>; <c>false</c> otherwise. As an output parameter.</param>
         public void Intersects(ref Rectangle value, out bool result)
         {
             result = value.Left < Right &&
@@ -518,22 +497,7 @@ namespace Microsoft.Xna.Framework
             result.Width = Math.Max(value1.Right, value2.Right) - result.X;
             result.Height = Math.Max(value1.Bottom, value2.Bottom) - result.Y;
         }
-
-        /// <summary>
-        /// Deconstruction method for <see cref="Rectangle"/>.
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <param name="width"></param>
-        /// <param name="height"></param>
-        public void Deconstruct(out int x, out int y, out int width, out int height)
-        {
-            x = X;
-            y = Y;
-            width = Width;
-            height = Height;
-        }
-
+				
         #endregion
     }
 }

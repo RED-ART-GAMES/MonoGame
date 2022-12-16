@@ -3,6 +3,7 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
+using System.Diagnostics;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
@@ -10,29 +11,16 @@ namespace Microsoft.Xna.Framework.Graphics
 	{
         private readonly TargetBlendState[] _targetBlendState;
 
-        private readonly bool _defaultStateObject;
-
 	    private Color _blendFactor;
 
 	    private int _multiSampleMask;
 
 	    private bool _independentBlendEnable;
 
-        internal void BindToGraphicsDevice(GraphicsDevice device)
+        [Conditional("DEBUG")]
+        private void AssertIfBound()
         {
-            if (_defaultStateObject)
-                throw new InvalidOperationException("You cannot bind a default state object.");
-            if (GraphicsDevice != null && GraphicsDevice != device)
-                throw new InvalidOperationException("This blend state is already bound to a different graphics device.");
-            GraphicsDevice = device;
-        }
-
-        internal void ThrowIfBound()
-        {
-            if (_defaultStateObject)
-                throw new InvalidOperationException("You cannot modify a default blend state object.");
-            if (GraphicsDevice != null)
-                throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
+            Debug.Assert(GraphicsDevice == null, "You cannot modify the blend state after it has been bound to the graphics device!");
         }
 
         /// <summary>
@@ -47,10 +35,10 @@ namespace Microsoft.Xna.Framework.Graphics
 
 	    public BlendFunction AlphaBlendFunction
 	    {
-	        get { return _targetBlendState[0].AlphaBlendFunction; }
+	        get { return _targetBlendState[0].AlphaBlendFunction; } 
             set
             {
-                ThrowIfBound();
+                AssertIfBound();
                 _targetBlendState[0].AlphaBlendFunction = value;
             }
 	    }
@@ -60,7 +48,7 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _targetBlendState[0].AlphaDestinationBlend; }
             set
             {
-                ThrowIfBound();
+                AssertIfBound();
                 _targetBlendState[0].AlphaDestinationBlend = value;
             }
         }
@@ -70,7 +58,7 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _targetBlendState[0].AlphaSourceBlend; }
             set
             {
-                ThrowIfBound();
+                AssertIfBound();
                 _targetBlendState[0].AlphaSourceBlend = value;
             }
         }
@@ -80,7 +68,7 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _targetBlendState[0].ColorBlendFunction; }
             set
             {
-                ThrowIfBound();
+                AssertIfBound();
                 _targetBlendState[0].ColorBlendFunction = value;
             }
         }
@@ -90,7 +78,7 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _targetBlendState[0].ColorDestinationBlend; }
             set
             {
-                ThrowIfBound();
+                AssertIfBound();
                 _targetBlendState[0].ColorDestinationBlend = value;
             }
         }
@@ -100,7 +88,7 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _targetBlendState[0].ColorSourceBlend; }
             set
             {
-                ThrowIfBound();
+                AssertIfBound();
                 _targetBlendState[0].ColorSourceBlend = value;
             }
         }
@@ -110,7 +98,7 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _targetBlendState[0].ColorWriteChannels; }
             set
             {
-                ThrowIfBound();
+                AssertIfBound();
                 _targetBlendState[0].ColorWriteChannels = value;
             }
         }
@@ -120,7 +108,7 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _targetBlendState[1].ColorWriteChannels; }
             set
             {
-                ThrowIfBound();
+                AssertIfBound();
                 _targetBlendState[1].ColorWriteChannels = value;
             }
         }
@@ -130,7 +118,7 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _targetBlendState[2].ColorWriteChannels; }
             set
             {
-                ThrowIfBound();
+                AssertIfBound();
                 _targetBlendState[2].ColorWriteChannels = value;
             }
         }
@@ -140,24 +128,17 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _targetBlendState[3].ColorWriteChannels; }
             set
             {
-                ThrowIfBound();
+                AssertIfBound();
                 _targetBlendState[3].ColorWriteChannels = value;
             }
         }
 
-        /// <summary>
-        /// The color used as blend factor when alpha blending.
-        /// </summary>
-        /// <remarks>
-        /// <see cref="P:Microsoft.Xna.Framework.Graphics.GraphicsDevice.BlendFactor"/> is set to this value when this <see cref="BlendState"/>
-        /// is bound to a GraphicsDevice.
-        /// </remarks>
 	    public Color BlendFactor
 	    {
 	        get { return _blendFactor; }
             set
             {
-                ThrowIfBound();
+                AssertIfBound();
                 _blendFactor = value;
             }
 	    }
@@ -167,7 +148,7 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _multiSampleMask; }
             set
             {
-                ThrowIfBound();
+                AssertIfBound();
                 _multiSampleMask = value;
             }
         }
@@ -180,82 +161,80 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _independentBlendEnable; }
             set
             {
-                ThrowIfBound();
+                AssertIfBound();
                 _independentBlendEnable = value;
             }
         }
 
+		private static readonly Utilities.ObjectFactoryWithReset<BlendState> _additive;
+        private static readonly Utilities.ObjectFactoryWithReset<BlendState> _alphaBlend;
+        private static readonly Utilities.ObjectFactoryWithReset<BlendState> _nonPremultiplied;
+        private static readonly Utilities.ObjectFactoryWithReset<BlendState> _opaque;
 
-        public static readonly BlendState Additive;
-        public static readonly BlendState AlphaBlend;
-        public static readonly BlendState NonPremultiplied;
-        public static readonly BlendState Opaque;
-
-        public BlendState()
+        public static BlendState Additive { get { return _additive.Value; } }
+        public static BlendState AlphaBlend { get { return _alphaBlend.Value; } }
+        public static BlendState NonPremultiplied { get { return _nonPremultiplied.Value; } }
+        public static BlendState Opaque { get { return _opaque.Value; } }
+        
+        public BlendState() 
         {
             _targetBlendState = new TargetBlendState[4];
-            _targetBlendState[0] = new TargetBlendState(this);
-            _targetBlendState[1] = new TargetBlendState(this);
-            _targetBlendState[2] = new TargetBlendState(this);
-            _targetBlendState[3] = new TargetBlendState(this);
+            _targetBlendState[0] = new TargetBlendState();
+            _targetBlendState[1] = new TargetBlendState();
+            _targetBlendState[2] = new TargetBlendState();
+            _targetBlendState[3] = new TargetBlendState();
 
 			_blendFactor = Color.White;
             _multiSampleMask = Int32.MaxValue;
             _independentBlendEnable = false;
         }
-
-        private BlendState(string name, Blend sourceBlend, Blend destinationBlend)
-            : this()
+		
+		static BlendState() 
         {
-            Name = name;
-            ColorSourceBlend = sourceBlend;
-            AlphaSourceBlend = sourceBlend;
-            ColorDestinationBlend = destinationBlend;
-            AlphaDestinationBlend = destinationBlend;
-            _defaultStateObject = true;
-        }
-
-        private BlendState(BlendState cloneSource)
-        {
-            Name = cloneSource.Name;
-
-            _targetBlendState = new TargetBlendState[4];
-            _targetBlendState[0] = cloneSource[0].Clone(this);
-            _targetBlendState[1] = cloneSource[1].Clone(this);
-            _targetBlendState[2] = cloneSource[2].Clone(this);
-            _targetBlendState[3] = cloneSource[3].Clone(this);
-
-            _blendFactor = cloneSource._blendFactor;
-            _multiSampleMask = cloneSource._multiSampleMask;
-            _independentBlendEnable = cloneSource._independentBlendEnable;
-        }
-
-        static BlendState()
-        {
-            Additive = new BlendState("BlendState.Additive", Blend.SourceAlpha, Blend.One);
-            AlphaBlend = new BlendState("BlendState.AlphaBlend", Blend.One, Blend.InverseSourceAlpha);
-            NonPremultiplied = new BlendState("BlendState.NonPremultiplied", Blend.SourceAlpha, Blend.InverseSourceAlpha);
-            Opaque = new BlendState("BlendState.Opaque", Blend.One, Blend.Zero);
+            _additive = new Utilities.ObjectFactoryWithReset<BlendState>(() => new BlendState
+            {
+                Name = "BlendState.Additive",
+                ColorSourceBlend = Blend.SourceAlpha,
+                AlphaSourceBlend = Blend.SourceAlpha,
+                ColorDestinationBlend = Blend.One,
+                AlphaDestinationBlend = Blend.One
+            });
+			
+			_alphaBlend = new Utilities.ObjectFactoryWithReset<BlendState>(() => new BlendState()
+            {
+                Name = "BlendState.AlphaBlend",
+				ColorSourceBlend = Blend.One,
+				AlphaSourceBlend = Blend.One,
+				ColorDestinationBlend = Blend.InverseSourceAlpha,
+				AlphaDestinationBlend = Blend.InverseSourceAlpha
+			});
+			
+			_nonPremultiplied = new Utilities.ObjectFactoryWithReset<BlendState>(() => new BlendState() 
+            {
+                Name = "BlendState.NonPremultiplied",
+				ColorSourceBlend = Blend.SourceAlpha,
+				AlphaSourceBlend = Blend.SourceAlpha,
+				ColorDestinationBlend = Blend.InverseSourceAlpha,
+				AlphaDestinationBlend = Blend.InverseSourceAlpha
+			});
+			
+			_opaque = new Utilities.ObjectFactoryWithReset<BlendState>(() => new BlendState()
+            {
+                Name = "BlendState.Opaque",
+				ColorSourceBlend = Blend.One,
+				AlphaSourceBlend = Blend.One,			    
+				ColorDestinationBlend = Blend.Zero,
+				AlphaDestinationBlend = Blend.Zero
+			});
 		}
 
-	    internal BlendState Clone()
-	    {
-	        return new BlendState(this);
-	    }
-
-        partial void PlatformDispose();
-
-        protected override void Dispose(bool disposing)
+        internal static void ResetStates()
         {
-            if (!IsDisposed)
-            {
-                for (int i = 0; i < _targetBlendState.Length; ++i)
-                    _targetBlendState[i] = null;
-
-                PlatformDispose();
-            }
-            base.Dispose(disposing);
+            _additive.Reset();
+            _alphaBlend.Reset();
+            _nonPremultiplied.Reset();
+            _opaque.Reset();
         }
-    }
+	}
 }
 

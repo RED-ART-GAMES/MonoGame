@@ -13,13 +13,14 @@ namespace Microsoft.Xna.Framework
     /// </summary>
     // TODO : [TypeConverter(typeof(ExpandableObjectConverter))]
     [DataContract]
-    public class Curve : ICurveEvaluator<float>
+    [Serializable]
+    public class Curve
     {
         #region Private Fields
 
-        private CurveLoopType _preLoop;
-        private CurveLoopType _postLoop;
         private CurveKeyCollection _keys;
+        private CurveLoopType _postLoop;
+        private CurveLoopType _preLoop;
 
         #endregion
 
@@ -35,17 +36,16 @@ namespace Microsoft.Xna.Framework
         }
 
         /// <summary>
-        /// Defines how to handle weighting values that are less than the first control point in the curve.
+        /// Gets the collection of curve keys.
         /// </summary>
         [DataMember]
-        public CurveLoopType PreLoop
+        public CurveKeyCollection Keys
         {
-            get { return this._preLoop; }
-            set { this._preLoop = value; }
+            get { return this._keys; }
         }
 
         /// <summary>
-        /// Defines how to handle weighting values that are greater than the last control point in the curve.
+        /// Gets or sets how to handle weighting values that are greater than the last control point in the curve.
         /// </summary>
         [DataMember]
         public CurveLoopType PostLoop
@@ -55,12 +55,13 @@ namespace Microsoft.Xna.Framework
         }
 
         /// <summary>
-        /// The collection of curve keys.
+        /// Gets or sets how to handle weighting values that are less than the first control point in the curve.
         /// </summary>
         [DataMember]
-        public CurveKeyCollection Keys
+        public CurveLoopType PreLoop
         {
-            get { return this._keys; }
+            get { return this._preLoop; }
+            set { this._preLoop = value; }
         }
 
         #endregion
@@ -68,7 +69,7 @@ namespace Microsoft.Xna.Framework
         #region Public Constructors
 
         /// <summary>
-        /// Constructs a curve.
+        /// Creates a new instance of <see cref="Curve"/> class.
         /// </summary>
         public Curve()
         {
@@ -101,16 +102,6 @@ namespace Microsoft.Xna.Framework
         /// <returns>Value at the position on this <see cref="Curve"/>.</returns>
         public float Evaluate(float position)
         {
-            if (_keys.Count == 0)
-            {
-            	return 0f;
-            }
-						
-            if (_keys.Count == 1)
-            {
-            	return _keys[0].Value;
-            }
-			
             CurveKey first = _keys[0];
             CurveKey last = _keys[_keys.Count - 1];
 

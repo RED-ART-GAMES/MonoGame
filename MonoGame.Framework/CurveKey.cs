@@ -3,6 +3,7 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
+using System.ComponentModel;
 using System.Runtime.Serialization;
 
 namespace Microsoft.Xna.Framework
@@ -12,6 +13,7 @@ namespace Microsoft.Xna.Framework
     /// </summary>
     // TODO : [TypeConverter(typeof(ExpandableObjectConverter))]
     [DataContract]
+    [Serializable]
     public class CurveKey : IEquatable<CurveKey>, IComparable<CurveKey>
     {
         #region Private Fields

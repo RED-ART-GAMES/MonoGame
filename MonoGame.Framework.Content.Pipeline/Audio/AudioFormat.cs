@@ -89,6 +89,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Audio
             {
                 using (var writer = new BinaryWriter(memory))
                 {
+                    writer.Write((int)18); /* header size */
                     writer.Write((short)this.format);
                     writer.Write((short)this.channelCount);
                     writer.Write((int)this.sampleRate);
@@ -104,5 +105,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Audio
                 }
             }
         }
+		
+		internal AudioFormat(List<byte> nativeWaveFormat) {
+			this.nativeWaveFormat = nativeWaveFormat;
+		}
     }
 }

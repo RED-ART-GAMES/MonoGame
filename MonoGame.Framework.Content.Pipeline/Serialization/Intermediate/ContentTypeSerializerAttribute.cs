@@ -36,19 +36,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate
                     var assemblies = AppDomain.CurrentDomain.GetAssemblies();
                     foreach (var assembly in assemblies)
                     {
-                        try
+                        var types = assembly.GetTypes();
+                        foreach (var type in types)
                         {
-                            var types = assembly.GetTypes();
-                            foreach (var type in types)
-                            {
-                                var attributes = type.GetCustomAttributes(typeof (ContentTypeSerializerAttribute), false);
-                                if (attributes.Length > 0)
-                                    found.Add(type);
-                            }
-                        }
-                        catch (System.Reflection.ReflectionTypeLoadException ex)
-                        {
-                            Console.WriteLine("Warning: " + ex.Message);
+                            var attributes = type.GetCustomAttributes(typeof (ContentTypeSerializerAttribute), false);
+                            if (attributes.Length > 0)
+                                found.Add(type);
                         }
                     }
 

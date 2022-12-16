@@ -33,10 +33,10 @@ namespace Microsoft.Xna.Framework.Design
             if (destinationType == typeof(string))
             {
                 var terms = new string[2];
-                terms[0] = vec.X.ToString("R", culture);
-                terms[1] = vec.Y.ToString("R", culture);
+                terms[0] = vec.X.ToString(culture);
+                terms[1] = vec.Y.ToString(culture);
 
-                return string.Join(culture.TextInfo.ListSeparator + " ", terms);
+                return string.Join(culture.NumberFormat.NumberGroupSeparator, terms);
             }
 
             return base.ConvertTo(context, culture, value, destinationType);
@@ -58,10 +58,10 @@ namespace Microsoft.Xna.Framework.Design
             if (sourceType == typeof(string))
             {
                 var str = (string)value;
-                var words = str.Split(culture.TextInfo.ListSeparator.ToCharArray());
+                var words = str.Split(culture.NumberFormat.NumberGroupSeparator.ToCharArray());
 
-                vec.X = float.Parse(words[0], culture);
-                vec.Y = float.Parse(words[1], culture);
+                vec.X = float.Parse(words[0]);
+                vec.Y = float.Parse(words[1]);
 
                 return vec;
             }

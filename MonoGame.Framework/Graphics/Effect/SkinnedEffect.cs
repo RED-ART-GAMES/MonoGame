@@ -18,7 +18,7 @@ namespace Microsoft.Xna.Framework.Graphics
     /// <summary>
     /// Built-in effect for rendering skinned character models.
     /// </summary>
-    public class SkinnedEffect : Effect, IEffectMatrices, IEffectLights, IEffectFog, IEffectBones
+    public class SkinnedEffect : Effect, IEffectMatrices, IEffectLights, IEffectFog
     {
         public const int MaxBones = 72;
         
@@ -67,6 +67,16 @@ namespace Microsoft.Xna.Framework.Graphics
         int weightsPerVertex = 4;
 
         EffectDirtyFlags dirtyFlags = EffectDirtyFlags.All;
+
+        static readonly byte[] Bytecode = LoadEffectResource(
+#if DIRECTX
+            "Microsoft.Xna.Framework.Graphics.Effect.Resources.SkinnedEffect.dx11.mgfxo"
+#elif OPENGL
+            "Microsoft.Xna.Framework.Graphics.Effect.Resources.SkinnedEffect.ogl.mgfxo"
+#elif PLAYSTATION4
+            "Microsoft.Xna.Framework.Graphics.Effect.Resources.SkinnedEffect.ps4.mgfxo"
+#endif
+        );            
 
         #endregion
 
@@ -379,7 +389,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// Creates a new SkinnedEffect with default parameter settings.
         /// </summary>
         public SkinnedEffect(GraphicsDevice device)
-            : base(device, EffectResource.SkinnedEffect.Bytecode)
+            : base(device, Bytecode)
         {
             CacheEffectParameters(null);
 

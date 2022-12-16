@@ -1,9 +1,17 @@
-// MonoGame - Copyright (C) The MonoGame Team
-// This file is subject to the terms and conditions defined in
-// file 'LICENSE.txt', which is part of this source code package.
-
+#region File Description
+//-----------------------------------------------------------------------------
+// SpriteEffect.cs
+//
 // Microsoft XNA Community Game Platform
 // Copyright (C) Microsoft Corporation. All rights reserved.
+//-----------------------------------------------------------------------------
+#endregion
+
+#region Using Statements
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System;
+#endregion
 
 namespace Microsoft.Xna.Framework.Graphics
 {
@@ -12,23 +20,34 @@ namespace Microsoft.Xna.Framework.Graphics
     /// </summary>
     public class SpriteEffect : Effect
     {
-        private EffectParameter _matrixParam;
-        private Viewport _lastViewport;
-        private Matrix _projection;
+        #region Effect Parameters
+
+        EffectParameter matrixParam;
+
+        #endregion
+
+        static internal readonly byte[] Bytecode = LoadEffectResource(
+#if DIRECTX
+            "Microsoft.Xna.Framework.Graphics.Effect.Resources.SpriteEffect.dx11.mgfxo"
+#elif PSM
+            "Microsoft.Xna.Framework.PSSuite.Graphics.Resources.SpriteEffect.cgx" //FIXME: This shader is totally incomplete
+#elif OPENGL
+            "Microsoft.Xna.Framework.Graphics.Effect.Resources.SpriteEffect.ogl.mgfxo"
+#elif PLAYSTATION4
+            "Microsoft.Xna.Framework.Graphics.Effect.Resources.SpriteEffect.ps4.mgfxo"
+#endif
+        );
+
+        #region Methods
 
         /// <summary>
         /// Creates a new SpriteEffect.
         /// </summary>
         public SpriteEffect(GraphicsDevice device)
-            : base(device, EffectResource.SpriteEffect.Bytecode)
+            : base(device, Bytecode)
         {
             CacheEffectParameters();
         }
-
-        /// <summary>
-        /// An optional matrix used to transform the sprite geometry. Uses <see cref="Matrix.Identity"/> if null.
-        /// </summary>
-        public Matrix? TransformMatrix { get; set; }
 
         /// <summary>
         /// Creates a new SpriteEffect by cloning parameter settings from an existing instance.
@@ -54,7 +73,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         void CacheEffectParameters()
         {
-            _matrixParam = Parameters["MatrixTransform"];
+            matrixParam = Parameters["MatrixTransform"];
         }
 
         /// <summary>
@@ -62,27 +81,15 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         protected internal override void OnApply()
         {
-            var vp = GraphicsDevice.Viewport;
-            if ((vp.Width != _lastViewport.Width) || (vp.Height != _lastViewport.Height))
-            {
-                // Normal 3D cameras look into the -z direction (z = 1 is in front of z = 0). The
-                // sprite batch layer depth is the opposite (z = 0 is in front of z = 1).
-                // --> We get the correct matrix with near plane 0 and far plane -1.
-                Matrix.CreateOrthographicOffCenter(0, vp.Width, vp.Height, 0, 0, -1, out _projection);
+            var viewport = GraphicsDevice.Viewport;
 
-                if (GraphicsDevice.UseHalfPixelOffset)
-                {
-                    _projection.M41 += -0.5f * _projection.M11;
-                    _projection.M42 += -0.5f * _projection.M22;
-                }
+            var projection = Matrix.CreateOrthographicOffCenter(0, viewport.Width, viewport.Height, 0, 0, 1);
+            var halfPixelOffset = Matrix.CreateTranslation(-0.5f, -0.5f, 0);
 
-                _lastViewport = vp;
-            }
-
-            if (TransformMatrix.HasValue)
-                _matrixParam.SetValue(TransformMatrix.GetValueOrDefault() * _projection);
-            else
-                _matrixParam.SetValue(_projection);
+            matrixParam.SetValue(halfPixelOffset * projection);
         }
+
+
+        #endregion
     }
 }

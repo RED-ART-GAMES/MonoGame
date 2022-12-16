@@ -4,7 +4,7 @@
 
 using System.IO;
 
-namespace MonoGame.Framework.Utilities
+namespace MonoGame.Utilities
 {
     internal static class Hash
     {

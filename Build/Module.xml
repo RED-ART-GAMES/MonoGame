@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Module>
+  <Name>MonoGame.Framework</Name>
+  <DefaultAction>Generate</DefaultAction>
+  <DefaultLinuxPlatforms>Angle,Linux,WindowsGL</DefaultLinuxPlatforms>
+  <DefaultMacOSPlatforms>Angle,MacOS,iOS,WindowsGL,Android</DefaultMacOSPlatforms>
+  <DefaultWindowsPlatforms>Android,Angle,Linux,Ouya,PSMobile,Windows8,Windows,WindowsGL,WindowsPhone,WindowsPhone81,iOS,PlayStation4</DefaultWindowsPlatforms>
+  <SupportedPlatforms>Android,Angle,Linux,Ouya,PSMobile,Windows8,Windows,WindowsGL,WindowsPhone,WindowsPhone81,iOS,MacOS,Web,PlayStation4</SupportedPlatforms>
+  <DisableSynchronisation>true</DisableSynchronisation>
+  <GenerateNuGetRepositories>true</GenerateNuGetRepositories>
+</Module>

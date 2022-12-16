@@ -95,7 +95,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate
 
                     Xml.WriteAttributeString("Null", "true");
                 }
-                else if (value.GetType() != typeSerializer.TargetType && !IsNullableType(declaredType))
+                else if (value.GetType() != declaredType && !IsNullableType(declaredType))
                 {
                     Xml.WriteStartAttribute("Type");
                     WriteTypeName(value.GetType());
@@ -105,7 +105,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate
                 }
             }
 
-            if (value != null && !typeSerializer.ObjectIsEmpty(value))
+            if (value != null)
                 typeSerializer.Serialize(this, value, format);
 
             if (!format.FlattenContent)
@@ -148,9 +148,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate
 
         private string GetSharedResourceID(object value)
         {
-            if (value == null)
-                return null;
-
             string id;
             if (!_sharedResources.TryGetValue(value, out id))
                 _sharedResources.Add(value, id = "#Resource" + (_sharedResources.Count + 1));
@@ -216,7 +213,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate
 
         public void WriteTypeName(Type type)
         {
-            Xml.WriteString(Serializer.GetFullTypeName(type));
+            Xml.WriteString(Serializer.GetTypeName(type));
         }
     }        
 }

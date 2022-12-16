@@ -2,13 +2,17 @@
 using System.Reflection;
 using System.Linq;
 
+#if WINRT
+using System.Reflection.Emit;
+#endif
+
 namespace Microsoft.Xna.Framework.Content
 {
     internal static class ContentExtensions
     {
         public static ConstructorInfo GetDefaultConstructor(this Type type)
         {
-#if NET45
+#if WINRT
             var typeInfo = type.GetTypeInfo();
             var ctor = typeInfo.DeclaredConstructors.FirstOrDefault(c => !c.IsStatic && c.GetParameters().Length == 0);
             return ctor;
@@ -26,7 +30,7 @@ namespace Microsoft.Xna.Framework.Content
             // all properties in this list are defined in this class by comparing
             // its get method with that of it's base class. If they're the same
             // Then it's an overridden property.
-#if NET45
+#if WINRT
             PropertyInfo[] infos= type.GetTypeInfo().DeclaredProperties.ToArray();
             var nonStaticPropertyInfos = from p in infos
                                          where (p.GetMethod != null) && (!p.GetMethod.IsStatic) &&
@@ -44,7 +48,7 @@ namespace Microsoft.Xna.Framework.Content
 
         public static FieldInfo[] GetAllFields(this Type type)
         {
-#if NET45
+#if WINRT
             FieldInfo[] fields= type.GetTypeInfo().DeclaredFields.ToArray();
             var nonStaticFields = from field in fields
                     where !field.IsStatic
@@ -53,15 +57,6 @@ namespace Microsoft.Xna.Framework.Content
 #else
             var attrs = BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly;
             return type.GetFields(attrs);
-#endif
-        }
-
-        public static bool IsClass(this Type type)
-        {
-#if NET45
-            return type.GetTypeInfo().IsClass;
-#else
-            return type.IsClass;
 #endif
         }
     }

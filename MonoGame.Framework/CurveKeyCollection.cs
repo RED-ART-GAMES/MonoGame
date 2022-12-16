@@ -5,6 +5,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Runtime.Serialization;
 
 namespace Microsoft.Xna.Framework
@@ -14,6 +15,7 @@ namespace Microsoft.Xna.Framework
     /// </summary>
     // TODO : [TypeConverter(typeof(ExpandableObjectConverter))]
     [DataContract]
+    [Serializable]
     public class CurveKeyCollection : ICollection<CurveKey>
     {
         #region Private Fields

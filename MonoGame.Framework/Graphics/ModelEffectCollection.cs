@@ -9,7 +9,7 @@ namespace Microsoft.Xna.Framework.Graphics
 	//     Represents a collection of effects associated with a model.
 	public sealed class ModelEffectCollection : ReadOnlyCollection<Effect>
 	{
-		internal ModelEffectCollection(IList<Effect> list)
+		public ModelEffectCollection(IList<Effect> list)
 			: base(list)
 		{
 

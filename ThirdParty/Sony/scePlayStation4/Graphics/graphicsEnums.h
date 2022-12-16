@@ -1,0 +1,207 @@
+#pragma once
+
+namespace Graphics {
+
+enum VertexElement
+{
+	// NOTE: This should match up with the MonoGame 
+	// VertexElementFormat enum for easy interop!
+
+	VertexElement_Single,
+    VertexElement_Vector2,
+    VertexElement_Vector3,
+    VertexElement_Vector4,
+    VertexElement_Color,
+    VertexElement_Byte4,
+    VertexElement_Short2,
+    VertexElement_Short4,
+    VertexElement_NormalizedShort2,
+    VertexElement_NormalizedShort4,
+    VertexElement_HalfVector2,
+    VertexElement_HalfVector4
+};
+
+enum TextureFormat
+{
+	// NOTE: This should match up with the MonoGame
+	// SurfaceFormat enum for easy interop!
+
+    TextureFormat_Color = 0,
+    TextureFormat_Bgr565 = 1,
+    TextureFormat_Bgra5551 = 2,
+    TextureFormat_Bgra4444 = 3,
+    TextureFormat_Dxt1 = 4,
+    TextureFormat_Dxt3 = 5,
+    TextureFormat_Dxt5 = 6,
+    TextureFormat_NormalizedByte2 = 7,
+    TextureFormat_NormalizedByte4 = 8,
+    TextureFormat_Rgba1010102 = 9,
+    TextureFormat_Rg32 = 10,
+    TextureFormat_Rgba64 = 11,
+    TextureFormat_Alpha8 = 12,
+    TextureFormat_Single = 13,
+    TextureFormat_Vector2 = 14,
+    TextureFormat_Vector4 = 15,
+    TextureFormat_HalfSingle = 16,
+    TextureFormat_HalfVector2 = 17,
+    TextureFormat_HalfVector4 = 18,
+    TextureFormat_HdrBlendable = 19,
+
+	TextureFormat_PlayStation4_BC1Unorm = 400,
+	TextureFormat_PlayStation4_BC2Unorm = 401,
+	TextureFormat_PlayStation4_BC3Unorm = 402,
+};
+
+enum DepthFormat
+{
+	// NOTE: This should match up with the MonoGame 
+	// DepthFormat enum for easy interop!
+
+	DepthFormat_None = -1,
+	DepthFormat_Depth16 = 54,
+	DepthFormat_Depth24 = 51,
+	DepthFormat_Depth24Stencil8 = 48,		
+};
+
+enum IndexElement
+{
+	// NOTE: This should match up with the MonoGame 
+	// IndexElementSize enum for easy interop!
+
+	IndexElement_SixteenBits,
+	IndexElement_ThirtyTwoBits
+};
+
+enum ShaderStage
+{
+	ShaderStage_Vertex,
+	ShaderStage_Pixel
+};
+
+enum PrimitiveType
+{
+	// NOTE: This should match up with the MonoGame 
+	// PrimitiveType enum for easy interop!
+
+	PrimitiveType_TriangleList,
+	PrimitiveType_TriangleStrip,
+	PrimitiveType_LineList,
+	PrimitiveType_LineStrip,
+};
+
+enum ClearOptions
+{
+	ClearOptions_Target = 1,
+    ClearOptions_DepthBuffer = 2,
+    ClearOptions_Stencil = 4        
+};
+
+enum TextureFilter
+{
+	// NOTE: This should match up with the MonoGame 
+	// TextureFilter enum for easy interop!
+
+	TextureFilter_Linear,
+	TextureFilter_Point,
+	TextureFilter_Anisotropic,
+	TextureFilter_LinearMipPoint,
+	TextureFilter_PointMipLinear,
+	TextureFilter_MinLinearMagPointMipLinear,
+	TextureFilter_MinLinearMagPointMipPoint,
+	TextureFilter_MinPointMagLinearMipLinear,
+	TextureFilter_MinPointMagLinearMipPoint,
+};
+
+enum TextureAddressMode
+{
+	// NOTE: This should match up with the MonoGame 
+	// TextureAddressMode enum for easy interop!
+
+	TextureAddressMode_Wrap,
+	TextureAddressMode_Clamp,
+	TextureAddressMode_Mirror,
+};
+
+enum CullMode
+{
+	// NOTE: This should match up with the MonoGame 
+	// CullMode enum for easy interop!
+
+    CullMode_None,
+    CullMode_CullClockwiseFace,
+    CullMode_CullCounterClockwiseFace
+};
+
+enum FillMode
+{
+	// NOTE: This should match up with the MonoGame 
+	// FillMode enum for easy interop!
+
+    FillMode_Solid,
+    FillMode_WireFrame
+};
+
+enum CompareFunction
+{
+	// NOTE: This should match up with the MonoGame 
+	// CompareFunction enum for easy interop!
+
+    CompareFunction_Always,
+    CompareFunction_Never,
+    CompareFunction_Less,
+    CompareFunction_LessEqual,
+    CompareFunction_Equal,
+    CompareFunction_GreaterEqual,
+    CompareFunction_Greater,
+    CompareFunction_NotEqual
+};
+
+enum BlendFunction
+{
+	// NOTE: This should match up with the MonoGame 
+	// BlendFunction enum for easy interop!
+
+	BlendFunction_Add,
+	BlendFunction_Subtract,
+	BlendFunction_ReverseSubtract,
+	BlendFunction_Max,
+	BlendFunction_Min,
+};
+
+enum StencilOperation
+{
+	// NOTE: This should match up with the MonoGame
+	// StencilOperation enum for easy interop!
+
+	StencilOperation_Keep,
+	StencilOperation_Zero,
+	StencilOperation_Replace,
+	StencilOperation_Increment,
+	StencilOperation_Decrement,
+	StencilOperation_IncrementSaturation,
+	StencilOperation_DecrementSaturation,
+	StencilOperation_Invert
+};
+
+enum Blend
+{
+	// NOTE: This should match up with the MonoGame 
+	// Blend enum for easy interop!
+
+	Blend_One,
+	Blend_Zero,
+	Blend_SourceColor,
+	Blend_InverseSourceColor,
+	Blend_SourceAlpha,
+	Blend_InverseSourceAlpha,
+	Blend_DestinationColor,
+	Blend_InverseDestinationColor,
+	Blend_DestinationAlpha,
+	Blend_InverseDestinationAlpha,
+	Blend_BlendFactor,
+	Blend_InverseBlendFactor,
+	Blend_SourceAlphaSaturation,
+};
+
+
+} // namespace Graphics

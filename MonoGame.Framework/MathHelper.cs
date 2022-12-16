@@ -14,7 +14,7 @@ namespace Microsoft.Xna.Framework
     	/// <summary>
         /// Represents the mathematical constant e(2.71828175).
         /// </summary>
-        public const float E = MathF.E;
+        public const float E = (float)Math.E;
         
         /// <summary>
         /// Represents the log base ten of e(0.4342945).
@@ -29,7 +29,7 @@ namespace Microsoft.Xna.Framework
         /// <summary>
         /// Represents the value of pi(3.14159274).
         /// </summary>
-        public const float Pi = MathF.PI;
+        public const float Pi = (float)Math.PI;
         
         /// <summary>
         /// Represents the value of pi divided by two(1.57079637).
@@ -45,12 +45,6 @@ namespace Microsoft.Xna.Framework
         /// Represents the value of pi times two(6.28318548).
         /// </summary>
         public const float TwoPi = (float)(Math.PI * 2.0);
-        
-        /// <summary>
-        /// Represents the value of pi times two(6.28318548).
-        /// This is an alias of TwoPi.
-        /// </summary>
-        public const float Tau = TwoPi;
         
         /// <summary>
         /// Returns the Cartesian coordinate for one axis of a point that is defined by a given triangle and two normalized barycentric (areal) coordinates.
@@ -165,46 +159,19 @@ namespace Microsoft.Xna.Framework
         /// Linearly interpolates between two values.
         /// </summary>
         /// <param name="value1">Source value.</param>
-        /// <param name="value2">Destination value.</param>
+        /// <param name="value2">Source value.</param>
         /// <param name="amount">Value between 0 and 1 indicating the weight of value2.</param>
         /// <returns>Interpolated value.</returns> 
-        /// <remarks>This method performs the linear interpolation based on the following formula:
-        /// <code>value1 + (value2 - value1) * amount</code>.
+        /// <remarks>This method performs the linear interpolation based on the following formula.
+        /// <c>value1 + (value2 - value1) * amount</c>
         /// Passing amount a value of 0 will cause value1 to be returned, a value of 1 will cause value2 to be returned.
-        /// See <see cref="MathHelper.LerpPrecise"/> for a less efficient version with more precision around edge cases.
         /// </remarks>
         public static float Lerp(float value1, float value2, float amount)
         {
             return value1 + (value2 - value1) * amount;
         }
 
-
-        /// <summary>
-        /// Linearly interpolates between two values.
-        /// This method is a less efficient, more precise version of <see cref="MathHelper.Lerp"/>.
-        /// See remarks for more info.
-        /// </summary>
-        /// <param name="value1">Source value.</param>
-        /// <param name="value2">Destination value.</param>
-        /// <param name="amount">Value between 0 and 1 indicating the weight of value2.</param>
-        /// <returns>Interpolated value.</returns>
-        /// <remarks>This method performs the linear interpolation based on the following formula:
-        /// <code>((1 - amount) * value1) + (value2 * amount)</code>.
-        /// Passing amount a value of 0 will cause value1 to be returned, a value of 1 will cause value2 to be returned.
-        /// This method does not have the floating point precision issue that <see cref="MathHelper.Lerp"/> has.
-        /// i.e. If there is a big gap between value1 and value2 in magnitude (e.g. value1=10000000000000000, value2=1),
-        /// right at the edge of the interpolation range (amount=1), <see cref="MathHelper.Lerp"/> will return 0 (whereas it should return 1).
-        /// This also holds for value1=10^17, value2=10; value1=10^18,value2=10^2... so on.
-        /// For an in depth explanation of the issue, see below references:
-        /// Relevant Wikipedia Article: https://en.wikipedia.org/wiki/Linear_interpolation#Programming_language_support
-        /// Relevant StackOverflow Answer: http://stackoverflow.com/questions/4353525/floating-point-linear-interpolation#answer-23716956
-        /// </remarks>
-        public static float LerpPrecise(float value1, float value2, float amount)
-        {
-            return ((1 - amount) * value1) + (value2 * amount);
-        }
-
-        /// <summary>
+	/// <summary>
         /// Returns the greater of two values.
         /// </summary>
         /// <param name="value1">Source value.</param>
@@ -212,18 +179,7 @@ namespace Microsoft.Xna.Framework
         /// <returns>The greater value.</returns>
         public static float Max(float value1, float value2)
         {
-            return value1 > value2 ? value1 : value2;
-        }
-
-        /// <summary>
-        /// Returns the greater of two values.
-        /// </summary>
-        /// <param name="value1">Source value.</param>
-        /// <param name="value2">Source value.</param>
-        /// <returns>The greater value.</returns>
-        public static int Max(int value1, int value2)
-        {
-            return value1 > value2 ? value1 : value2;
+            return Math.Max(value1, value2);
         }
         
         /// <summary>
@@ -234,18 +190,7 @@ namespace Microsoft.Xna.Framework
         /// <returns>The lesser value.</returns>
         public static float Min(float value1, float value2)
         {
-            return value1 < value2 ? value1 : value2;
-        }
-
-        /// <summary>
-        /// Returns the lesser of two values.
-        /// </summary>
-        /// <param name="value1">Source value.</param>
-        /// <param name="value2">Source value.</param>
-        /// <returns>The lesser value.</returns>
-        public static int Min(int value1, int value2)
-        {
-            return value1 < value2 ? value1 : value2;
+            return Math.Min(value1, value2);
         }
         
         /// <summary>
@@ -301,17 +246,22 @@ namespace Microsoft.Xna.Framework
         /// </summary>
         /// <param name="angle">The angle to reduce, in radians.</param>
         /// <returns>The new angle, in radians.</returns>
-        public static float WrapAngle(float angle)
-        {
-            if ((angle > -Pi) && (angle <= Pi))
-                return angle;
-            angle %= TwoPi;
-            if (angle <= -Pi)
-                return angle + TwoPi;
-            if (angle > Pi)
-                return angle - TwoPi;
-            return angle;
-        }
+	public static float WrapAngle(float angle)
+	{
+            angle = (float)Math.IEEERemainder((double)angle, 6.2831854820251465);
+	    if (angle <= -3.14159274f)
+	    {
+		angle += 6.28318548f;
+	    }
+	    else
+	    {
+		if (angle > 3.14159274f)
+		{
+		   angle -= 6.28318548f;
+		}
+	    }
+	    return angle;
+	}
 
  	/// <summary>
         /// Determines if value is powered by two.

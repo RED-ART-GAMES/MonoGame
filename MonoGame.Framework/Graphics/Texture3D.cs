@@ -5,7 +5,6 @@
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
-using MonoGame.Framework.Utilities;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
@@ -32,21 +31,15 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		public Texture3D(GraphicsDevice graphicsDevice, int width, int height, int depth, bool mipMap, SurfaceFormat format)
             : this(graphicsDevice, width, height, depth, mipMap, format, false)
-		{
+		{		    
 		}
 
 		protected Texture3D (GraphicsDevice graphicsDevice, int width, int height, int depth, bool mipMap, SurfaceFormat format, bool renderTarget)
 		{
-		    if (graphicsDevice == null)
-		        throw new ArgumentNullException("graphicsDevice", FrameworkResources.ResourceCreationWhenDeviceIsNull);
-            if (width <= 0)
-                throw new ArgumentOutOfRangeException("width","Texture width must be greater than zero");
-            if (height <= 0)
-                throw new ArgumentOutOfRangeException("height","Texture height must be greater than zero");
-            if (depth <= 0)
-                throw new ArgumentOutOfRangeException("depth","Texture depth must be greater than zero");
+            if (graphicsDevice == null)
+                throw new ArgumentNullException("graphicsDevice");
 
-		    this.GraphicsDevice = graphicsDevice;
+			this.GraphicsDevice = graphicsDevice;
             this._width = width;
             this._height = height;
             this._depth = depth;
@@ -58,27 +51,26 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public void SetData<T>(T[] data) where T : struct
 		{
-            if (data == null)
-                throw new ArgumentNullException("data");
-			SetData(data, 0, data.Length);
+			SetData<T>(data, 0, data.Length);
 		}
-
+		
 		public void SetData<T> (T[] data, int startIndex, int elementCount) where T : struct
 		{
-			SetData(0, 0, 0, Width, Height, 0, Depth, data, startIndex, elementCount);
+			SetData<T>(0, 0, 0, Width, Height, 0, Depth, data, startIndex, elementCount);
 		}
 
 		public void SetData<T> (int level,
 		                        int left, int top, int right, int bottom, int front, int back,
 		                        T[] data, int startIndex, int elementCount) where T : struct
 		{
-            ValidateParams(level, left, top, right, bottom, front, back, data, startIndex, elementCount);
+			if (data == null) 
+				throw new ArgumentNullException("data");
 
-            var width = right - left;
-            var height = bottom - top;
-            var depth = back - front;
+            int width = right - left;
+            int height = bottom - top;
+            int depth = back - front;
 
-            PlatformSetData(level, left, top, right, bottom, front, back, data, startIndex, elementCount, width, height, depth);
+            PlatformSetData<T>(level, left, top, right, bottom, front, back, data, startIndex, elementCount, width, height, depth);
 		}
 
         /// <summary>
@@ -97,7 +89,17 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="elementCount">Number of elements to get.</param>
         public void GetData<T>(int level, int left, int top, int right, int bottom, int front, int back, T[] data, int startIndex, int elementCount) where T : struct
         {
-            ValidateParams(level, left, top, right, bottom, front, back, data, startIndex, elementCount);
+            if (data == null || data.Length == 0)
+                throw new ArgumentException("data cannot be null");
+            if (data.Length < startIndex + elementCount)
+                throw new ArgumentException("The data passed has a length of " + data.Length + " but " + elementCount + " pixels have been requested.");
+
+            // Disallow negative box size
+            if ((left < 0 || left >= right)
+                || (top < 0 || top >= bottom)
+                || (front < 0 || front >= back))
+                throw new ArgumentException("Neither box size nor box position can be negative");
+
             PlatformGetData(level, left, top, right, bottom, front, back, data, startIndex, elementCount);
         }
 
@@ -120,45 +122,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="data">Array of data.</param>
         public void GetData<T>(T[] data) where T : struct
         {
-            if (data == null)
-                throw new ArgumentNullException("data");
             GetData(data, 0, data.Length);
-        }
-
-        private void ValidateParams<T>(int level,
-		                        int left, int top, int right, int bottom, int front, int back,
-		                        T[] data, int startIndex, int elementCount) where T : struct
-        {
-            var texWidth = Math.Max(Width >> level, 1);
-            var texHeight = Math.Max(Height >> level, 1);
-            var texDepth = Math.Max(Depth >> level, 1);
-            var width = right - left;
-            var height = bottom - top;
-            var depth = back - front;
-
-            if (left < 0 || top < 0 || back < 0 || right > texWidth || bottom > texHeight || front > texDepth)
-                throw new ArgumentException("Area must remain inside texture bounds");
-            // Disallow negative box size
-            if (left >= right || top >= bottom || front >= back)
-                throw new ArgumentException("Neither box size nor box position can be negative");
-            if (level < 0 || level >= LevelCount)
-                throw new ArgumentException("level must be smaller than the number of levels in this texture.");
-            if (data == null)
-                throw new ArgumentNullException("data");
-            var tSize = ReflectionHelpers.SizeOf<T>.Get();
-            var fSize = Format.GetSize();
-            if (tSize > fSize || fSize % tSize != 0)
-                throw new ArgumentException("Type T is of an invalid size for the format of this texture.", "T");
-            if (startIndex < 0 || startIndex >= data.Length)
-                throw new ArgumentException("startIndex must be at least zero and smaller than data.Length.", "startIndex");
-            if (data.Length < startIndex + elementCount)
-                throw new ArgumentException("The data array is too small.");
-
-            var dataByteSize = width*height*depth*fSize;
-            if (elementCount * tSize != dataByteSize)
-                throw new ArgumentException(string.Format("elementCount is not the right size, " +
-                                            "elementCount * sizeof(T) is {0}, but data size is {1}.",
-                                            elementCount * tSize, dataByteSize), "elementCount");
         }
 	}
 }

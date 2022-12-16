@@ -5,9 +5,8 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Reflection;
-using MonoGame.Framework.Utilities;
+using Microsoft.Xna.Framework.Utilities;
 
 namespace Microsoft.Xna.Framework.Content
 {
@@ -22,14 +21,9 @@ namespace Microsoft.Xna.Framework.Content
         private ContentTypeReader _baseTypeReader;
 
 
-        public ReflectiveReader() 
+        internal ReflectiveReader() 
             : base(typeof(T))
         {
-        }
-
-        public override bool CanDeserializeIntoExistingObject
-        {
-            get { return TargetType.IsClass(); }
         }
 
         protected internal override void Initialize(ContentTypeReaderManager manager)
@@ -76,8 +70,15 @@ namespace Microsoft.Xna.Framework.Content
                     return null;
 
                 // Skip over indexer properties.
-                if (property.GetIndexParameters().Any())
-                    return null;
+                if (property.Name == "Item")
+                {
+                    var getMethod = ReflectionHelpers.GetPropertyGetMethod(property);
+                    var setMethod = ReflectionHelpers.GetPropertySetMethod(property);
+
+                    if ((getMethod != null && getMethod.GetParameters().Length > 0) ||
+                        (setMethod != null && setMethod.GetParameters().Length > 0))
+                        return null;
+                }
             }
 
             // Are we explicitly asked to ignore this item?
@@ -94,15 +95,10 @@ namespace Microsoft.Xna.Framework.Content
                     if (!ReflectionHelpers.PropertyIsPublic(property))
                         return null;
 
-                    // If the read-only property has a type reader,
-                    // and CanDeserializeIntoExistingObject is true,
-                    // then it is safe to deserialize into the existing object.
-                    if (!property.CanWrite)
-                    {
-                        var typeReader = manager.GetTypeReader(property.PropertyType);
-                        if (typeReader == null || !typeReader.CanDeserializeIntoExistingObject)
-                            return null;
-                    }
+                    // If the read-only property has a type reader then
+                    // it is safe to deserialize into the existing type.
+                    if (!property.CanWrite && manager.GetTypeReader(property.PropertyType) == null)
+                        return null;
                 }
                 else
                 {
@@ -146,16 +142,19 @@ namespace Microsoft.Xna.Framework.Content
             // We need to have a reader at this point.
             var reader = manager.GetTypeReader(elementType);
             if (reader == null)
-                if (elementType == typeof(System.Array))
-                    reader = new ArrayReader<Array>();
-                else
-                    throw new ContentLoadException(string.Format("Content reader could not be found for {0} type.", elementType.FullName));
+                throw new ContentLoadException(string.Format("Content reader could not be found for {0} type.", elementType.FullName));
 
             // We use the construct delegate to pick the correct existing 
             // object to be the target of deserialization.
             Func<object, object> construct = parent => null;
             if (property != null && !property.CanWrite)
                 construct = parent => property.GetValue(parent, null);
+            else if (ReflectionHelpers.IsConcreteClass(elementType))
+            {
+                var constructor = elementType.GetDefaultConstructor();
+                if (constructor != null)
+                    construct = parent => constructor.Invoke(null);
+            }
 
             return (input, parent) =>
             {

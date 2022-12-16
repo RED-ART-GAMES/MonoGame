@@ -3,11 +3,11 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Xml;
-using MonoGame.Framework.Utilities;
+using Microsoft.Xna.Framework.Utilities;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate
 {
@@ -26,7 +26,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate
         private readonly List<ElementInfo> _elements = new List<ElementInfo>();
 
         private ContentTypeSerializer _baseSerializer;
-        private GenericCollectionHelper _collectionHelper;
 
         private bool GetElementInfo(IntermediateSerializer serializer, MemberInfo member, out ElementInfo info)
         {
@@ -61,21 +60,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate
                     if (prop.GetGetMethod() == null)
                         return false;
 
-                    // If there is a setter, but it's private, then don't include this element
-                    // (although technically we could, as long as we have a serializer with
-                    // CanDeserializeIntoExistingObject=true for this property type)
-                    var setter = prop.GetSetMethod(true);
-                    if (setter != null && !setter.IsPublic)
-                        return false;
-
-                    // If there is no setter, and we don't have a type serializer 
-                    // that can deserialize into an existing object, then we have no way 
-                    // for it to be deserialized.
-                    if (setter == null && !serializer.GetTypeSerializer(prop.PropertyType).CanDeserializeIntoExistingObject)
-                        return false;
-
-                    // Don't serialize or deserialize indexers.
-                    if (prop.GetIndexParameters().Any())
+                    // If there is no public setter and the property is a system
+                    // type then we have no way for it to be deserialized.
+                    if (prop.GetSetMethod() == null &&
+                        prop.PropertyType.Namespace == "System")
                         return false;
                 }
                 else if (field != null)
@@ -133,14 +121,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate
                 if (GetElementInfo(serializer, field, out info))
                     _elements.Add(info);                
             }
-
-            if (GenericCollectionHelper.IsGenericCollectionType(TargetType, false))
-                _collectionHelper = serializer.GetCollectionHelper(TargetType);
-        }
-
-        public override bool CanDeserializeIntoExistingObject
-        {
-            get { return TargetType.IsClass && TargetType.BaseType != null; }
         }
 
         protected internal override object Deserialize(IntermediateReader input, ContentSerializerAttribute format, object existingInstance)
@@ -175,7 +155,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate
                             continue;
                         
                         // We failed to find a required element.
-                        throw input.NewInvalidContentException(null, "The Xml element `{0}` is required, but element `{1}` was found at line {2}:{3}. Try changing the element order or adding missing elements.", info.Attribute.ElementName, input.Xml.Name, ((IXmlLineInfo)input.Xml).LineNumber, ((IXmlLineInfo)input.Xml).LinePosition);
+                        throw new InvalidContentException(string.Format("The Xml element `{0}` is required!", info.Attribute.ElementName));
                     }
                 }
 
@@ -196,9 +176,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate
                 }
             }
 
-            if (_collectionHelper != null)
-                _collectionHelper.Deserialize(input, result, format);
-
             return result;
         }
 
@@ -206,8 +183,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate
         {
             if (_baseSerializer != null)
                 return _baseSerializer.ObjectIsEmpty(value);
-            if (_collectionHelper != null)
-                return _collectionHelper.ObjectIsEmpty(value);
             return false;
         }
 
@@ -233,9 +208,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate
 
                 elementSerializer.ScanChildren(serializer, callback, elementValue);
             }
-
-            if (_collectionHelper != null)
-                _collectionHelper.ScanChildren(callback, value);
         }
 
         protected internal override void Serialize(IntermediateWriter output, object value, ContentSerializerAttribute format)
@@ -254,9 +226,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate
                 else
                     output.WriteObjectInternal(elementValue, info.Attribute, info.Serializer, info.Serializer.TargetType);
             }
-
-            if (_collectionHelper != null)
-                _collectionHelper.Serialize(output, value, format);
         }
     }
 }

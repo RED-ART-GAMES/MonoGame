@@ -4,20 +4,16 @@
 
 using System;
 using System.IO;
-using System.Text;
-using System.Text.RegularExpressions;
 
-namespace MonoGame.Framework.Utilities
+namespace Microsoft.Xna.Framework.Utilities
 {
     internal static class FileHelpers
     {
-        private static readonly char[] UrlSafeChars = new[] { '.', '_', '-', ';', '/', '?', '\\', ':' };
-
         public static readonly char ForwardSlash = '/';
         public static readonly string ForwardSlashString = new string(ForwardSlash, 1);
         public static readonly char BackwardSlash = '\\';
 
-#if WINDOWS_UAP
+#if WINRT
         public static readonly char NotSeparator = ForwardSlash;
         public static readonly char Separator = BackwardSlash;
 #else
@@ -42,20 +38,16 @@ namespace MonoGame.Framework.Utilities
         {
             // Uri accepts forward slashes
             filePath = filePath.Replace(BackwardSlash, ForwardSlash);
-            relativeFile = relativeFile.Replace(BackwardSlash, ForwardSlash);
-
-            // Sanitize the path of double slashes, they confuse Uri
-            while (filePath.Contains("//"))
-                filePath = filePath.Replace("//", "/");
 
             bool hasForwardSlash = filePath.StartsWith(ForwardSlashString);
             if (!hasForwardSlash)
                 filePath = ForwardSlashString + filePath;
 
             // Get a uri for filePath using the file:// schema and no host.
-            var src = new Uri("file://" + UrlEncode(filePath));
+            var src = new Uri("file://" + filePath);
 
-            var dst = new Uri(src, UrlEncode(relativeFile));
+            var dst = new Uri(src, relativeFile);
+
             // The uri now contains the path to the relativeFile with 
             // relative addresses resolved... get the local path.
             var localPath = dst.LocalPath;
@@ -65,50 +57,7 @@ namespace MonoGame.Framework.Utilities
 
             // Convert the directory separator characters to the 
             // correct platform specific separator.
-            return TrimPath(NormalizeFilePathSeparators(localPath));
-        }
-
-        internal static string UrlEncode(string url)
-        {
-            var encoder = new UTF8Encoding();
-            var safeline = new StringBuilder(encoder.GetByteCount(url) * 3);
-
-            foreach (var c in url)
-            {
-                if ((c >= 48 && c <= 57) || (c >= 65 && c <= 90) || (c >= 97 && c <= 122) || Array.IndexOf(UrlSafeChars, c) != -1)
-                    safeline.Append(c);
-                else
-                {
-                    var bytes = encoder.GetBytes(c.ToString());
-
-                    foreach (var num in bytes)
-                    {
-                        safeline.Append("%");
-                        safeline.Append(num.ToString("X"));
-                    }
-                }
-            }
-
-            return safeline.ToString();
-        }
-
-        private static string TrimPath(string filePath)
-        {
-            // Remove . in filePath
-
-            while (filePath.Contains("/./"))
-                filePath = filePath.Replace("/./", "/");
-
-            while (filePath.Contains(@"\.\"))
-                filePath = filePath.Replace(@"\.\", @"\");
-
-            filePath = Regex.Replace(filePath, @"^\.(\/|\\)", string.Empty);
-
-            // Remove .. in filePath
-
-            filePath = Regex.Replace(filePath, @"[^\/\\]+(\/|\\)\.\.(\/|\\)", string.Empty);
-
-            return filePath;
+            return NormalizeFilePathSeparators(localPath);
         }
     }
 }

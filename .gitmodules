@@ -1,4 +1,0 @@
-[submodule "PS4"]
-	path = PS4
-	url = git@github.com:RED-ART-GAMES/MonoGame.PS4.git
-	branch = brute

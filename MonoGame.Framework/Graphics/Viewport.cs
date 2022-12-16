@@ -11,6 +11,7 @@ namespace Microsoft.Xna.Framework.Graphics
     /// Describes the view bounds for render-target surface.
     /// </summary>
     [DataContract]
+    [Serializable]
     public struct Viewport
     {
 		private int x;
@@ -144,11 +145,21 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
 		public Rectangle TitleSafeArea 
 		{
-			get { return GraphicsDevice.GetTitleSafeArea(x, y, width, height); }
+			get
+			{
+                // TODO : Possible change it for XBOX or PS4 
+
+                var iSafeStartX = x;
+                var iSafeStartY = y;
+                var iSafeWidth = width;
+                var iSafeHeight = height;
+
+                return new Rectangle(iSafeStartX, iSafeStartY, iSafeWidth, iSafeHeight);
+			}
 		}
 
         /// <summary>
-        /// Constructs a viewport from the given values. The <see cref="MinDepth"/> will be 0.0 and <see cref="MaxDepth"/> will be 1.0.
+        /// Creates a new instance of <see cref="Viewport"/> struct.
         /// </summary>
         /// <param name="x">The x coordinate of the upper-left corner of the view bounds in pixels.</param>
         /// <param name="y">The y coordinate of the upper-left corner of the view bounds in pixels.</param>
@@ -165,7 +176,7 @@ namespace Microsoft.Xna.Framework.Graphics
 		}
 
         /// <summary>
-        /// Constructs a viewport from the given values.
+        /// Creates a new instance of <see cref="Viewport"/> struct.
         /// </summary>
         /// <param name="x">The x coordinate of the upper-left corner of the view bounds in pixels.</param>
         /// <param name="y">The y coordinate of the upper-left corner of the view bounds in pixels.</param>
@@ -192,10 +203,7 @@ namespace Microsoft.Xna.Framework.Graphics
 		}
 
         /// <summary>
-        /// Projects a <see cref="Vector3"/> from model space into screen space.
-        /// The source point is transformed from model space to world space by the world matrix,
-        /// then from world space to view space by the view matrix, and
-        /// finally from view space to screen space by the projection matrix.
+        /// Projects a <see cref="Vector3"/> from world space into screen space.
         /// </summary>
         /// <param name="source">The <see cref="Vector3"/> to project.</param>
         /// <param name="projection">The projection <see cref="Matrix"/>.</param>
@@ -220,11 +228,7 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
         /// <summary>
-        /// Unprojects a <see cref="Vector3"/> from screen space into model space.
-        /// The source point is transformed from screen space to view space by the inverse of the projection matrix,
-        /// then from view space to world space by the inverse of the view matrix, and
-        /// finally from world space to model space by the inverse of the world matrix.
-        /// Note source.Z must be less than or equal to MaxDepth.
+        /// Unprojects a <see cref="Vector3"/> from screen space into world space.
         /// </summary>
         /// <param name="source">The <see cref="Vector3"/> to unproject.</param>
         /// <param name="projection">The projection <see cref="Matrix"/>.</param>

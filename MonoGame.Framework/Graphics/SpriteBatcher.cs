@@ -2,6 +2,8 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+#define USE_INDEX_BUFFERS
+
 using System;
 using System.Collections.Generic;
 
@@ -47,29 +49,28 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         private readonly GraphicsDevice _device;
 
+#if USE_INDEX_BUFFERS
+        private IndexBuffer _indexBuffer;
+#else
         /// <summary>
         /// Vertex index array. The values in this array never change.
         /// </summary>
         private short[] _index;
+#endif
 
         private VertexPositionColorTexture[] _vertexArray;
 
-        public SpriteBatcher(GraphicsDevice device, int capacity = 0)
+		public SpriteBatcher (GraphicsDevice device)
 		{
             _device = device;
 
-            if (capacity <= 0)
-                capacity = InitialBatchSize;
-            else
-                capacity = (capacity + 63) & (~63); // ensure chunks of 64.
-
-            _batchItemList = new SpriteBatchItem[capacity];
+			_batchItemList = new SpriteBatchItem[InitialBatchSize];
             _batchItemCount = 0;
 
-            for (int i = 0; i < capacity; i++)
+            for (int i = 0; i < InitialBatchSize; i++)
                 _batchItemList[i] = new SpriteBatchItem();
 
-            EnsureArrayCapacity(capacity);
+            EnsureArrayCapacity(InitialBatchSize);
 		}
 
         /// <summary>
@@ -101,18 +102,28 @@ namespace Microsoft.Xna.Framework.Graphics
         private unsafe void EnsureArrayCapacity(int numBatchItems)
         {
             int neededCapacity = 6 * numBatchItems;
+
+#if USE_INDEX_BUFFERS
+            if (_indexBuffer != null && neededCapacity <= _indexBuffer.IndexCount)
+#else
             if (_index != null && neededCapacity <= _index.Length)
+#endif
             {
                 // Short circuit out of here because we have enough capacity.
                 return;
             }
+
             short[] newIndex = new short[6 * numBatchItems];
             int start = 0;
+
+#if !USE_INDEX_BUFFERS
             if (_index != null)
             {
                 _index.CopyTo(newIndex, 0);
                 start = _index.Length / 6;
             }
+#endif
+
             fixed (short* indexFixedPtr = newIndex)
             {
                 var indexPtr = indexFixedPtr + (start * 6);
@@ -138,7 +149,15 @@ namespace Microsoft.Xna.Framework.Graphics
                     *(indexPtr + 5) = (short)(i * 4 + 2);
                 }
             }
+
+#if USE_INDEX_BUFFERS
+            if (_indexBuffer != null)
+                _indexBuffer.Dispose();
+            _indexBuffer = new IndexBuffer(_device, IndexElementSize.SixteenBits, newIndex.Length, BufferUsage.WriteOnly);
+            _indexBuffer.SetData(newIndex);
+#else
             _index = newIndex;
+#endif
 
             _vertexArray = new VertexPositionColorTexture[4 * numBatchItems];
         }
@@ -173,10 +192,6 @@ namespace Microsoft.Xna.Framework.Graphics
             int batchCount = _batchItemCount;
 
             
-            unchecked
-            {
-                _device._graphicsMetrics._spriteCount += batchCount;
-            }
 
             // Iterate through the batches, doing short.MaxValue sets of vertices only.
             while(batchCount > 0)
@@ -263,7 +278,11 @@ namespace Microsoft.Xna.Framework.Graphics
                         _vertexArray,
                         0,
                         vertexCount,
+#if USE_INDEX_BUFFERS
+                        _indexBuffer,
+#else
                         _index,
+#endif
                         0,
                         (vertexCount / 4) * 2,
                         VertexPositionColorTexture.VertexDeclaration);
@@ -277,7 +296,11 @@ namespace Microsoft.Xna.Framework.Graphics
                     _vertexArray,
                     0,
                     vertexCount,
+#if USE_INDEX_BUFFERS
+                    _indexBuffer,
+#else
                     _index,
+#endif
                     0,
                     (vertexCount / 4) * 2,
                     VertexPositionColorTexture.VertexDeclaration);

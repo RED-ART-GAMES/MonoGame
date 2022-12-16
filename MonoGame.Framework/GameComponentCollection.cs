@@ -7,9 +7,6 @@ using System.Collections.ObjectModel;
 
 namespace Microsoft.Xna.Framework
 {
-    /// <summary>
-    /// A collection of <see cref="IGameComponent"/> instances.
-    /// </summary>
     public sealed class GameComponentCollection : Collection<IGameComponent>
     {
         /// <summary>
@@ -52,12 +49,18 @@ namespace Microsoft.Xna.Framework
 
         private void OnComponentAdded(GameComponentCollectionEventArgs eventArgs)
         {
-            EventHelpers.Raise(this, ComponentAdded, eventArgs);
+            if (this.ComponentAdded != null)
+            {
+                this.ComponentAdded(this, eventArgs);
+            }
         }
 
         private void OnComponentRemoved(GameComponentCollectionEventArgs eventArgs)
         {
-            EventHelpers.Raise(this, ComponentRemoved, eventArgs);
+            if (this.ComponentRemoved != null)
+            {
+                this.ComponentRemoved(this, eventArgs);
+            }
         }
 
         protected override void RemoveItem(int index)

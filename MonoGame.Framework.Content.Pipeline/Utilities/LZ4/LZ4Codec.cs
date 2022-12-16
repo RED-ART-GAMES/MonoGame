@@ -35,10 +35,15 @@ NOTE:
 	Use 'LZ4s' conditional define to differentiate
 */
 
+// ReSharper disable InconsistentNaming
 
-namespace Microsoft.Xna.Framework.Content.Pipeline.Utilities.LZ4
+#if LZ4s
+namespace LZ4s
+#else
+namespace LZ4n
+#endif
 {
-	internal static partial class LZ4Codec
+	public static partial class LZ4Codec
 	{
 		#region configuration
 

@@ -6,7 +6,6 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
-using MonoGame.Framework.Utilities;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline
 {
@@ -117,22 +116,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         /// </remarks>
         private static string FindCommand(string command)
         {
-            // Expand any environment variables.
-            command = Environment.ExpandEnvironmentVariables(command);
-
             // If we have a full path just pass it through.
             if (File.Exists(command))
                 return command;
-
-            // For Linux check specific subfolder
-            var lincom = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "linux", command);
-            if (CurrentPlatform.OS == OS.Linux && File.Exists(lincom))
-                return lincom;
-
-            // For Mac check specific subfolder
-            var maccom = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "osx", command);
-            if (CurrentPlatform.OS == OS.MacOSX && File.Exists(maccom))
-                return maccom;
 
             // We don't have a full path, so try running through the system path to find it.
             var paths = AppDomain.CurrentDomain.BaseDirectory +
@@ -146,53 +132,39 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                 if (File.Exists(fullName))
                     return fullName;
 
-                if (CurrentPlatform.OS == OS.Windows)
-                {
-                    var fullExeName = string.Concat(fullName, ".exe");
-                    if (File.Exists(fullExeName))
-                        return fullExeName;
-                }
+#if WINDOWS
+                var fullExeName = string.Concat(fullName, ".exe");
+                if (File.Exists(fullExeName))
+                    return fullExeName;
+#endif
             }
 
             return null;
         }
 
-        /// <summary>   
-        /// Ensures the specified executable has the executable bit set.  If the    
-        /// executable doesn't have the executable bit set on Linux or Mac OS, then 
-        /// Mono will refuse to execute it. 
-        /// </summary>  
-        /// <param name="path">The full path to the executable.</param> 
+        /// <summary>
+        /// Ensures the specified executable has the executable bit set.  If the
+        /// executable doesn't have the executable bit set on Linux or Mac OS, then
+        /// Mono will refuse to execute it.
+        /// </summary>
+        /// <param name="path">The full path to the executable.</param>
         private static void EnsureExecutable(string path)
         {
-            if (!path.StartsWith("/home") && !path.StartsWith("/Users"))
+#if LINUX || MONOMAC
+            if(path == "/bin/bash")
                 return;
 
             try
             {
-                var p = Process.Start("chmod", "u+x \"" + path + "\"");
+                var p = Process.Start("chmod", "u+x '" + path + "'");
                 p.WaitForExit();
             }
             catch
             {
-                // This platform may not have chmod in the path, in which case we can't 
-                // do anything reasonable here. 
+                // This platform may not have chmod in the path, in which case we can't
+                // do anything reasonable here.
             }
-        }
-
-        /// <summary>
-        /// Safely deletes the file if it exists.
-        /// </summary>
-        /// <param name="filePath">The path to the file to delete.</param>
-        public static void DeleteFile(string filePath)
-        {
-            try
-            {
-                File.Delete(filePath);
-            }
-            catch (Exception)
-            {                    
-            }
+#endif
         }
     }
 }

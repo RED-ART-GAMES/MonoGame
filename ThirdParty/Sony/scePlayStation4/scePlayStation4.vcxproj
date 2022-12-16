@@ -1,0 +1,234 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|ORBIS">
+      <Configuration>Debug</Configuration>
+      <Platform>ORBIS</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|ORBIS">
+      <Configuration>Release</Configuration>
+      <Platform>ORBIS</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCTargetsPath Condition="'$(VCTargetsPath11)' != '' and '$(VSVersion)' == '' and '$(VisualStudioVersion)' == ''">$(VCTargetsPath11)</VCTargetsPath>
+    <ProjectGuid>{73E143CF-7BB5-4EAA-B952-F9DBCEA7FB76}</ProjectGuid>
+  </PropertyGroup>
+  <Import Project="$(SolutionDir)\SceGnm.props" Condition="Exists('$(SolutionDir)\SceGnm.Development.props')" />
+  <Import Project="$(SCE_ORBIS_SDK_DIR)\host_tools\msbuild\SceGnm.props" Condition="!Exists('$(SolutionDir)\SceGnm.Development.props')" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ORBIS'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ORBIS'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <PropertyGroup Condition="'$(DebuggerFlavor)'=='ORBISDebugger'" Label="OverrideDebuggerDefaults">
+    <!--LocalDebuggerCommand>$(TargetPath)</LocalDebuggerCommand-->
+    <!--LocalDebuggerCommandArguments></LocalDebuggerCommandArguments-->
+    <!--LocalDebuggerTarget></LocalDebuggerTarget-->
+    <!--LocalDebuggerWorkingDirectory>$(ProjectDir)</LocalDebuggerWorkingDirectory-->
+    <!--LocalRunCommandLine></LocalRunCommandLine-->
+  </PropertyGroup>
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <OutDir>bin\$(Configuration)\</OutDir>
+    <IntDir>obj\$(Configuration)\</IntDir>
+    <IncludePath>$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ORBIS'">
+    <CustomBuildAfterTargets>
+    </CustomBuildAfterTargets>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ORBIS'">
+    <ClCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions);</PreprocessorDefinitions>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <Link>
+      <OutputFile>bin\$(Configuration)\$(TargetName)$(TargetExt)</OutputFile>
+      <AdditionalDependencies>-lSceVideoOut_stub_weak;-lSceGnmDriver_stub_weak;-lSceGnmx;-lSceGnm;-lSceNgs2_stub_weak;-lSceAudioOut_stub_weak;-lSceAudiodec_stub_weak;-lSceGpuAddress;-lScePngDec_stub_weak;-lSceSysmodule_stub_weak;-lScePad_stub_weak;-lSceUserService_stub_weak;-lSceWebBrowserDialog_stub_weak;-lSceSaveData_stub_weak;-lSceSystemService_stub_weak;-lSceNpTrophy_stub_weak;-lSceNpCommon_stub_weak;-lSceNpManager_stub_weak;-lSceVideoRecording_stub_weak;-lSceSaveDataDialog_stub_weak;-lSceCommonDialog_stub_weak;-lSceIme_stub_weak;-lSceMouse_stub_weak;-lSceRemoteplay_stub_weak;-lScePlayGo_stub_weak;-lSceNpTus_stub_weak;-lSceNpProfileDialog_stub_weak;-lSceScreenShot_stub_weak;-lSceErrorDialog_stub_weak;-lSceMsgDialog_stub_weak;-lSceCes;-lSceNpCommerce_stub_weak;-lSceNpScore_stub_weak;-lSceCamera_stub_weak;-lSceAvPlayer_stub_weak;-lSceSulpha_stub_weak;-lSceImeDialog_stub_weak;-lSceAppContent_stub_weak;-lSceRtc_stub_weak;-lSceHttp_stub_weak;-lSceNpMatching2_stub_weak;-lSceInvitationDialog_stub_weak;-lSceNpAuth_stub_weak;-lSceNetCtl_stub_weak;-lSceNet_stub_weak;-lSceNpWebApi_stub_weak;-lSceSsl_stub_weak;-lSceNpUtility_stub_weak;-lScePosix_stub_weak;-lSceSigninDialog_stub_weak;-lSceJson2_stub_weak;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>..\BindingGen\bin\$(Configuration)\BindingGen.exe</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>Generating C# Bindings!</Message>
+    </PostBuildEvent>
+    <CustomBuildStep>
+      <Command>
+      </Command>
+    </CustomBuildStep>
+    <CustomBuildStep>
+      <Message>
+      </Message>
+    </CustomBuildStep>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ORBIS'">
+    <ClCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions);</PreprocessorDefinitions>
+      <OptimizationLevel>Level2</OptimizationLevel>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <Link>
+      <OutputFile>bin\$(Configuration)\$(TargetName)$(TargetExt)</OutputFile>
+      <AdditionalDependencies>-lSceVideoOut_stub_weak;-lSceGnmDriver_stub_weak;-lSceGnmx;-lSceGnm;-lSceNgs2_stub_weak;-lSceAudioOut_stub_weak;-lSceAudiodec_stub_weak;-lSceGpuAddress;-lScePngDec_stub_weak;-lSceSysmodule_stub_weak;-lScePad_stub_weak;-lSceUserService_stub_weak;-lSceWebBrowserDialog_stub_weak;-lSceSaveData_stub_weak;-lSceSystemService_stub_weak;-lSceNpTrophy_stub_weak;-lSceNpCommon_stub_weak;-lSceNpManager_stub_weak;-lSceVideoRecording_stub_weak;-lSceSaveDataDialog_stub_weak;-lSceCommonDialog_stub_weak;-lSceIme_stub_weak;-lSceMouse_stub_weak;-lSceRemoteplay_stub_weak;-lScePlayGo_stub_weak;-lSceNpTus_stub_weak;-lSceNpProfileDialog_stub_weak;-lSceScreenShot_stub_weak;-lSceErrorDialog_stub_weak;-lSceMsgDialog_stub_weak;-lSceCes;-lSceNpCommerce_stub_weak;-lSceNpScore_stub_weak;-lSceCamera_stub_weak;-lSceAvPlayer_stub_weak;-lSceImeDialog_stub_weak;-lSceAppContent_stub_weak;-lSceRtc_stub_weak;-lSceHttp_stub_weak;-lSceNpMatching2_stub_weak;-lSceInvitationDialog_stub_weak;-lSceNpAuth_stub_weak;-lSceNetCtl_stub_weak;-lSceNet_stub_weak;-lSceNpWebApi_stub_weak;-lSceSsl_stub_weak;-lSceNpUtility_stub_weak;-lScePosix_stub_weak;-lSceSigninDialog_stub_weak;-lSceJson2_stub_weak;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>..\BindingGen\bin\$(Configuration)\BindingGen.exe</Command>
+      <Message>Generating C# Bindings!</Message>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="allocator.cpp" />
+    <ClCompile Include="game.cpp" />
+    <ClCompile Include="Audio\audioBuffer.cpp" />
+    <ClCompile Include="Audio\samplerVoice.cpp" />
+    <ClCompile Include="Audio\soundSystem.cpp" />
+    <ClCompile Include="Graphics\fetchShader.cpp" />
+    <ClCompile Include="Graphics\graphicsSystem.cpp" />
+    <ClCompile Include="Graphics\indexBuffer.cpp" />
+    <ClCompile Include="Graphics\pixelShader.cpp" />
+    <ClCompile Include="Graphics\pngReader.cpp" />
+    <ClCompile Include="Graphics\renderTarget.cpp" />
+    <ClCompile Include="Graphics\texture.cpp" />
+    <ClCompile Include="Graphics\vertexBuffer.cpp" />
+    <ClCompile Include="Graphics\vertexShader.cpp" />
+    <ClCompile Include="Input\camera.cpp" />
+    <ClCompile Include="Input\gamePad.cpp" />
+    <ClCompile Include="Input\keyboard.cpp" />
+    <ClCompile Include="Input\mouse.cpp" />
+    <ClCompile Include="Input\vkeys.h" />
+    <ClCompile Include="Media\at9\audio_decoder_at9.cpp" />
+    <ClCompile Include="Media\at9\riff_wave_header_at9_parser.cpp" />
+    <ClCompile Include="Media\audio_decoder.cpp" />
+    <ClCompile Include="Media\audio_output.cpp" />
+    <ClCompile Include="Media\file.cpp" />
+    <ClCompile Include="Media\m4aac\adts_header_parser.cpp" />
+    <ClCompile Include="Media\m4aac\audio_decoder_m4aac.cpp" />
+    <ClCompile Include="Media\mp3\audio_decoder_mp3.cpp" />
+    <ClCompile Include="Media\mp3\mpeg_audio_header_parser.cpp" />
+    <ClCompile Include="Media\song.cpp" />
+    <ClCompile Include="Media\ring_buffer.cpp" />
+    <ClCompile Include="Media\stream.cpp" />
+    <ClCompile Include="Media\videoPlayer.cpp" />
+    <ClCompile Include="Network\netCtl.cpp" />
+    <ClCompile Include="Network\np.cpp" />
+    <ClCompile Include="Network\npCommerce.cpp" />
+    <ClCompile Include="Network\npCommerceDialog.cpp" />
+    <ClCompile Include="Network\npScore.cpp" />
+    <ClCompile Include="Network\titleSmallStorage.cpp" />
+    <ClCompile Include="Network\titleUserStorage.cpp" />
+    <ClCompile Include="Network\trophySet.cpp" />
+    <ClCompile Include="prx.cpp" />
+    <ClCompile Include="System\appContent.cpp" />
+    <ClCompile Include="System\commonDialog.cpp" />
+    <ClCompile Include="System\errorDialog.cpp" />
+    <ClCompile Include="System\imeDialog.cpp" />
+    <ClCompile Include="System\msgDialog.cpp" />
+    <ClCompile Include="System\npProfileDialog.cpp" />
+    <ClCompile Include="System\playGo.cpp" />
+    <ClCompile Include="System\remotePlay.cpp" />
+    <ClCompile Include="System\rtc.cpp" />
+    <ClCompile Include="System\saveData.cpp" />
+    <ClCompile Include="System\saveDataDialog.cpp" />
+    <ClCompile Include="System\saveDataDirNameSearch.cpp" />
+    <ClCompile Include="System\screenShot.cpp" />
+    <ClCompile Include="System\systemService.cpp" />
+    <ClCompile Include="System\userService.cpp" />
+    <ClCompile Include="System\videoRecording.cpp" />
+    <ClCompile Include="System\webBrowserDialog.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="allocator.h" />
+    <ClInclude Include="game.h" />
+    <ClInclude Include="Audio\audioBuffer.h" />
+    <ClInclude Include="Audio\audioOut.h" />
+    <ClInclude Include="Audio\predecls.h" />
+    <ClInclude Include="Audio\samplerVoice.h" />
+    <ClInclude Include="Audio\soundSystem.h" />
+    <ClInclude Include="Graphics\displayBuffer.h" />
+    <ClInclude Include="Graphics\fetchShader.h" />
+    <ClInclude Include="Graphics\graphicsEnums.h" />
+    <ClInclude Include="Graphics\graphicsHelpers.h" />
+    <ClInclude Include="Graphics\graphicsSystem.h" />
+    <ClInclude Include="Graphics\indexBuffer.h" />
+    <ClInclude Include="Graphics\pixelShader.h" />
+    <ClInclude Include="Graphics\pngReader.h" />
+    <ClInclude Include="Graphics\predecls.h" />
+    <ClInclude Include="Graphics\renderTarget.h" />
+    <ClInclude Include="Graphics\texture.h" />
+    <ClInclude Include="Graphics\vertexBuffer.h" />
+    <ClInclude Include="Graphics\vertexShader.h" />
+    <ClInclude Include="Graphics\videoShaders.h" />
+    <ClInclude Include="Input\camera.h" />
+    <ClInclude Include="Input\gamePad.h" />
+    <ClInclude Include="Input\gamePadState.h" />
+    <ClInclude Include="Input\keyboard.h" />
+    <ClInclude Include="Input\keyboardState.h" />
+    <ClInclude Include="Input\mouse.h" />
+    <ClInclude Include="Input\mouseState.h" />
+    <ClInclude Include="Input\predecls.h" />
+    <ClInclude Include="Media\at9\audio_decoder_at9.h" />
+    <ClInclude Include="Media\at9\riff_wave_header_at9_parser.h" />
+    <ClInclude Include="Media\audio_decoder.h" />
+    <ClInclude Include="Media\audio_output.h" />
+    <ClInclude Include="Media\file.h" />
+    <ClInclude Include="Media\m4aac\adts_header_parser.h" />
+    <ClInclude Include="Media\m4aac\audio_decoder_m4aac.h" />
+    <ClInclude Include="Media\mp3\audio_decoder_mp3.h" />
+    <ClInclude Include="Media\mp3\mpeg_audio_header_parser.h" />
+    <ClInclude Include="Media\song.h" />
+    <ClInclude Include="Media\predecls.h" />
+    <ClInclude Include="Media\ring_buffer.h" />
+    <ClInclude Include="Media\stream.h" />
+    <ClInclude Include="common.h" />
+    <ClInclude Include="Media\videoPlayer.h" />
+    <ClInclude Include="Network\netCtl.h" />
+    <ClInclude Include="Network\np.h" />
+    <ClInclude Include="Network\npCommerce.h" />
+    <ClInclude Include="Network\npCommerceDialog.h" />
+    <ClInclude Include="Network\npScore.h" />
+    <ClInclude Include="Network\predecls.h" />
+    <ClInclude Include="Network\titleSmallStorage.h" />
+    <ClInclude Include="Network\titleUserStorage.h" />
+    <ClInclude Include="Network\trophySet.h" />
+    <ClInclude Include="System\appContent.h" />
+    <ClInclude Include="System\commonDialog.h" />
+    <ClInclude Include="System\errorDialog.h" />
+    <ClInclude Include="System\imeDialog.h" />
+    <ClInclude Include="System\msgDialog.h" />
+    <ClInclude Include="System\npProfileDialog.h" />
+    <ClInclude Include="System\playGo.h" />
+    <ClInclude Include="System\predecls.h" />
+    <ClInclude Include="System\remotePlay.h" />
+    <ClInclude Include="System\rtc.h" />
+    <ClInclude Include="System\saveData.h" />
+    <ClInclude Include="System\saveDataDialog.h" />
+    <ClInclude Include="System\saveDataDirNameSearch.h" />
+    <ClInclude Include="System\screenShot.h" />
+    <ClInclude Include="System\systemService.h" />
+    <ClInclude Include="System\threadPrio.h" />
+    <ClInclude Include="System\userService.h" />
+    <ClInclude Include="System\videoRecording.h" />
+    <ClInclude Include="System\webBrowserDialog.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile_PSSL_To_Header Include="Graphics\clear_p.pssl" />
+    <Compile_PSSL_To_Header Include="Graphics\clear_vv.pssl" />
+    <Compile_PSSL_To_Header Include="Graphics\video_p.pssl" />
+    <Compile_PSSL_To_Header Include="Graphics\video_vv.pssl" />
+  </ItemGroup>
+  <Import Project="$(SolutionDir)\SceGnm.targets" Condition="Exists('$(SolutionDir)\SceGnm.Development.props')" />
+  <Import Project="$(SCE_ORBIS_SDK_DIR)\host_tools\msbuild\SceGnm.targets" Condition="!Exists('$(SolutionDir)\SceGnm.Development.props')" />
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

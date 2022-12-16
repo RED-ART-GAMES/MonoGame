@@ -4,40 +4,71 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Resources;
 
-// Common information about an assembly is controlled through the following
+// General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
+[assembly: AssemblyTitle("MonoGame.Framework")]
+#if OUYA
+[assembly: AssemblyDescription("MonoGame for OUYA")]
+#elif ANDROID
+[assembly: AssemblyDescription("MonoGame for Android")]
+#elif WINDOWS_STOREAPP
+[assembly: AssemblyDescription("MonoGame for Windows Store")]
+#elif WINDOWS
+#if DIRECTX
+[assembly: AssemblyDescription("MonoGame for Windows Desktop (DirectX)")]
+#else
+[assembly: AssemblyDescription("MonoGame for Windows Desktop (OpenGL)")]
+#endif
+#elif PSM
+[assembly: AssemblyDescription("MonoGame for PlayStation Mobile")]
+#elif LINUX
+[assembly: AssemblyDescription("MonoGame for Linux")]
+#elif MAC
+[assembly: AssemblyDescription("MonoGame for Mac OS X")]
+#elif IOS
+[assembly: AssemblyDescription("MonoGame for iOS")]
+#elif WINDOWS_PHONE
+[assembly: AssemblyDescription("MonoGame for Windows Phone 8")]
+#elif PLAYSTATION4
+[assembly: AssemblyDescription("MonoGame for PlayStation 4")]
+#endif
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("MonoGame Team")]
+[assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("MonoGame.Framework")]
-[assembly: AssemblyCopyright("Copyright © 2009-2016 MonoGame Team")]
-[assembly: AssemblyTrademark("MonoGame® is a registered trademark of the MonoGame Team")]
+[assembly: AssemblyCopyright("Copyright © 2011-2013")]
+[assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
 // Mark the assembly as CLS compliant so it can be safely used in other .NET languages
-[assembly: CLSCompliant(true)]
+[assembly:CLSCompliant(true)]
 
-// Allow the content pipeline assembly to access
+// Allow the content pipeline assembly to access 
 // some of our internal helper methods that it needs.
 [assembly: InternalsVisibleTo("MonoGame.Framework.Content.Pipeline")]
 [assembly: InternalsVisibleTo("MonoGame.Framework.Net")]
 
 //Tests projects need access too
-[assembly: InternalsVisibleTo("MonoGame.Tests")]
+[assembly: InternalsVisibleTo("MonoGameTests")]
 
-// Setting ComVisible to false makes the types in this assembly not visible
-// to COM components.  If you need to access a type in this assembly from
+// Setting ComVisible to false makes the types in this assembly not visible 
+// to COM components.  If you need to access a type in this assembly from 
 // COM, set the ComVisible attribute to true on that type.
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("81119db2-82a6-45fb-a366-63a08437b485")]
 
-// This was needed in WinRT releases to inform the system that we
-// don't need to load any language specific resources.
+// Version information for an assembly consists of the following four values:
+//
+//      Major Version
+//      Minor Version 
+//      Build Number
+//      Revision
+//
+// You can specify all the values or you can default the Build and Revision Numbers 
+// by using the '*' as shown below:
+// [assembly: AssemblyVersion("1.0.*")]
+[assembly: AssemblyVersion("3.1.2.0")]
+[assembly: AssemblyFileVersion("3.1.2.0")]
 [assembly: NeutralResourcesLanguageAttribute("en-US")]
-
-// Version information for the assembly which is automatically
-// set by our automated build process.
-[assembly: AssemblyVersion("0.0.0.0")]
-[assembly: AssemblyFileVersion("0.0.0.0")]

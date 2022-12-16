@@ -1,8 +1,4 @@
-﻿// MonoGame - Copyright (C) The MonoGame Team
-// This file is subject to the terms and conditions defined in
-// file 'LICENSE.txt', which is part of this source code package.
-
-using System;
+﻿using System;
 
 namespace Microsoft.Xna.Framework.Graphics.PackedVector
 {
@@ -38,11 +34,7 @@ namespace Microsoft.Xna.Framework.Graphics.PackedVector
             this.packedValue = HalfTypeHelper.Convert(vector.X);
         }
 
-        /// <summary>
-        /// Gets the packed vector in Vector4 format.
-        /// </summary>
-        /// <returns>The packed vector in Vector4 format</returns>
-        public Vector4 ToVector4()
+        Vector4 IPackedVector.ToVector4()
         {
             return new Vector4(this.ToSingle(), 0f, 0f, 1f);
         }

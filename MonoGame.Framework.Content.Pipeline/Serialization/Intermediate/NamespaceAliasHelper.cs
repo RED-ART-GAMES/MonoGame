@@ -75,11 +75,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate
                 if (contentTypeSerializer.TargetType == childType)
                     return;
 
-                if (contentTypeSerializer.TargetType.IsGenericType 
-                    && contentTypeSerializer.TargetType.GetGenericTypeDefinition() == typeof(Nullable<>) 
-                    && contentTypeSerializer.TargetType.GetGenericArguments()[0] == childType)
-                    return;
-
                 if (_serializer.HasTypeAlias(childType))
                     return;
 
@@ -136,7 +131,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate
         }
 
         /// <summary>
-        /// Returns just the portion <paramref name="namespace"/> relative to <paramref name="namespaceParent"/>.
+        /// Returns just the portion <paramref name="@namespace"/> relative to <paramref name="namespaceParent"/>.
         /// For example, given namespaceParent=Foo.Bar and @namespace=Foo.Bar.Baz, will return Baz.
         /// </summary>
         private static string GetRelativeNamespace(string namespaceParent, string @namespace)
@@ -153,7 +148,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate
                 AliasedNamespace namespaceAlias;
                 if (_namespaceLookupReverse.TryGetValue(type.Namespace, out namespaceAlias))
                 {
-                    typeName = namespaceAlias.Alias + ":" + namespaceAlias.TypePrefix + _serializer.GetTypeName(type);
+                    typeName = namespaceAlias.Alias + ":" + namespaceAlias.TypePrefix + type.Name;
                     return true;
                 }
             }

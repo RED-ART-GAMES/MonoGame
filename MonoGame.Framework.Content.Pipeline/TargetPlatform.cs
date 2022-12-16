@@ -2,16 +2,11 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
-using System;
-using System.ComponentModel;
-using System.Globalization;
-
 namespace Microsoft.Xna.Framework.Content.Pipeline
 {
     /// <summary>
     /// Identifiers for the target platform.
     /// </summary>
-    [TypeConverter(typeof(TargetPlatformTypeConverter))]
     public enum TargetPlatform
     {
         /// <summary>
@@ -23,6 +18,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         /// Xbox 360 video game and entertainment system
         /// </summary>
         Xbox360,
+
+        /// <summary>
+        /// Windows Phone
+        /// </summary>
+        WindowsPhone,
 
         // MonoGame-specific platforms listed below
 
@@ -39,10 +39,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         Android,
 
         /// <summary>
-        /// All desktop versions using OpenGL.
+        /// Linux-based PCs
         /// (MonoGame)
         /// </summary>
-        DesktopGL,
+        Linux,
 
         /// <summary>
         /// Apple Mac OSX-based devices (iMac, MacBook, MacBook Air, etc)
@@ -63,6 +63,18 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         NativeClient,
 
         /// <summary>
+        /// Ouya video game console, a variation of Android
+        /// (MonoGame)
+        /// </summary>
+        Ouya,
+
+        /// <summary>
+        /// Sony PlayStation Mobile (PS Vita)
+        /// (MonoGame)
+        /// </summary>
+        PlayStationMobile,
+
+        /// <summary>
         /// Windows Phone 8
         /// (MonoGame)
         /// </summary>
@@ -80,54 +92,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         PlayStation4,
 
         /// <summary>
-        /// Sony PlayStation5
+        /// All desktop versions of Windows using OpenGL.
+        /// (MonoGame)
         /// </summary>
-        PlayStation5,
-
-        /// <summary>
-        /// Xbox One
-        /// </summary>
-        XboxOne,
-
-        /// <summary>
-        /// Nintendo Switch
-        /// </summary>
-        Switch,
-
-        /// <summary>
-        /// Google Stadia
-        /// </summary>
-        Stadia,
-
-        /// <summary>
-        /// WebAssembly and Bridge.NET
-        /// </summary>
-        Web
-    }
-
-
-    /// <summary>
-    /// Deserialize legacy Platforms from .MGCB files.
-    /// </summary>
-    internal class TargetPlatformTypeConverter : EnumConverter
-    {
-        public TargetPlatformTypeConverter(Type type) : base(type)
-        {
-        }
-
-        public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
-        {   
-            try
-            {
-                return base.ConvertFrom(context, culture, value);
-            }
-            catch (FormatException fex)
-            { 
-                // convert legacy Platforms
-                if (value.Equals("Linux") || value.Equals("WindowsGL"))
-                    return TargetPlatform.DesktopGL;
-                else throw fex;
-            }
-        }
+        WindowsGL,
     }
 }

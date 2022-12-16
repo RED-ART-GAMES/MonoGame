@@ -1,95 +1,66 @@
-﻿# MonoGame
+# [MonoGame](http://monogame.net/) [![Build Status](http://teamcity.monogame.net/app/rest/builds/buildType:MonoGame_DevelopWin/statusIcon)](http://teamcity.monogame.net/project.html?projectId=MonoGame&guest=1)
 
-MonoGame is a simple and powerful .NET framework for creating games for desktop PCs, video game consoles, and mobile devices using the C# programming language. It has been succesfully used to create games such as [Streets of Rage 4](https://store.steampowered.com/app/985890/Streets_of_Rage_4/), [Carrion](https://store.steampowered.com/app/953490/CARRION/), [Celeste](https://store.steampowered.com/app/504230/Celeste/), [Stardew Valley](https://store.steampowered.com/app/413150/Stardew_Valley/), and [many other](https://www.monogame.net/showcase/).
+[MonoGame](http://monogame.net) is an open source implementation of the Microsoft XNA 4.x Framework.
 
-It is an open-source re-implementation of the discontinued [Microsoft's XNA Framework](https://msdn.microsoft.com/en-us/library/bb200104.aspx).
-
-[![Join the chat at https://discord.gg/monogame](https://img.shields.io/discord/355231098122272778?color=%237289DA&label=MonoGame&logo=discord&logoColor=white)](https://discord.gg/monogame)
-
-* [Build Status](#build-status)
-* [Supported Platforms](#supported-platforms)
-* [Support and Contributions](#support-and-contributions)
-* [Source Code](#source-code)
-* [Helpful Links](#helpful-links)
-* [License](#license)
-
-## Build Status
-
-We use [GitHub Actions](https://github.com/MonoGame/MonoGame/actions) to automate builds and packages distribution of the latest MonoGame changes. We also rely on a [build server](http://teamcity.monogame.net/?guest=1) to run tests in order to avoid regressions.  The table below shows the current build status for the ```develop``` branch.
-
-| Name                            | Status                                                                                                                                                                                         |
-|:------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Builds                          | [![Build](https://github.com/MonoGame/MonoGame/actions/workflows/main.yml/badge.svg?branch=develop)](https://github.com/MonoGame/MonoGame/actions/workflows/main.yml)                          |
-| Windows Tests                   | [![Build Status](http://teamcity.monogame.net/app/rest/builds/buildType:MonoGame_TestWindows/statusIcon)](http://teamcity.monogame.net/viewType.html?buildTypeId=MonoGame_TestWindows&guest=1) |
-| Mac Tests                       | [![Build Status](http://teamcity.monogame.net/app/rest/builds/buildType:MonoGame_TestMac/statusIcon)](http://teamcity.monogame.net/viewType.html?buildTypeId=MonoGame_TestMac&guest=1)         |
+Our goal is to make it easy for XNA developers to create cross-platform games with extremely high code reuse.
 
 ## Supported Platforms
 
-We support a growing list of platforms across the desktop, mobile, and console space.  If there is a platform we don't support, please [make a request](https://github.com/MonoGame/MonoGame/issues) or [come help us](CONTRIBUTING.md) add it.
+* iOS (including Retina displays)
+* Android
+* Windows (OpenGL & DirectX)
+* Mac OS X
+* Linux
+* [Windows Store Apps](http://dev.windows.com) (for Windows 8 and Windows RT)
+* [Windows Phone 8](http://dev.windowsphone.com)
+* [Windows Phone 8.1](http://dev.windows.com)
+* [PlayStation Mobile](https://psm.playstation.net/portal/en/index.html) (currently 2D only)
+* [OUYA](http://ouya.tv), an Android-based gaming console
 
-* Desktop PCs
-  * Windows 8.1 and up (OpenGL & DirectX)
-  * Windows Store Apps (UWP)
-  * Linux (OpenGL)
-  * macOS 10.15 and up (OpenGL)
-* Mobile/Tablet Devices
-  * Android 6.0 and up (OpenGL)
-  * iPhone/iPad 10.0 and up (OpenGL)
-* Consoles (for registered developers)
-  * PlayStation 4
-  * PlayStation 5
-  * Xbox One (both UWP and XDK)
-  * Nintendo Switch
-  * Google Stadia
+## Quick Start
 
-## Support and Contributions
+There are a few pre-requisites that you should be aware of for the various platforms. Please check them over [MonoGame](http://monogame.net/downloads) website.
 
-If you think you have found a bug or have a feature request, use our [issue tracker](https://github.com/MonoGame/MonoGame/issues). Before opening a new issue, please search to see if your problem has already been reported.  Try to be as detailed as possible in your issue reports.
+There are four quick start options available:
+* Download the current stable release from [our website](http://monogame.net/downloads).
+* Download the latest "unstable" installer from [our build server](http://teamcity.monogame.net/viewLog.html?buildTypeId=MonoGame_DevelopWin&buildId=lastSuccessful&tab=artifacts&buildBranch=%3Cdefault%3E&guest=1).
+* Download the latest [source code](https://github.com/mono/MonoGame/archive/develop.zip).
+* Fork and clone the repo: `https://github.com/mono/MonoGame.git`.
 
-If you need help using MonoGame or have other questions we suggest you post on our [community forums](http://community.monogame.net).  Please do not use the GitHub issue tracker for personal support requests.
+### Solutions & Projects
 
-If you are interested in contributing fixes or features to MonoGame, please read our [contributors guide](CONTRIBUTING.md) first.
+The solution and project files are generated by [Protobuild](https://github.com/hach-que/Protobuild) when you double-click `Protobuild.exe` on Windows or run `mono Protobuild.exe` under Mac OS or Linux.  To modify the projects you must edit the .definition file in the `Build/Projects/` folder and re-execute Protobuild.
 
-### Subscription
+For more information and advanced usage, please refer to the [Protobuild documentation](https://protobuild.readthedocs.org/).
 
-If you'd like to help the project by supporting us financially, consider supporting us via a subscription for the price of a monthly coffee.
+### Samples
 
-Money goes towards hosting, new hardware and if enough people subscribe a dedicated developer.
+Once you have MonoGame, grab the [MonoGame StarterKits](https://github.com/kungfubanana/MonoGame-StarterKits) or [MonoGame Samples](https://github.com/Mono-Game/MonoGame.Samples) to help get you started on your first project.
 
-There are several options on our [Donation Page](http://www.monogame.net/donate/).
+## Bug Tracker
 
-## Source Code
+Have a bug or a feature request? [Please open a new issue](https://github.com/mono/MonoGame/issues). Before opening any issue, please search for existing issues and read the [Issue Guidelines](https://github.com/necolas/issue-guidelines).
 
-The full source code is available here from GitHub:
+## Community
 
-* Clone the source: `git clone https://github.com/MonoGame/MonoGame.git`
-* Set up the submodules: `git submodule update --init`
-* Open the solution for your target platform to build the game framework.
-* Open the Tools solution for your development platform to build the pipeline and content tools.
+Keep track of development and community news.
 
-For the prerequisites for building from source, please look at the [Requirements](REQUIREMENTS.md) file.
+* Follow [@MonoGameTeam on Twitter](https://twitter.com/monogameteam).
+* Have a question that's not a feature request or bug report? [Ask on our community site.](http://community.monogame.net)
+* Join us over IRC - [irc://irc.gnome.org/#monogame](http://mibbit.com/?server=irc.gnome.org&channel=%23monogame).
 
-A high level breakdown of the components of the framework:
+## Contributing
 
-* The game framework is found in [MonoGame.Framework](MonoGame.Framework).
-* The content pipeline is located in [MonoGame.Framework.Content.Pipeline](MonoGame.Framework.Content.Pipeline).
-* Project templates are in [Templates](Templates).
-* See [Tests](Tests) for the framework unit tests.
-* See [Tools/Tests](Tools/MonoGame.Tools.Tests) for the content pipeline and other tool tests.
-* [mgcb](Tools/MonoGame.Content.Builder) is the command line tool for content processing.
-* [mgfxc](Tools/MonoGame.Effect.Compiler) is the command line effect compiler tool.
-* The [mgcb-editor](Tools/MonoGame.Content.Builder.Editor) tool is a GUI frontend for content processing.
-
-## Helpful Links
-
-* The official website is [monogame.net](http://www.monogame.net).
-* Our [issue tracker](https://github.com/MonoGame/MonoGame/issues) is on GitHub.
-* Use our [community forums](http://community.monogame.net/) for support questions.
-* You can [join the Discord server](https://discord.gg/monogame) and chat live with the core developers and other users.
-* The [official documentation](http://www.monogame.net/documentation/) is on our website.
-* Download release and development [packages](http://www.monogame.net/downloads/).
-* Follow [@MonoGameTeam](https://twitter.com/monogameteam) on Twitter.
+Please read our [contributing](https://github.com/mono/MonoGame/blob/develop/CONTRIBUTING.md) guide.
 
 ## License
 
-The MonoGame project is under the [Microsoft Public License](https://opensource.org/licenses/MS-PL) except for a few portions of the code.  See the [LICENSE.txt](LICENSE.txt) file for more details.  Third-party libraries used by MonoGame are under their own licenses.  Please refer to those libraries for details on the license they use.
+MonoGame is released under [Microsoft Public License (Ms-PL)](https://github.com/mono/MonoGame/blob/develop/LICENSE.txt).
+
+## Current Roadmap
+
+* The MonoGame 2.x series is now in maintenance mode.
+* MonoGame 3.0 will mark the start of full support for the entire XNA API.
+* The Content Pipeline is currently under development. This will allow compiling of assets to optimized formats for the MonoGame supported platforms in Visual Studio or MonoDevelop without requiring XNA Game Studio 4.0 installed.
+* SuperGiant Games have a version working in Google Chrome Native Client which we will merge back into our tree.
+* Raspberry Pi has been shown to be working, but still needs some work.
