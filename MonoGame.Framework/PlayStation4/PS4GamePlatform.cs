@@ -27,6 +27,8 @@ namespace Microsoft.Xna.Framework
         private PS4GameWindow _window;
 
         private bool _isSplashHidden;
+        static public SaveDataDialog saveDataDialog;
+
 
         public PS4GamePlatform(Game game)
             : base(game)
@@ -41,6 +43,11 @@ namespace Microsoft.Xna.Framework
             // should they want to.
             SoundSystem.Instance.Initialize();
             UserService.Initialize();
+            SaveData.Initialize(ThreadPrio.Highest);
+            CommonDialog.Initialize();
+            //MsgDialog.Initialize();
+            //ErrorDialog.Initialize();
+            saveDataDialog = new SaveDataDialog();
         }
 
         public override GameRunBehavior DefaultRunBehavior
@@ -83,6 +90,7 @@ namespace Microsoft.Xna.Framework
         public override void Exit()
         {
             UserService.Terminate();
+            SaveData.Terminate();
         }
 
         public override bool BeforeUpdate(GameTime gameTime)

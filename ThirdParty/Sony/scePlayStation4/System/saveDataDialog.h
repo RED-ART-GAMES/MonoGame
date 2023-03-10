@@ -8,6 +8,8 @@
 
 namespace System {
 
+class SaveData;
+
 enum class SaveDataDialogSysMsg
 {
 	Invalid = SCE_SAVE_DATA_DIALOG_SYSMSG_TYPE_INVALID,
@@ -53,7 +55,19 @@ public:
 	SaveDataDialog();
 	~SaveDataDialog();
 
-	CommonDialogError OpenSystemMsg(SaveDataDialogSysMsg message, uint64_t value);
+	CommonDialogError OpenSystemMsg(const SceSaveDataDialogType type,
+		SaveData * saveData,
+		SceSaveDataDialogSystemMessageType msgType,
+		uint64_t value/*=0*/,
+		void* newIconBuf/*=NULL*/, const size_t newIconSize/*=0*/);
+	CommonDialogError OpenSystemWizardMsg(const SceSaveDataDialogType type,
+		SaveData* saveData,
+		SceSaveDataDialogSystemMessageType msgType,
+		uint64_t value/*=0*/,
+		void* newIconBuf/*=NULL*/, const size_t newIconSize/*=0*/);
+	CommonDialogError OpenProgress(const SceSaveDataDialogType type, SaveData* saveData,
+		SceSaveDataDialogProgressSystemMessageType msgType);
+	CommonDialogError OpenError(const SceSaveDataDialogType type, SaveData* saveData, int errorCode);
 
 	CommonDialogError ForceClose();
 
@@ -72,6 +86,8 @@ public:
 
 	void SetDisplayType(SaveDataDialogType type);
 	SaveDataDialogType GetDisplayType();
+
+	static SaveDataDialog* saveDataDialog;
 };
 
 } // namespace System

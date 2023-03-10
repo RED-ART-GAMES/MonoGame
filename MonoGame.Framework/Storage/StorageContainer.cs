@@ -44,6 +44,9 @@ purpose and non-infringement.
 using Microsoft.Xna.Framework;
 using System;
 using System.IO;
+using Sce.PlayStation4.System;
+
+using System.Runtime.InteropServices;
 
 #if WINDOWS_STOREAPP
 using Windows.Storage;
@@ -101,28 +104,152 @@ namespace Microsoft.Xna.Framework.Storage
 		private readonly StorageDevice _device;
 		private readonly string _name;
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="Microsoft.Xna.Framework.Storage.StorageContainer"/> class.
-		/// </summary>
-		/// <param name='device'>The attached storage-device.</param>
+#if PLAYSTATION4
+        private static string _titleId;
+        private static string _fingerprint;
+        private static ulong _blocks;
+        private SaveData sd;
+
+        public static void Init(string titleId, string fingerprint, ulong blocks = 96)
+        {
+            _titleId = titleId;
+            _fingerprint = fingerprint;
+            _blocks = blocks;
+        }
+
+        ~StorageContainer()
+        {
+            sd.Unmount(true);
+        }
+
+        private SaveDataResult Mount(SaveDataMountMode mode)
+        {
+            ulong rBlocks;
+            uint prog;
+            retry:
+            var res = sd.Mount(_blocks, mode, out rBlocks, out prog);
+            unsafe
+            {
+                switch (res)
+                {
+                    case SaveDataResult.ErrorBroken:
+                        //var resd = PS4GamePlatform.saveDataDialog.OpenSystemWizardMsg(((int)SaveDataDialogType.Load), sd, ((int)SaveDataDialogSysMsg.FileCorrupted), 0, null, 0);
+                        Console.WriteLine($"Broken: {0}");
+                        break;
+                    case SaveDataResult.ErrorOutOfMemory:
+                        //var resde = PS4GamePlatform.saveDataDialog.OpenSystemWizardMsg(((int)SaveDataDialogType.Load), sd, ((int)SaveDataDialogSysMsg.NoSpace), _blocks, null, 0);
+                        Console.WriteLine($"Out of memory: {0}");
+                        break;
+                    case SaveDataResult.ErrorBackupBusy:
+                        System.Threading.Thread.Sleep(50);
+                        Console.WriteLine("Backup busy, waiting...");
+                        goto retry;
+                    case SaveDataResult.Ok:
+                        break;
+                    default:
+                        throw new SystemException($"SaveData Mount failed: {res}");
+                }
+            }
+            return res;
+        }
+
+        private SaveDataResult Unmount()
+        {
+            retry:
+            var res = sd.Unmount(true);
+            unsafe
+            {
+                switch (res)
+                {
+                    case SaveDataResult.ErrorBroken:
+                        var resd = PS4GamePlatform.saveDataDialog.OpenSystemMsg(((int)SaveDataDialogType.Save), sd, ((int)SaveDataDialogSysMsg.FileCorrupted), 0, null, 0);
+                        Console.WriteLine($"Broken: {resd}");
+                        break;
+                    case SaveDataResult.ErrorOutOfMemory:
+                        var resde = PS4GamePlatform.saveDataDialog.OpenSystemMsg(((int)SaveDataDialogType.Save), sd, ((int)SaveDataDialogSysMsg.NoSpace), _blocks, null, 0);
+                        Console.WriteLine($"Out of memory: {resde}");
+                        break;
+                    case SaveDataResult.ErrorBackupBusy:
+                        System.Threading.Thread.Sleep(50);
+                        Console.WriteLine("Backup busy, waiting...");
+                        goto retry;
+                    case SaveDataResult.Ok:
+                    case SaveDataResult.ErrorParameter:
+                        break;
+                    default:
+                        throw new SystemException($"SaveData Unmount failed: {res}");
+                }
+            }
+            return res;
+        }
+
+        public bool WriteFile(string filePath, string content)
+        {
+            unsafe
+            {
+                Mount(SaveDataMountMode.ReadWrite);
+                var arg0 = Marshal.StringToHGlobalAnsi(content);
+                Console.WriteLine($"Arg0: {(ulong)content.Length}");
+                var ret = sd.Write(filePath, arg0.ToPointer(), ((ulong)content.Length + 1));
+                Marshal.FreeHGlobal(arg0);
+                Unmount();
+                return ret;
+            }
+        }
+
+        public bool ReadFile(string filePath, out string content)
+        {
+            unsafe
+            {
+                content = "";
+                Mount(SaveDataMountMode.ReadOnly);
+                var cnt = sd.Read(filePath);
+                if (cnt == null)
+                {
+                    Console.WriteLine($"Couldn't find file: {filePath}");
+                    Unmount();
+                    return false;
+                }
+                content = Marshal.PtrToStringAnsi((IntPtr)cnt);
+                sd.FreeRead(cnt);
+                Unmount();
+                return true;
+            }
+        }
+#endif
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Microsoft.Xna.Framework.Storage.StorageContainer"/> class.
+        /// </summary>
+        /// <param name='device'>The attached storage-device.</param>
         /// <param name='name'> name.</param>
-		/// <param name='playerIndex'>The player index of the player to save the data.</param>
-		internal StorageContainer(StorageDevice device, string name, PlayerIndex? playerIndex)
+        /// <param name='playerIndex'>The player index of the player to save the data.</param>
+        internal StorageContainer(StorageDevice device, string name, PlayerIndex? playerIndex)
 		{
 			if (string.IsNullOrEmpty(name))
-				throw new ArgumentNullException("A title name has to be provided in parameter name.");			
+				throw new ArgumentNullException("A title name has to be provided in parameter name.");
 
 			_device = device;
 			_name = name;
 
-			// From the examples the root is based on MyDocuments folder
+#if PLAYSTATION4
+            if (string.IsNullOrEmpty(_fingerprint) || string.IsNullOrEmpty(_titleId))
+                throw new InvalidOperationException("StorageContainer/SaveData not initialized with fingerprint and title id.");
+            Console.WriteLine($"Title id: {_titleId}");
+            sd = new SaveData(UserService.GetUserByPlayerIndex((playerIndex.HasValue ? (int)playerIndex.Value : 0)), _titleId, name, _fingerprint);
+            Mount(SaveDataMountMode.Create2 | SaveDataMountMode.CopyIcon);
+            Unmount();
+            return;
+#endif
+
+            // From the examples the root is based on MyDocuments folder
 #if WINDOWS_STOREAPP
             var saved = "";
 #elif LINUX || MONOMAC
             // We already have a SaveData folder on Mac/Linux.
             var saved = StorageDevice.StorageRoot;
 #else
-			var root = StorageDevice.StorageRoot;
+            var root = StorageDevice.StorageRoot;
 			var saved = Path.Combine(root,"SavedGames");
 #endif
             _storagePath = Path.Combine(saved, name);
@@ -197,6 +324,7 @@ namespace Microsoft.Xna.Framework.Storage
 #else
             if (!Directory.Exists(path))
             {
+                Console.WriteLine($"Trying to create dir: {path}");
                 Directory.CreateDirectory(path);
             }
 #endif
@@ -319,9 +447,19 @@ namespace Microsoft.Xna.Framework.Storage
 		{
 			if (string.IsNullOrEmpty(file))
 				throw new ArgumentNullException("Parameter file must contain a value.");
-			
-			// relative so combine with our path
-			var filePath= Path.Combine(_storagePath, file);
+
+#if PLAYSTATION4
+            unsafe
+            {
+                Mount(SaveDataMountMode.ReadOnly);
+                var ret = sd.FileExists(file);
+                Unmount();
+                return ret;
+            }
+#endif
+
+            // relative so combine with our path
+            var filePath= Path.Combine(_storagePath, file);
 
 #if WINDOWS_STOREAPP
             var folder = ApplicationData.Current.LocalFolder;

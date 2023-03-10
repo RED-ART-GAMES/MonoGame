@@ -185,6 +185,8 @@ void* outputMain(void* arg)
 	state->outputStream = new AudioOutputStream(outputStreamSize, sizeof(int16_t) * AUDIO_STEREO * outputStreamGrain);
 	assert(state->outputStream);
 
+	// Error here
+	printf("Sample rate: %u\n", state->decoder->sampleRate());
 	ret = state->outputStream->open(outputStreamGrain, state->decoder->sampleRate(), AudioOutputSystem::param(state->decoder->numChannels()));
 	assert(ret >= 0);
 
@@ -276,6 +278,7 @@ Song::~Song()
 	// join and detach a thread for audio output
 	printf("Joining output thread.\n");
 	if (_state->threadOutput) {
+		// FREEZE HERE
 		scePthreadJoin(_state->threadOutput, 0);
 		_state->threadOutput = NULL;
 	}
@@ -348,14 +351,14 @@ void Song::Play()
 	ret = scePthreadCreate(&_state->threadDecode, &attr, decodeMain, _state, "AudioDecBgm");
 	if (ret < 0)
 	{
-		printf("error: scePthreadCreate() failed: 0x%08X\n", ret);
+		printf("error: scePthreadCreate1() failed: 0x%08X\n", ret);
 		goto term;
 	}
 
 	ret = scePthreadCreate(&_state->threadOutput, &attr, outputMain, _state, "AudioOutBgM");
 	if (ret < 0)
 	{
-		printf("error: scePthreadCreate() failed: 0x%08X\n", ret);
+		printf("error: scePthreadCreate2() failed: 0x%08X\n", ret);
 		goto term;
 	}
 

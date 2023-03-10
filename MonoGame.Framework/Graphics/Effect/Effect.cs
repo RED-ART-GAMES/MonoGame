@@ -437,6 +437,7 @@ namespace Microsoft.Xna.Framework.Graphics
 				var annotations = ReadAnnotations(reader);
 				var rowCount = (int)reader.ReadByte();
 				var columnCount = (int)reader.ReadByte();
+                //System.Console.WriteLine($"Class: {class_}, type: {type}, name: {name}");
 
 				var elements = ReadParameters(reader);
 				var structMembers = ReadParameters(reader);
@@ -489,8 +490,9 @@ namespace Microsoft.Xna.Framework.Graphics
 					class_, type, name, rowCount, columnCount, semantic, 
 					annotations, elements, structMembers, data);
 			}
+            //System.Console.WriteLine($"Effect Parameters finished");
 
-			return new EffectParameterCollection(parameters);
+            return new EffectParameterCollection(parameters);
 		}
 #else //PSM
 		internal void ReadEffect(BinaryReader reader)

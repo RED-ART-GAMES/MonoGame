@@ -4,7 +4,7 @@
 
 namespace Microsoft.Xna.Framework
 {   
-    public enum PlayerIndex
+    public enum PlayerIndex : int
     {
         One = 0,
         Two = 1,

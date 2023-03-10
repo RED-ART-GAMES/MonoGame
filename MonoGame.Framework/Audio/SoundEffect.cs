@@ -177,6 +177,8 @@ namespace Microsoft.Xna.Framework.Audio
             if (inst == null)
                 return false;
 
+            System.Console.WriteLine($"Play(){inst.Volume}, {inst.Pitch}, {inst.Pan}");
+
             inst.Play();
 
             return true;
@@ -201,6 +203,8 @@ namespace Microsoft.Xna.Framework.Audio
             inst.Volume = volume;
             inst.Pitch = pitch;
             inst.Pan = pan;
+
+            //System.Console.WriteLine($"Play(v, p, p){inst.Volume}, {inst.Pitch}, {inst.Pan}");
 
             inst.Play();
 

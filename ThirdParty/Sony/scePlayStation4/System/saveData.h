@@ -9,6 +9,7 @@
 #include <save_data.h>
 #include <save_data/save_data_error.h>
 
+
 namespace System {
 
 enum class SaveDataResult
@@ -46,6 +47,7 @@ CS_FLAGS enum class SaveDataMountMode
 	ReadOnly = SCE_SAVE_DATA_MOUNT_MODE_RDONLY,
 	ReadWrite = SCE_SAVE_DATA_MOUNT_MODE_RDWR,
 	Create = SCE_SAVE_DATA_MOUNT_MODE_CREATE,
+	Create2 = SCE_SAVE_DATA_MOUNT_MODE_CREATE2,
 	DestructOff = SCE_SAVE_DATA_MOUNT_MODE_DESTRUCT_OFF,
 #if SCE_ORBIS_SDK_VERSION >= 0x01700081u // SDK Version 1.7
 	CopyIcon = SCE_SAVE_DATA_MOUNT_MODE_COPY_ICON,
@@ -100,7 +102,7 @@ public:
 							CS_OUT uint64_t &requiredBlocks,
 							CS_OUT uint32_t &progress);
 
-	SaveDataResult Unmount();
+	SaveDataResult Unmount(bool withBackup = true);
 
 	SaveDataResult UnmountWithBackup();
 
@@ -114,6 +116,17 @@ public:
 
 	const char* GetDetail();
 	void		SetDetail(const char *detail);
+
+	// Added by Kevin
+	bool		Write(const char *path, const void* buf, size_t nbytes) const;
+	char *		Read(const char* path) const;
+	void		FreeRead(char* data) const;
+	bool		FileExists(const char * path) const;
+	bool		MkDir(const char* path) const;
+	UserServiceUserId   GetUserId();
+	SceSaveDataTitleId*	GetTitleId();
+	SceSaveDataDirName* GetDirName();
+
 
 	uint32_t	GetUserParam();
 	void		SetUserParam(uint32_t userParam);

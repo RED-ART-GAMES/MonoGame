@@ -5,7 +5,11 @@
 
 #include <save_data.h>
 #include <scebase_common.h>
+#include <error_dialog.h>
 
+#include <string>
+
+#include "saveDataDialog.h"
 
 #if SCE_ORBIS_SDK_VERSION >= 0x04008081u
 #define SceSaveDataMount SceSaveDataMount2
@@ -119,7 +123,7 @@ SaveDataResult SaveData::Mount(	uint64_t blocks,
 	SceSaveDataMountResult mountResult;
 	memset(&mountResult, 0, sizeof(mountResult));
 
-	auto result = sceSaveDataMount(&mount, &mountResult);
+	SaveDataResult result = static_cast<SaveDataResult>(sceSaveDataMount(&mount, &mountResult));
 
 	memcpy(&_mountPoint, &mountResult.mountPoint, sizeof(_mountPoint));
 	requiredBlocks = mountResult.requiredBlocks;
@@ -129,11 +133,52 @@ SaveDataResult SaveData::Mount(	uint64_t blocks,
 	progress = mountResult.progress;
 #endif
 
-	return (SaveDataResult)result;
+	if (result == SaveDataResult::ErrorBroken)
+	{
+		SceSaveDataCheckBackupData backupData;
+		memset(&backupData, 0, sizeof(backupData));
+		backupData.dirName = mount.dirName;
+		backupData.userId = mount.userId;
+		if (sceSaveDataCheckBackupData(&backupData) == SCE_OK)
+		{
+			askForBackup:
+			SceCommonDialogStatus status;
+			SaveDataDialog::saveDataDialog->OpenSystemMsg(SCE_SAVE_DATA_DIALOG_TYPE_LOAD,
+				this, SCE_SAVE_DATA_DIALOG_SYSMSG_TYPE_CORRUPTED_AND_RESTORE, 0, nullptr, 0);
+			while ((status = sceSaveDataDialogUpdateStatus()) != SCE_COMMON_DIALOG_STATUS_FINISHED);
+			SceSaveDataDialogResult res;
+			memset(&res, 0, sizeof(res));
+			sceSaveDataDialogGetResult(&res);
+			if (res.result != SCE_OK) goto askForBackup;
+			SceSaveDataRestoreBackupData restoreBackupData;
+			memset(&restoreBackupData, 0, sizeof(restoreBackupData));
+			restoreBackupData.dirName = mount.dirName;
+			restoreBackupData.userId = mount.userId;
+			if (sceSaveDataRestoreBackupData(&restoreBackupData) != SCE_OK)
+				goto error;
+			return Mount(blocks, mountMode, requiredBlocks, progress);
+		}
+		else
+		{
+		error:
+			SaveDataDialog::saveDataDialog->OpenError(SCE_SAVE_DATA_DIALOG_TYPE_LOAD, this, (int)SaveDataResult::ErrorBroken);
+		}
+	}
+	else if (result == SaveDataResult::ErrorNoSpaceFs)
+	{
+		SceCommonDialogStatus status;
+		auto ret = SaveDataDialog::saveDataDialog->OpenSystemMsg(SCE_SAVE_DATA_DIALOG_TYPE_SAVE,
+			this, SCE_SAVE_DATA_DIALOG_SYSMSG_TYPE_NOSPACE_CONTINUABLE, blocks, nullptr, 0);
+		while ((status = sceSaveDataDialogUpdateStatus()) != SCE_COMMON_DIALOG_STATUS_FINISHED);
+		return Mount(blocks, mountMode, requiredBlocks, progress);
+	}
+
+	return result;
 }
 
-SaveDataResult SaveData::Unmount()
+SaveDataResult SaveData::Unmount(bool withBackup)
 {
+	if (withBackup) return UnmountWithBackup();
 	auto result = sceSaveDataUmount(&_mountPoint);
 	if (result == SCE_OK)
 	{
@@ -239,6 +284,132 @@ void SaveData::SetDetail(const char *detail)
 	assert(len < SCE_SAVE_DATA_DETAIL_MAXSIZE);
 	auto result = sceSaveDataSetParam(&_mountPoint, SCE_SAVE_DATA_PARAM_TYPE_DETAIL, detail, len);
 	assert(result == SCE_OK);
+}
+
+std::string GetDirFromFilePath(const std::string& str)
+{
+	size_t found;
+	found = str.find_last_of("/\\");
+	return str.substr(0, found);
+}
+
+bool SaveData::Write(const char* filePath, const void* buf, size_t nbytes) const
+{
+	int32_t ret = SCE_OK;
+
+	std::string path = _mountPoint.data;
+	path += "/";
+	path += filePath;
+	int fd = sceKernelOpen(path.c_str(), SCE_KERNEL_O_RDWR | SCE_KERNEL_O_TRUNC | SCE_KERNEL_O_CREAT, SCE_KERNEL_S_IRWU);
+	if (fd < SCE_OK)
+	{
+		if (fd == SCE_KERNEL_ERROR_ENOENT) {
+			std::string dirPath = GetDirFromFilePath(filePath);
+			if (MkDir(dirPath.c_str())) return Write(filePath, buf, nbytes);
+		}
+		fprintf(stderr, "sceKernelOpen : 0x%08x(%s)\n", fd, path.c_str());
+		return false;
+	}
+	ret = static_cast<int32_t>(sceKernelWrite(fd, buf, nbytes));
+	if (ret < SCE_OK)
+	{
+		fprintf(stderr, "sceKernelWrite : 0x%08x(%s)\n", ret, path.c_str());
+		sceKernelClose(fd);
+		return ret == SCE_OK;
+	}
+	sceKernelClose(fd);
+	fprintf(stderr, "sceKernelWriteWhat : 0x%08x(%s)\n", ret, path.c_str());
+
+	return ret >= SCE_OK;
+}
+
+char * SaveData::Read(const char* filePath) const
+{
+	int32_t ret = SCE_OK;
+
+	std::string path = _mountPoint.data;
+	path += "/";
+	path += filePath;
+	SceKernelStat st;
+	ret = sceKernelStat(path.c_str(), &st);
+	if (ret < SCE_OK)
+	{
+		fprintf(stderr, "sceKernelStat : 0x%08x(%s)\n", ret, path.c_str());
+		return nullptr;
+	}
+
+	char * data = new char[st.st_size];
+	if (!data)
+	{
+		fprintf(stderr, "data == NULL\n");
+		return nullptr;
+	}
+
+	int fd = sceKernelOpen(path.c_str(), SCE_KERNEL_O_RDONLY, SCE_KERNEL_S_INONE);
+	if (fd < SCE_OK)
+	{
+		fprintf(stderr, "sceKernelOpen : 0x%08x(%s)\n", fd, path.c_str());
+		delete[] data;
+		return nullptr;
+	}
+	ret = static_cast<int32_t>(sceKernelRead(fd, data, static_cast<size_t>(st.st_size)));
+	if (ret < SCE_OK)
+	{
+		fprintf(stderr, "sceKernelRead : 0x%08x(%s)\n", ret, path.c_str());
+		goto End;
+	}
+
+	sceKernelClose(fd);
+	return data;
+End:
+	sceKernelClose(fd);
+	delete[] data;
+
+	return nullptr;
+}
+
+void SaveData::FreeRead(char* data) const
+{
+	if (data) delete data;
+}
+
+bool SaveData::FileExists(const char* filePath) const
+{
+	std::string path = _mountPoint.data;
+	path += "/";
+	path += filePath;
+	SceKernelStat st;
+	int ret = sceKernelStat(path.c_str(), &st);
+	return ret != SCE_KERNEL_ERROR_ENOENT;
+}
+
+bool SaveData::MkDir(const char* filePath) const
+{
+	std::string path = _mountPoint.data;
+	path += "/";
+	path += filePath;
+	int ret = static_cast<int32_t>(sceKernelMkdir(path.c_str(), SCE_KERNEL_S_IRWU));
+	if (ret < SCE_OK)
+	{
+		fprintf(stderr, "sceKernelMkDir : 0x%08x(%s)\n", ret, path.c_str());
+		return false;
+	}
+	return true;
+}
+
+UserServiceUserId System::SaveData::GetUserId()
+{
+	return _userId;
+}
+
+SceSaveDataTitleId* System::SaveData::GetTitleId()
+{
+	return &_titleId;
+}
+
+SceSaveDataDirName* System::SaveData::GetDirName()
+{
+	return &_dirName;
 }
 
 void SaveData::SetUserParam(uint32_t userParam)
