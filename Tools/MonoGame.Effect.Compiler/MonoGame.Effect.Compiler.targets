@@ -1,0 +1,23 @@
+<Project>
+
+  <ItemGroup>
+    <Compile Include="..\..\PlayStation4\Tools\MonoGame.Effect.Compiler\ConstantBufferData.PS4.cs" />
+    <Compile Include="..\..\PlayStation4\Tools\MonoGame.Effect.Compiler\ShaderProfile.PS4.cs" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Reference Include="scePlayStation4Tools">
+      <HintPath>..\..\PlayStation4\Tools\scePlayStation4Tools\bin\x64\$(Configuration)\scePlayStation4Tools.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  
+  <Target Name="BuildPS4Tools" BeforeTargets="PreBuildEvent">
+    <PropertyGroup>
+      <MSBuildCostumPath Condition="'$(MSBuildCostumPath)' == '' AND Exists('$(MSBuildProgramFiles32)\Microsoft Visual Studio\2017\Enterprise\')">"$(MSBuildProgramFiles32)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\msbuild.exe"</MSBuildCostumPath>
+      <MSBuildCostumPath Condition="'$(MSBuildCostumPath)' == '' AND Exists('$(MSBuildProgramFiles32)\Microsoft Visual Studio\2017\Professional\')">"$(MSBuildProgramFiles32)\Microsoft Visual Studio\2017\Professional\MSBuild\15.0\Bin\msbuild.exe"</MSBuildCostumPath>
+      <MSBuildCostumPath Condition="'$(MSBuildCostumPath)' == '' AND Exists('$(MSBuildProgramFiles32)\Microsoft Visual Studio\2017\Communnity\')">"$(MSBuildProgramFiles32)\Microsoft Visual Studio\2017\Communnity\MSBuild\15.0\Bin\msbuild.exe"</MSBuildCostumPath>
+    </PropertyGroup>
+    <Exec Command="$(MSBuildCostumPath) &quot;..\..\PlayStation4\Tools\scePlayStation4Tools\scePlayStation4Tools.vcxproj&quot; /t:Build /p:Configuration=$(Configuration) /p:Platform=&quot;x64&quot;" />
+  </Target>
+  
+</Project>

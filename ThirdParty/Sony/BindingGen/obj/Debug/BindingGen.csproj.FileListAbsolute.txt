@@ -1,0 +1,11 @@
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\BindingGen\bin\Debug\CppSharp.CppParser.dll
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\BindingGen\bin\Debug\BindingGen.exe
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\BindingGen\bin\Debug\BindingGen.pdb
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\BindingGen\bin\Debug\CppSharp.AST.dll
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\BindingGen\bin\Debug\CppSharp.dll
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\BindingGen\bin\Debug\CppSharp.Generator.dll
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\BindingGen\bin\Debug\CppSharp.Parser.CLI.dll
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\BindingGen\obj\Debug\BindingGen.csproj.CoreCompileInputs.cache
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\BindingGen\obj\Debug\BindingGen.csproj.CopyComplete
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\BindingGen\obj\Debug\BindingGen.exe
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\BindingGen\obj\Debug\BindingGen.pdb

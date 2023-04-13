@@ -1,0 +1,399 @@
+﻿  [WAVE->H] clear_p.pssl
+  [WAVE->H] clear_vv.pssl
+  [WAVE->H] video_p.pssl
+  [WAVE->H] video_vv.pssl
+  vkeys.h
+  allocator.cpp
+  game.cpp
+  audioBuffer.cpp
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\scePlayStation4\Audio\audioBuffer.cpp(65,6): warning : variable 'errorCode' set but not used [-Wunused-but-set-variable]
+          int errorCode;
+              ^
+  1 warning generated.
+  samplerVoice.cpp
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\scePlayStation4\Audio\samplerVoice.cpp(30,7): warning : unused variable 'errorCode' [-Wunused-variable]
+          auto errorCode = sceNgs2VoiceGetStateFlags(_voiceHandle, &stateFlags);
+               ^
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\scePlayStation4\Audio\samplerVoice.cpp(67,7): warning : variable 'errorCode' set but not used [-Wunused-but-set-variable]
+          auto errorCode = sceNgs2SamplerVoiceSetupParam(&param.header, 0, &waveformInfo->format, 0);
+               ^
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\scePlayStation4\Audio\samplerVoice.cpp(121,7): warning : unused variable 'errorCode' [-Wunused-variable]
+          auto errorCode = sceNgs2SamplerVoiceSetEnvelope(_voiceHandle, envelopePoints, fadeInPts, fadeOutPts);
+               ^
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\scePlayStation4\Audio\samplerVoice.cpp(134,7): warning : unused variable 'errorCode' [-Wunused-variable]
+          auto errorCode = sceNgs2VoiceSetPortVolume(_voiceHandle, 0, newVol);
+               ^
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\scePlayStation4\Audio\samplerVoice.cpp(170,7): warning : variable 'errorCode' set but not used [-Wunused-but-set-variable]
+          auto errorCode = sceNgs2PanInit( &panWork, NULL, SCE_NGS2_PAN_ANGLE_DEGREE, SCE_NGS2_PAN_SPEAKER_7_0CH);
+               ^
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\scePlayStation4\Audio\samplerVoice.cpp(198,7): warning : variable 'errorCode' set but not used [-Wunused-but-set-variable]
+          auto errorCode = sceNgs2VoiceSetMatrixLevels(_voiceHandle, 0, matrixLevels, SCE_NGS2_MAX_VOICE_CHANNELS * bufferChannels);
+               ^
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\scePlayStation4\Audio\samplerVoice.cpp(217,7): warning : unused variable 'errorCode' [-Wunused-variable]
+          auto errorCode = sceNgs2SamplerVoiceSetPitch(_voiceHandle, pitchRatio);
+               ^
+  7 warnings generated.
+  soundSystem.cpp
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\scePlayStation4\Audio\soundSystem.cpp(48,10): warning : variable 'result' set but not used [-Wunused-but-set-variable]
+          int32_t result;
+                  ^
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\scePlayStation4\Audio\soundSystem.cpp(79,6): warning : variable 'errorCode' set but not used [-Wunused-but-set-variable]
+          int errorCode;
+              ^
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\scePlayStation4\Audio\soundSystem.cpp(191,6): warning : variable 'errorCode' set but not used [-Wunused-but-set-variable]
+          int errorCode = 0;
+              ^
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\scePlayStation4\Audio\soundSystem.cpp(240,6): warning : variable 'errorCode' set but not used [-Wunused-but-set-variable]
+          int errorCode;
+              ^
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\scePlayStation4\Audio\soundSystem.cpp(286,7): warning : variable 'errorCode' set but not used [-Wunused-but-set-variable]
+          auto errorCode = sceNgs2RackGetVoiceHandle(_masteringRackHandle, 1 + playerIdx, &_masteringPadVoiceHandle[playerIdx]);
+               ^
+  5 warnings generated.
+  fetchShader.cpp
+  graphicsSystem.cpp
+  indexBuffer.cpp
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\scePlayStation4\Graphics\indexBuffer.cpp(55,7): warning : unused variable 'edest' [-Wunused-variable]
+          auto edest = sdest + bytes;
+               ^
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\scePlayStation4\Graphics\indexBuffer.cpp(53,7): warning : unused variable 'ebuffer' [-Wunused-variable]
+          auto ebuffer = _bufferData + _requiredSize;
+               ^
+  2 warnings generated.
+  pixelShader.cpp
+  pngReader.cpp
+  renderTarget.cpp
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\scePlayStation4\Graphics\renderTarget.cpp(182,7): warning : unused variable 'ret' [-Wunused-variable]
+          auto ret = renderTarget->initFromTexture(colorTex, 0);
+               ^
+  1 warning generated.
+  texture.cpp
+  vertexBuffer.cpp
+  vertexShader.cpp
+  camera.cpp
+  gamePad.cpp
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\scePlayStation4\Input\gamePad.cpp(95,7): warning : unused variable 'ret' [-Wunused-variable]
+          auto ret = scePadInit();
+               ^
+  1 warning generated.
+  keyboard.cpp
+  mouse.cpp
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\scePlayStation4\Input\mouse.cpp(102,7): warning : unused variable 'ret' [-Wunused-variable]
+          auto ret = sceMouseClose(handle);
+               ^
+  1 warning generated.
+  audio_decoder_at9.cpp
+  riff_wave_header_at9_parser.cpp
+  audio_decoder.cpp
+  audio_output.cpp
+  file.cpp
+  adts_header_parser.cpp
+  audio_decoder_m4aac.cpp
+  audio_decoder_mp3.cpp
+  mpeg_audio_header_parser.cpp
+  song.cpp
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\scePlayStation4\Media\song.cpp(177,7): warning : variable 'ret' set but not used [-Wunused-but-set-variable]
+          auto ret = 0;
+               ^
+  1 warning generated.
+  ring_buffer.cpp
+  stream.cpp
+  videoPlayer.cpp
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\scePlayStation4\Media\videoPlayer.cpp(67,7): warning : variable 'ret' set but not used [-Wunused-but-set-variable]
+          auto ret = sceSysmoduleLoadModule(SCE_SYSMODULE_VIDEODEC);
+               ^
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\scePlayStation4\Media\videoPlayer.cpp(328,8): warning : unused variable 'ret' [-Wunused-variable]
+                  auto ret = sceAvPlayerSetLooping(_handle, value);
+                       ^
+  2 warnings generated.
+  netCtl.cpp
+  np.cpp
+  npCommerce.cpp
+  npCommerceDialog.cpp
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\scePlayStation4\Network\npCommerceDialog.cpp(17,7): warning : variable 'error' set but not used [-Wunused-but-set-variable]
+          auto error = sceCommonDialogInitialize();
+               ^
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\scePlayStation4\Network\npCommerceDialog.cpp(25,7): warning : unused variable 'error' [-Wunused-variable]
+          auto error = sceNpCommerceDialogTerminate();
+               ^
+  2 warnings generated.
+  npScore.cpp
+  titleSmallStorage.cpp
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\scePlayStation4\Network\titleSmallStorage.cpp(13,8): warning : unused variable 'ret' [-Wunused-variable]
+                  auto ret = sceSysmoduleLoadModule(SCE_SYSMODULE_NP_TUS);
+                       ^
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\scePlayStation4\Network\titleSmallStorage.cpp(22,8): warning : unused variable 'ret' [-Wunused-variable]
+                  auto ret = sceNpTssDeleteNpTitleCtx(_titleCtxId);
+                       ^
+  In file included from C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\scePlayStation4\Network\titleSmallStorage.cpp:1:
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\scePlayStation4\Network/titleSmallStorage.h(37,20): warning : private field '_npId' is not used [-Wunused-private-field]
+          CS_IGNORE SceNpId _npId;
+                            ^
+  3 warnings generated.
+  titleUserStorage.cpp
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\scePlayStation4\Network\titleUserStorage.cpp(25,8): warning : unused variable 'ret' [-Wunused-variable]
+                  auto ret = sceSysmoduleLoadModule(SCE_SYSMODULE_NP_TUS);
+                       ^
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\scePlayStation4\Network\titleUserStorage.cpp(34,8): warning : unused variable 'ret' [-Wunused-variable]
+                  auto ret = sceNpTusDeleteNpTitleCtx(_titleCtxId);
+                       ^
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\scePlayStation4\Network\titleUserStorage.cpp(44,8): warning : unused variable 'ret' [-Wunused-variable]
+                  auto ret = sceNpTusDeleteNpTitleCtx(_titleCtxId);
+                       ^
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\scePlayStation4\Network\titleUserStorage.cpp(86,3): warning : expression result unused [-Wunused-value]
+                  (TitleUserStorageResult)ret;
+                  ^                       ~~~
+  In file included from C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\scePlayStation4\Network\titleUserStorage.cpp:1:
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\scePlayStation4\Network/titleUserStorage.h(38,20): warning : private field '_npId' is not used [-Wunused-private-field]
+          CS_IGNORE SceNpId _npId;
+                            ^
+  5 warnings generated.
+  trophySet.cpp
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\scePlayStation4\Network\trophySet.cpp(12,8): warning : unused variable 'ret' [-Wunused-variable]
+                  auto ret = sceSysmoduleLoadModule(SCE_SYSMODULE_NP_TROPHY);
+                       ^
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\scePlayStation4\Network\trophySet.cpp(21,8): warning : unused variable 'ret' [-Wunused-variable]
+                  auto ret = sceNpTrophyDestroyContext(_context);
+                       ^
+  2 warnings generated.
+  prx.cpp
+  appContent.cpp
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\scePlayStation4\System\appContent.cpp(14,7): warning : unused variable 'error' [-Wunused-variable]
+          auto error = sceSysmoduleLoadModule(SCE_SYSMODULE_APP_CONTENT);
+               ^
+  1 warning generated.
+  commonDialog.cpp
+  errorDialog.cpp
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\scePlayStation4\System\errorDialog.cpp(12,8): warning : unused variable 'error' [-Wunused-variable]
+                  auto error = sceSysmoduleLoadModule(SCE_SYSMODULE_ERROR_DIALOG);
+                       ^
+  1 warning generated.
+  imeDialog.cpp
+  msgDialog.cpp
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\scePlayStation4\System\msgDialog.cpp(11,8): warning : unused variable 'error' [-Wunused-variable]
+                  auto error = sceSysmoduleLoadModule(SCE_SYSMODULE_MESSAGE_DIALOG);
+                       ^
+  1 warning generated.
+  npProfileDialog.cpp
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\scePlayStation4\System\npProfileDialog.cpp(12,8): warning : unused variable 'error' [-Wunused-variable]
+                  auto error = sceSysmoduleLoadModule(SCE_SYSMODULE_NP_PROFILE_DIALOG);
+                       ^
+  1 warning generated.
+  playGo.cpp
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\scePlayStation4\System\playGo.cpp(16,8): warning : unused variable 'ret' [-Wunused-variable]
+                  auto ret = sceSysmoduleLoadModule(SCE_SYSMODULE_PLAYGO);
+                       ^
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\scePlayStation4\System\playGo.cpp(52,8): warning : unused variable 'ret' [-Wunused-variable]
+                  auto ret = sceSysmoduleUnloadModule(SCE_SYSMODULE_PLAYGO);
+                       ^
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\scePlayStation4\System\playGo.cpp(42,7): warning : unused variable 'ret' [-Wunused-variable]
+          auto ret = scePlayGoClose(_handle);
+               ^
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\scePlayStation4\System\playGo.cpp(45,7): warning : unused variable 'termRet' [-Wunused-variable]
+          auto termRet = scePlayGoTerminate();
+               ^
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\scePlayStation4\System\playGo.cpp(65,7): warning : unused variable 'ret' [-Wunused-variable]
+          auto ret = scePlayGoGetEta(_handle, chunks->_items, chunks->_count, &result);
+               ^
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\scePlayStation4\System\playGo.cpp(73,7): warning : unused variable 'ret' [-Wunused-variable]
+          auto ret = scePlayGoGetInstallSpeed(_handle, &result);
+               ^
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\scePlayStation4\System\playGo.cpp(80,7): warning : unused variable 'ret' [-Wunused-variable]
+          auto ret = scePlayGoSetInstallSpeed(_handle, (ScePlayGoInstallSpeed)speed);
+               ^
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\scePlayStation4\System\playGo.cpp(87,7): warning : unused variable 'ret' [-Wunused-variable]
+          auto ret = scePlayGoGetLanguageMask(_handle, &result);
+               ^
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\scePlayStation4\System\playGo.cpp(94,7): warning : unused variable 'ret' [-Wunused-variable]
+          auto ret = scePlayGoSetLanguageMask(_handle, languageMask);
+               ^
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\scePlayStation4\System\playGo.cpp(123,7): warning : unused variable 'ret' [-Wunused-variable]
+          auto ret = scePlayGoGetToDoList(_handle, result->_items, result->MaxItems, &result->_count);
+               ^
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\scePlayStation4\System\playGo.cpp(131,7): warning : unused variable 'ret' [-Wunused-variable]
+          auto ret = scePlayGoSetToDoList(_handle, toDoList->_items, toDoList->_count);
+               ^
+  11 warnings generated.
+  remotePlay.cpp
+  rtc.cpp
+  saveData.cpp
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\scePlayStation4\System\saveData.cpp(230,7): warning : unused variable 'result' [-Wunused-variable]
+          auto result = sceSaveDataGetParam(&_mountPoint, SCE_SAVE_DATA_PARAM_TYPE_TITLE, _title, SCE_SAVE_DATA_TITLE_MAXSIZE, NULL);
+               ^
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\scePlayStation4\System\saveData.cpp(237,7): warning : unused variable 'result' [-Wunused-variable]
+          auto result = sceSaveDataGetParam(&_mountPoint, SCE_SAVE_DATA_PARAM_TYPE_SUB_TITLE, _subTitle, SCE_SAVE_DATA_SUBTITLE_MAXSIZE, NULL);
+               ^
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\scePlayStation4\System\saveData.cpp(244,7): warning : unused variable 'result' [-Wunused-variable]
+          auto result = sceSaveDataGetParam(&_mountPoint, SCE_SAVE_DATA_PARAM_TYPE_DETAIL, _detail, SCE_SAVE_DATA_DETAIL_MAXSIZE, NULL);
+               ^
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\scePlayStation4\System\saveData.cpp(252,7): warning : unused variable 'result' [-Wunused-variable]
+          auto result = sceSaveDataGetParam(&_mountPoint, SCE_SAVE_DATA_PARAM_TYPE_USER_PARAM, &userParam, sizeof(uint32_t), NULL);
+               ^
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\scePlayStation4\System\saveData.cpp(260,7): warning : unused variable 'result' [-Wunused-variable]
+          auto result = sceSaveDataGetParam(&_mountPoint, SCE_SAVE_DATA_PARAM_TYPE_MTIME, &mtime, sizeof(time_t), NULL);
+               ^
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\scePlayStation4\System\saveData.cpp(270,7): warning : unused variable 'result' [-Wunused-variable]
+          auto result = sceSaveDataSetParam(&_mountPoint, SCE_SAVE_DATA_PARAM_TYPE_TITLE, title, len);
+               ^
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\scePlayStation4\System\saveData.cpp(278,7): warning : unused variable 'result' [-Wunused-variable]
+          auto result = sceSaveDataSetParam(&_mountPoint, SCE_SAVE_DATA_PARAM_TYPE_SUB_TITLE, subTitle, len);
+               ^
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\scePlayStation4\System\saveData.cpp(286,7): warning : unused variable 'result' [-Wunused-variable]
+          auto result = sceSaveDataSetParam(&_mountPoint, SCE_SAVE_DATA_PARAM_TYPE_DETAIL, detail, len);
+               ^
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\scePlayStation4\System\saveData.cpp(418,7): warning : unused variable 'result' [-Wunused-variable]
+          auto result = sceSaveDataSetParam(&_mountPoint, SCE_SAVE_DATA_PARAM_TYPE_USER_PARAM, &userParam, sizeof(uint32_t));
+               ^
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\scePlayStation4\System\saveData.cpp(424,7): warning : unused variable 'result' [-Wunused-variable]
+          auto result = sceSaveDataSetParam(&_mountPoint, SCE_SAVE_DATA_PARAM_TYPE_MTIME, &mtime, sizeof(time_t));
+               ^
+  10 warnings generated.
+  saveDataDialog.cpp
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\scePlayStation4\System\saveDataDialog.cpp(35,7): warning : unused variable 'error' [-Wunused-variable]
+          auto error = sceSaveDataDialogTerminate();
+               ^
+  1 warning generated.
+  saveDataDirNameSearch.cpp
+  screenShot.cpp
+  systemService.cpp
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\scePlayStation4\System\systemService.cpp(14,7): warning : unused variable 'result' [-Wunused-variable]
+          auto result = sceSystemServiceParamGetInt(SCE_SYSTEM_SERVICE_PARAM_ID_LANG, &language);
+               ^
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\scePlayStation4\System\systemService.cpp(22,7): warning : unused variable 'result' [-Wunused-variable]
+          auto result = sceSystemServiceParamGetInt(SCE_SYSTEM_SERVICE_PARAM_ID_DATE_FORMAT, &format);
+               ^
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\scePlayStation4\System\systemService.cpp(30,7): warning : unused variable 'result' [-Wunused-variable]
+          auto result = sceSystemServiceParamGetInt(SCE_SYSTEM_SERVICE_PARAM_ID_TIME_FORMAT, &format);
+               ^
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\scePlayStation4\System\systemService.cpp(38,7): warning : unused variable 'result' [-Wunused-variable]
+          auto result = sceSystemServiceParamGetInt(SCE_SYSTEM_SERVICE_PARAM_ID_TIME_ZONE, &offset);
+               ^
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\scePlayStation4\System\systemService.cpp(46,7): warning : unused variable 'result' [-Wunused-variable]
+          auto result = sceSystemServiceParamGetInt(SCE_SYSTEM_SERVICE_PARAM_ID_SUMMERTIME, &summertime);
+               ^
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\scePlayStation4\System\systemService.cpp(59,7): warning : unused variable 'result' [-Wunused-variable]
+          auto result = sceSystemServiceHideSplashScreen();
+               ^
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\scePlayStation4\System\systemService.cpp(65,7): warning : unused variable 'result' [-Wunused-variable]
+          auto result = sceSystemServiceDisableMusicPlayer();
+               ^
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\scePlayStation4\System\systemService.cpp(71,7): warning : unused variable 'result' [-Wunused-variable]
+          auto result = sceSystemServiceReenableMusicPlayer();
+               ^
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\scePlayStation4\System\systemService.cpp(128,7): warning : unused variable 'result' [-Wunused-variable]
+          auto result = sceSystemServiceSetGpuLoadEmulationMode((SceSystemServiceGpuLoadEmulationMode)mode);
+               ^
+  9 warnings generated.
+  userService.cpp
+  videoRecording.cpp
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\scePlayStation4\System\videoRecording.cpp(57,8): warning : unused variable 'ret' [-Wunused-variable]
+                  auto ret = sceSysmoduleLoadModule(SCE_SYSMODULE_VIDEO_RECORDING);
+                       ^
+  1 warning generated.
+  webBrowserDialog.cpp
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\scePlayStation4\System\webBrowserDialog.cpp(12,8): warning : unused variable 'error' [-Wunused-variable]
+                  auto error = sceSysmoduleLoadModule(SCE_SYSMODULE_WEB_BROWSER_DIALOG);
+                       ^
+  1 warning generated.
+  scePlayStation4.vcxproj -> C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\scePlayStation4\bin\Release\scePlayStation4.prx
+  Generating C# Bindings!
+  Parsing libraries...
+  Indexing library symbols...
+  Parsing code...
+  Parsed 'Game.h'
+  Parsed 'Audio\AudioBuffer.h'
+  Parsed 'Audio\SamplerVoice.h'
+  Parsed 'Audio\SoundSystem.h'
+  Parsed 'Graphics\RenderTarget.h'
+.\Graphics/texture.h(22,2): warning : inline function 'Graphics::Texture::Texture' is not defined
+  Parsed 'Graphics\GraphicsSystem.h'
+  Parsed 'Graphics\VertexShader.h'
+  Parsed 'Graphics\FetchShader.h'
+  Parsed 'Graphics\PixelShader.h'
+  Parsed 'Graphics\PngReader.h'
+  Parsed 'Graphics\VertexBuffer.h'
+  Parsed 'Graphics\IndexBuffer.h'
+  Parsed 'Input\Camera.h'
+  Parsed 'Input\GamePad.h'
+  Parsed 'Input\Keyboard.h'
+  Parsed 'Input\Mouse.h'
+  Parsed 'Media\Song.h'
+  Parsed 'Media\VideoPlayer.h'
+  Parsed 'Network\NpCommerce.h'
+  Parsed 'Network\NpCommerceDialog.h'
+  Parsed 'Network\NpScore.h'
+  Parsed 'Network\TitleSmallStorage.h'
+  Parsed 'Network\TitleUserStorage.h'
+  Parsed 'Network\TrophySet.h'
+  Parsed 'Network\NetCtl.h'
+  Parsed 'System\AppContent.h'
+  Parsed 'System\PlayGo.h'
+  Parsed 'System\RemotePlay.h'
+  Parsed 'System\SystemService.h'
+  Parsed 'System\UserService.h'
+  Parsed 'System\SaveData.h'
+  Parsed 'System\SaveDataDirNameSearch.h'
+  Parsed 'System\NpProfileDialog.h'
+  Parsed 'System\WebBrowserDialog.h'
+  Parsed 'System\ErrorDialog.h'
+  Parsed 'System\MsgDialog.h'
+  Parsed 'System\ImeDialog.h'
+  Parsed 'System\SaveDataDialog.h'
+  Parsed 'System\ScreenShot.h'
+  Parsed 'System\VideoRecording.h'
+  Parsed 'System\Rtc.h'
+  Processing code...
+  Generating code...
+  Generated 'Game.cs'
+  Generated 'common.cs'
+  Generated 'AudioBuffer.cs'
+  Generated 'common.cs'
+  Generated 'SamplerVoice.cs'
+  Generated 'SoundSystem.cs'
+  Generated 'RenderTarget.cs'
+  Generated 'common.cs'
+  Generated 'texture.cs'
+  Generated 'graphicsEnums.cs'
+  Generated 'GraphicsSystem.cs'
+  Generated 'VertexShader.cs'
+  Generated 'FetchShader.cs'
+  Generated 'PixelShader.cs'
+  Generated 'PngReader.cs'
+  Generated 'VertexBuffer.cs'
+  Generated 'IndexBuffer.cs'
+  Generated 'Camera.cs'
+  Generated 'common.cs'
+  Generated 'GamePad.cs'
+  Generated 'Keyboard.cs'
+  Generated 'Mouse.cs'
+  Generated 'Song.cs'
+  Generated 'common.cs'
+  Generated 'VideoPlayer.cs'
+  Generated 'NpCommerce.cs'
+  Generated 'common.cs'
+  Generated 'NpCommerceDialog.cs'
+  Generated 'NpScore.cs'
+  Generated 'np.cs'
+  Generated 'TitleSmallStorage.cs'
+  Generated 'TitleUserStorage.cs'
+  Generated 'TrophySet.cs'
+  Generated 'NetCtl.cs'
+  Generated 'AppContent.cs'
+  Generated 'common.cs'
+  Generated 'PlayGo.cs'
+  Generated 'RemotePlay.cs'
+  Generated 'SystemService.cs'
+  Generated 'UserService.cs'
+  Generated 'SaveData.cs'
+  Generated 'threadPrio.cs'
+  Generated 'SaveDataDirNameSearch.cs'
+  Generated 'NpProfileDialog.cs'
+  Generated 'commonDialog.cs'
+  Generated 'WebBrowserDialog.cs'
+  Generated 'ErrorDialog.cs'
+  Generated 'MsgDialog.cs'
+  Generated 'ImeDialog.cs'
+  Generated 'SaveDataDialog.cs'
+  Generated 'ScreenShot.cs'
+  Generated 'VideoRecording.cs'
+  Generated 'Rtc.cs'

@@ -1,0 +1,19 @@
+﻿  Stdafx.cpp
+  AssemblyInfo.cpp
+c:\users\kevin\documents\github\jetsnguns2_allplatforms\jng2_ps4\monogame\thirdparty\sony\sceplaystation4tools\assemblyinfo.cpp(40): warning C4947: 'System::Security::Permissions::SecurityAction::RequestMinimum': marked as obsolete
+  c:\users\kevin\documents\github\jetsnguns2_allplatforms\jng2_ps4\monogame\thirdparty\sony\sceplaystation4tools\assemblyinfo.cpp(40): note: Message: 'Assembly level declarative security is obsolete and is no longer enforced by the CLR by default. See http://go.microsoft.com/fwlink/?LinkID=155570 for more information.'
+  scePlayStation4Tools.cpp
+  ShaderCompiler.cpp
+c:\users\kevin\documents\github\jetsnguns2_allplatforms\jng2_ps4\monogame\thirdparty\sony\sceplaystation4tools\shadercompiler.cpp(105): warning C4267: '=': conversion from 'size_t' to 'uint32_t', possible loss of data
+c:\users\kevin\documents\github\jetsnguns2_allplatforms\jng2_ps4\monogame\thirdparty\sony\sceplaystation4tools\shadercompiler.cpp(229): warning C4018: '>=': signed/unsigned mismatch
+c:\users\kevin\documents\github\jetsnguns2_allplatforms\jng2_ps4\monogame\thirdparty\sony\sceplaystation4tools\shadercompiler.cpp(255): warning C4018: '>=': signed/unsigned mismatch
+  TextureTools.cpp
+c:\users\kevin\documents\github\jetsnguns2_allplatforms\jng2_ps4\monogame\thirdparty\sony\sceplaystation4tools\texturetools.cpp(64): warning C4244: 'argument': conversion from 'uint64_t' to 'int', possible loss of data
+c:\users\kevin\documents\github\jetsnguns2_allplatforms\jng2_ps4\monogame\thirdparty\sony\sceplaystation4tools\texturetools.cpp(67): warning C4244: 'argument': conversion from 'uint64_t' to 'uint32_t', possible loss of data
+c:\users\kevin\documents\github\jetsnguns2_allplatforms\jng2_ps4\monogame\thirdparty\sony\sceplaystation4tools\texturetools.cpp(33): warning C4996: 'sce::Gnm::Texture::initAs2d': API has changed.
+  c:\program files (x86)\sce\orbis sdks\10.000\target\include_common\gnm\texture.h(189): note: see declaration of 'sce::Gnm::Texture::initAs2d'
+  Generating Code...
+  .NETFramework,Version=v4.0,Profile=Client.AssemblyAttributes.cpp
+  AssemblyInfo.obj : /DEBUG:FASTLINK is not supported when managed code is present; restarting link with /DEBUG:FULL
+  AssemblyInfo.obj : MSIL module encountered; incremental linking is disabled for MSIL; performing full link
+  scePlayStation4Tools.vcxproj -> C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\scePlayStation4Tools\\bin\x64\Debug\scePlayStation4Tools.dll

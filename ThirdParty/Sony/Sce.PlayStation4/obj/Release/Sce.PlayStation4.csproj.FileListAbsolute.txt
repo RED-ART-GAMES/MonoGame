@@ -1,0 +1,6 @@
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\Sce.PlayStation4\bin\Release\scePlayStation4.prx
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\Sce.PlayStation4\bin\Release\Sce.PlayStation4.dll
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\Sce.PlayStation4\bin\Release\Sce.PlayStation4.pdb
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\Sce.PlayStation4\obj\Release\Sce.PlayStation4.csproj.CoreCompileInputs.cache
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\Sce.PlayStation4\obj\Release\Sce.PlayStation4.dll
+C:\Users\Kevin\Documents\GitHub\JetsNGuns2_AllPlatforms\jng2_ps4\MonoGame\ThirdParty\Sony\Sce.PlayStation4\obj\Release\Sce.PlayStation4.pdb

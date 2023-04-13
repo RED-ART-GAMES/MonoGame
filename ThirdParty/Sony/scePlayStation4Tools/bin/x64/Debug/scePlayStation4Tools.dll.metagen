@@ -1,0 +1,326 @@
+ImageRuntimeVersion: v4.0.30319
+Assembly scePlayStation4Tools, Version=1.0.*, Culture=Invariant Language (Invariant Country): 
+	hash=SHA1, flags=PublicKey
+Assembly mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=None, flags=None
+Assembly System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=None, flags=None
+Assembly System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=None, flags=None
+Assembly System.Xml, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=None, flags=None
+Class sce.PlayStation4.Tools.ElementDesc: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+    Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Fields:
+    System.String Name : Public
+    sce.PlayStation4.Tools.ElementType Type : Public
+    System.String TypeName : Public
+    Byte[] DefaultValue : Public
+    Int32 ArraySize : Public
+    Int32 OffsetInBytes : Public
+    Int32 SizeInBytes : Public
+Class sce.PlayStation4.Tools.BufferDesc: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+    Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Fields:
+    sce.PlayStation4.Tools.BufferType Type : Public
+    System.String Name : Public
+    Int32 Index : Public
+    Int32 ElementCount : Public
+    Int32 StrideSize : Public
+  Methods:
+    GetElement(Int32): PrivateScope, Public, HideBySig
+Class sce.PlayStation4.Tools.SamplerDesc: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+    Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Fields:
+    System.String Name : Public
+    Int32 Index : Public
+Class sce.PlayStation4.Tools.AttributeDesc: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+    Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Fields:
+    System.String Name : Public
+    System.String SemanticName : Public
+    Int32 SemanticIndex : Public
+    sce.PlayStation4.Tools.SemanticUsage Usage : Public
+Class sce.PlayStation4.Tools.ShaderCompiler: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+    Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Properties:
+    Byte[] ShaderDebugData 'get ' : 
+    Byte[] Bytecode 'get ' : 
+    Int32 BufferCount 'get ' : 
+    Int32 SamplerCount 'get ' : 
+    Int32 AttributeCount 'get ' : 
+  Methods:
+    Compile(String, String, String, String, Boolean(HasFieldMarshal), String&(Out)): PrivateScope, Public, HideBySig
+    Reflect(Byte[]): PrivateScope, Public, HideBySig
+    Strip(): PrivateScope, Public, HideBySig
+    GetBufferDesc(Int32): PrivateScope, Public, HideBySig
+    GetSamplerDesc(Int32): PrivateScope, Public, HideBySig
+    GetAttributeDesc(Int32): PrivateScope, Public, HideBySig
+    get_AttributeCount(): PrivateScope, Public, HideBySig, SpecialName
+    get_SamplerCount(): PrivateScope, Public, HideBySig, SpecialName
+    get_BufferCount(): PrivateScope, Public, HideBySig, SpecialName
+    get_Bytecode(): PrivateScope, Public, HideBySig, SpecialName
+    get_ShaderDebugData(): PrivateScope, Public, HideBySig, SpecialName
+Struct sce.PlayStation4.Tools.BufferType: AutoLayout, AnsiClass, Class, Public, Sealed, BeforeFieldInit
+  :System.Enum
+  Fields:
+    Int32 value__ : Public, SpecialName, RTSpecialName
+    sce.PlayStation4.Tools.BufferType DataBuffer = 0 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.BufferType Texture1d = 1 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.BufferType Texture2d = 2 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.BufferType Texture3d = 3 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.BufferType TextureCube = 4 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.BufferType Texture1dArray = 5 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.BufferType Texture2dArray = 6 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.BufferType TextureCubeArray = 7 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.BufferType MsTexture2d = 8 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.BufferType MsTexture2dArray = 9 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.BufferType RegularBuffer = 10 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.BufferType ByteBuffer = 11 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.BufferType RwDataBuffer = 12 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.BufferType RwTexture1d = 13 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.BufferType RwTexture2d = 14 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.BufferType RwTexture3d = 15 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.BufferType RwTexture1dArray = 16 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.BufferType RwTexture2dArray = 17 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.BufferType RwRegularBuffer = 18 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.BufferType RwByteBuffer = 19 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.BufferType AppendBuffer = 20 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.BufferType ConsumeBuffer = 21 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.BufferType ConstantBuffer = 22 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.BufferType TextureBuffer = 23 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.BufferType PointBuffer = 24 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.BufferType LineBuffer = 25 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.BufferType TriangleBuffer = 26 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.BufferType SRTBuffer = 27 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.BufferType BufferTypeLast = 28 : Public, Static, Literal, HasDefault
+Struct sce.PlayStation4.Tools.ElementType: AutoLayout, AnsiClass, Class, Public, Sealed, BeforeFieldInit
+  :System.Enum
+  Fields:
+    Int32 value__ : Public, SpecialName, RTSpecialName
+    sce.PlayStation4.Tools.ElementType Float1 = 0 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Float2 = 1 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Float3 = 2 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Float4 = 3 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Half1 = 4 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Half2 = 5 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Half3 = 6 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Half4 = 7 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Int1 = 8 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Int2 = 9 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Int3 = 10 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Int4 = 11 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Uint1 = 12 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Uint2 = 13 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Uint3 = 14 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Uint4 = 15 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Double1 = 16 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Double2 = 17 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Double3 = 18 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Double4 = 19 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Float1x1 = 20 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Float2x1 = 21 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Float3x1 = 22 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Float4x1 = 23 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Float1x2 = 24 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Float2x2 = 25 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Float3x2 = 26 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Float4x2 = 27 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Float1x3 = 28 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Float2x3 = 29 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Float3x3 = 30 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Float4x3 = 31 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Float1x4 = 32 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Float2x4 = 33 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Float3x4 = 34 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Float4x4 = 35 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Half1x1 = 36 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Half2x1 = 37 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Half3x1 = 38 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Half4x1 = 39 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Half1x2 = 40 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Half2x2 = 41 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Half3x2 = 42 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Half4x2 = 43 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Half1x3 = 44 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Half2x3 = 45 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Half3x3 = 46 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Half4x3 = 47 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Half1x4 = 48 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Half2x4 = 49 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Half3x4 = 50 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Half4x4 = 51 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Int1x1 = 52 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Int2x1 = 53 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Int3x1 = 54 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Int4x1 = 55 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Int1x2 = 56 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Int2x2 = 57 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Int3x2 = 58 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Int4x2 = 59 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Int1x3 = 60 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Int2x3 = 61 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Int3x3 = 62 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Int4x3 = 63 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Int1x4 = 64 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Int2x4 = 65 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Int3x4 = 66 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Int4x4 = 67 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Uint1x1 = 68 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Uint2x1 = 69 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Uint3x1 = 70 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Uint4x1 = 71 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Uint1x2 = 72 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Uint2x2 = 73 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Uint3x2 = 74 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Uint4x2 = 75 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Uint1x3 = 76 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Uint2x3 = 77 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Uint3x3 = 78 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Uint4x3 = 79 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Uint1x4 = 80 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Uint2x4 = 81 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Uint3x4 = 82 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Uint4x4 = 83 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Double1x1 = 84 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Double2x1 = 85 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Double3x1 = 86 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Double4x1 = 87 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Double1x2 = 88 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Double2x2 = 89 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Double3x2 = 90 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Double4x2 = 91 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Double1x3 = 92 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Double2x3 = 93 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Double3x3 = 94 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Double4x3 = 95 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Double1x4 = 96 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Double2x4 = 97 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Double3x4 = 98 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Double4x4 = 99 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Point = 100 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Line = 101 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Triangle = 102 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Adjacentline = 103 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Adjacenttriangle = 104 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Patch = 105 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Structure = 106 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Long1 = 107 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Long2 = 108 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Long3 = 109 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Long4 = 110 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Ulong1 = 111 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Ulong2 = 112 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Ulong3 = 113 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Ulong4 = 114 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Long1x1 = 115 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Long2x1 = 116 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Long3x1 = 117 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Long4x1 = 118 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Long1x2 = 119 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Long2x2 = 120 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Long3x2 = 121 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Long4x2 = 122 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Long1x3 = 123 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Long2x3 = 124 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Long3x3 = 125 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Long4x3 = 126 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Long1x4 = 127 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Long2x4 = 128 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Long3x4 = 129 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Long4x4 = 130 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Ulong1x1 = 131 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Ulong2x1 = 132 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Ulong3x1 = 133 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Ulong4x1 = 134 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Ulong1x2 = 135 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Ulong2x2 = 136 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Ulong3x2 = 137 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Ulong4x2 = 138 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Ulong1x3 = 139 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Ulong2x3 = 140 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Ulong3x3 = 141 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Ulong4x3 = 142 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Ulong1x4 = 143 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Ulong2x4 = 144 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Ulong3x4 = 145 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Ulong4x4 = 146 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Bool1 = 147 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Bool2 = 148 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Bool3 = 149 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Bool4 = 150 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Texture = 151 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType SamplerState = 152 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType Buffer = 153 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.ElementType TypeEnd = 154 : Public, Static, Literal, HasDefault
+Struct sce.PlayStation4.Tools.SemanticUsage: AutoLayout, AnsiClass, Class, Public, Sealed, BeforeFieldInit
+  :System.Enum
+  Fields:
+    Int32 value__ : Public, SpecialName, RTSpecialName
+    sce.PlayStation4.Tools.SemanticUsage Position = 0 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.SemanticUsage Normal = 1 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.SemanticUsage Color = 2 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.SemanticUsage Binormal = 3 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.SemanticUsage Tangent = 4 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.SemanticUsage Texcoord0 = 5 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.SemanticUsage Texcoord1 = 6 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.SemanticUsage Texcoord2 = 7 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.SemanticUsage Texcoord3 = 8 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.SemanticUsage Texcoord4 = 9 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.SemanticUsage Texcoord5 = 10 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.SemanticUsage Texcoord6 = 11 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.SemanticUsage Texcoord7 = 12 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.SemanticUsage Texcoord8 = 13 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.SemanticUsage Texcoord9 = 14 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.SemanticUsage TexcoordEnd = 15 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.SemanticUsage Implicit = 16 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.SemanticUsage Nonreferencable = 17 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.SemanticUsage Clip = 18 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.SemanticUsage Fog = 19 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.SemanticUsage Pointsize = 20 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.SemanticUsage Fragcoord = 21 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.SemanticUsage Target0 = 22 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.SemanticUsage Target1 = 23 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.SemanticUsage Target2 = 24 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.SemanticUsage Target3 = 25 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.SemanticUsage Target4 = 26 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.SemanticUsage Target5 = 27 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.SemanticUsage Target6 = 28 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.SemanticUsage Target7 = 29 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.SemanticUsage Target8 = 30 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.SemanticUsage Target9 = 31 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.SemanticUsage Target10 = 32 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.SemanticUsage Target11 = 33 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.SemanticUsage Depth = 34 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.SemanticUsage Lastcg = 35 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.SemanticUsage UserDefined = 36 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.SemanticUsage SClipDistance = 37 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.SemanticUsage SCullDistance = 38 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.SemanticUsage SCoverage = 39 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.SemanticUsage SDepthOutput = 40 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.SemanticUsage SDispatchthreadId = 41 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.SemanticUsage SDomainLocation = 42 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.SemanticUsage SGroupId = 43 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.SemanticUsage SGroupIndex = 44 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.SemanticUsage SGroupThreadId = 45 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.SemanticUsage SPosition = 46 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.SemanticUsage SVertexId = 47 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.SemanticUsage SInstanceId = 48 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.SemanticUsage SSampleIndex = 49 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.SemanticUsage SPrimitiveId = 50 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.SemanticUsage SGsinstanceId = 51 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.SemanticUsage SOutputControlPointId = 52 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.SemanticUsage SFrontFace = 53 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.SemanticUsage SRenderTargetIndex = 54 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.SemanticUsage SViewportIndex = 55 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.SemanticUsage STargetOutput = 56 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.SemanticUsage SEdgeTessFactor = 57 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.SemanticUsage SInsideTessFactor = 58 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.SemanticUsage SpriteCoord = 59 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.SemanticUsage SDepthGEOutput = 60 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.SemanticUsage SDepthLEOutput = 61 : Public, Static, Literal, HasDefault
+    sce.PlayStation4.Tools.SemanticUsage SemanticEnd = 62 : Public, Static, Literal, HasDefault
+Class sce.PlayStation4.Tools.TextureTools: AutoLayout, AnsiClass, Class, Public, Abstract, BeforeFieldInit
+    Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Methods:
+    CompressImage2D(Int32, Int32, Int32, Int32, Boolean(HasFieldMarshal), Byte[]): PrivateScope, Public, Static, HideBySig

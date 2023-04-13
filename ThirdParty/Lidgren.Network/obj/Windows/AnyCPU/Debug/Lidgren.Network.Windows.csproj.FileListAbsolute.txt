@@ -1,0 +1,7 @@
+C:\Users\Kevin\Documents\GitHub\MonoGame.PS4\ThirdParty\Lidgren.Network\bin\Windows\AnyCPU\Debug\Lidgren.Network.xml
+C:\Users\Kevin\Documents\GitHub\MonoGame.PS4\ThirdParty\Lidgren.Network\bin\Windows\AnyCPU\Debug\Lidgren.Network.dll
+C:\Users\Kevin\Documents\GitHub\MonoGame.PS4\ThirdParty\Lidgren.Network\bin\Windows\AnyCPU\Debug\Lidgren.Network.pdb
+C:\Users\Kevin\Documents\GitHub\MonoGame.PS4\ThirdParty\Lidgren.Network\obj\Windows\AnyCPU\Debug\Lidgren.Network.Windows.csproj.AssemblyReference.cache
+C:\Users\Kevin\Documents\GitHub\MonoGame.PS4\ThirdParty\Lidgren.Network\obj\Windows\AnyCPU\Debug\Lidgren.Network.Windows.csproj.CoreCompileInputs.cache
+C:\Users\Kevin\Documents\GitHub\MonoGame.PS4\ThirdParty\Lidgren.Network\obj\Windows\AnyCPU\Debug\Lidgren.Network.dll
+C:\Users\Kevin\Documents\GitHub\MonoGame.PS4\ThirdParty\Lidgren.Network\obj\Windows\AnyCPU\Debug\Lidgren.Network.pdb

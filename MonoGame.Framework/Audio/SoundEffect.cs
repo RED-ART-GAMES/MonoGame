@@ -167,7 +167,7 @@ namespace Microsoft.Xna.Framework.Audio
             if (count <= 0)
                 throw new ArgumentException("Ensure that the count is greater than zero.", "count");
             if ((count % blockAlign) != 0)
-                throw new ArgumentException("Ensure that the count meets the block alignment requirements for the number of channels.", "count");
+                throw new ArgumentException($"Ensure that the count meets the block alignment requirements for the number of channels. {count} / {blockAlign}", "count");
 
             if (offset < 0)
                 throw new ArgumentException("The offset cannot be negative.", "offset");
