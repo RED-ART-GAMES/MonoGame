@@ -48,6 +48,8 @@ using Sce.PlayStation4.System;
 
 using System.Runtime.InteropServices;
 
+using System.Collections.Generic;
+
 #if WINDOWS_STOREAPP
 using Windows.Storage;
 using System.Linq;
@@ -108,7 +110,11 @@ namespace Microsoft.Xna.Framework.Storage
         private static string _titleId;
         private static string _fingerprint;
         private static ulong _blocks;
+        public bool _mounted = false;
+        public SaveDataMountMode _lastMountMode;
         private SaveData sd;
+
+        public static List<StorageContainer> _containers = new List<StorageContainer>();
 
         public static void Init(string titleId, string fingerprint, ulong blocks = 96)
         {
@@ -117,9 +123,28 @@ namespace Microsoft.Xna.Framework.Storage
             _blocks = blocks;
         }
 
+        StorageContainer()
+        {
+            _containers.Add(this);
+        }
+
         ~StorageContainer()
         {
             sd.Unmount(true);
+        }
+
+        public static void Update()
+        {
+            if (_containers.Count != 0)
+            {
+                foreach (var container in _containers)
+                {
+                    if (container._mounted && container._lastMountMode != SaveDataMountMode.ReadOnly)
+                    {
+                        container.Unmount();
+                    }
+                }
+            }
         }
 
         private SaveDataResult Mount(SaveDataMountMode mode)
@@ -144,6 +169,8 @@ namespace Microsoft.Xna.Framework.Storage
                         System.Threading.Thread.Sleep(50);
                         goto retry;
                     case SaveDataResult.Ok:
+                        _mounted = true;
+                        _lastMountMode = mode;
                         break;
                     default:
                         throw new SystemException($"SaveData Mount failed: {res}");
@@ -154,8 +181,9 @@ namespace Microsoft.Xna.Framework.Storage
 
         private SaveDataResult Unmount()
         {
-            retry:
+        retry:
             var res = sd.Unmount(true);
+            _mounted = false;
             unsafe
             {
                 switch (res)
@@ -185,12 +213,14 @@ namespace Microsoft.Xna.Framework.Storage
         {
             unsafe
             {
-                Mount(SaveDataMountMode.ReadWrite);
+                if (!_mounted || _lastMountMode != SaveDataMountMode.ReadWrite)
+                {
+                    if (_mounted) Unmount();
+                    Mount(SaveDataMountMode.ReadWrite);
+                }
                 var arg0 = Marshal.StringToHGlobalAnsi(content);
-                Console.WriteLine($"Arg0: {(ulong)content.Length}");
                 var ret = sd.Write(filePath, arg0.ToPointer(), ((ulong)content.Length + 1));
                 Marshal.FreeHGlobal(arg0);
-                Unmount();
                 return ret;
             }
         }
@@ -200,7 +230,8 @@ namespace Microsoft.Xna.Framework.Storage
             unsafe
             {
                 content = "";
-                Mount(SaveDataMountMode.ReadOnly);
+                if (!_mounted)
+                    Mount(SaveDataMountMode.ReadOnly);
                 var cnt = sd.Read(filePath);
                 if (cnt == null)
                 {
@@ -210,7 +241,6 @@ namespace Microsoft.Xna.Framework.Storage
                 }
                 content = Marshal.PtrToStringAnsi((IntPtr)cnt);
                 sd.FreeRead(cnt);
-                Unmount();
                 return true;
             }
         }
@@ -380,27 +410,35 @@ namespace Microsoft.Xna.Framework.Storage
 		{
 			if (string.IsNullOrEmpty(file))
 				throw new ArgumentNullException("Parameter file must contain a value.");
-			
-			// relative so combine with our path
-			var filePath= Path.Combine(_storagePath, file);
+
+            // relative so combine with our path
 
 #if WINDOWS_STOREAPP
+			var filePath= Path.Combine(_storagePath, file);
             var folder = ApplicationData.Current.LocalFolder;
             var deleteFile = folder.GetFileAsync(filePath).AsTask().GetAwaiter().GetResult();
             deleteFile.DeleteAsync().AsTask().Wait();
+#elif PLAYSTATION4
+            if (!_mounted || _lastMountMode != SaveDataMountMode.ReadWrite)
+            {
+                if (_mounted) Unmount();
+                Mount(SaveDataMountMode.ReadWrite);
+            }
+            sd.DeleteFile(file);
 #else
             // Now let's try to delete it
-			File.Delete(filePath);		
+			var filePath= Path.Combine(_storagePath, file);
+            File.Delete(filePath);		
 #endif
         }
-				
+
 
         /// <summary>
         /// Returns true if specified path exists in the storage-container, false otherwise.
         /// </summary>
         /// <param name="directory">The relative path of directory to query for.</param>
         /// <returns>True if queried directory exists, false otherwise.</returns>
-		public bool DirectoryExists (string directory)
+        public bool DirectoryExists (string directory)
 		{
 			if (string.IsNullOrEmpty(directory))
 				throw new ArgumentNullException("Parameter directory must contain a value.");
@@ -448,9 +486,8 @@ namespace Microsoft.Xna.Framework.Storage
 #if PLAYSTATION4
             unsafe
             {
-                Mount(SaveDataMountMode.ReadOnly);
+                if (!_mounted) Mount(SaveDataMountMode.ReadOnly);
                 var ret = sd.FileExists(file);
-                Unmount();
                 return ret;
             }
 #endif

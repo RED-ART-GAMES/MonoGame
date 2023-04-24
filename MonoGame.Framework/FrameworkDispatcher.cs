@@ -34,6 +34,7 @@ namespace Microsoft.Xna.Framework
             DynamicSoundEffectInstanceManager.UpdatePlayingInstances();
             SoundEffectInstancePool.Update();
             Microphone.UpdateMicrophones();
+            Storage.StorageContainer.Update();
         }
 
         private static void Initialize()

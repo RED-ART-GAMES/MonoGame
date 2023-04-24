@@ -21,6 +21,14 @@ namespace Microsoft.Xna.Framework.Audio
         private float _volume;
         private float _pitch;
 
+#if PLAYSTATION4
+        public bool xAct
+        {
+            get { return _isXAct; }
+            set { _isXAct = value; }
+        }
+#endif
+
         /// <summary>Enables or Disables whether the SoundEffectInstance should repeat after playback.</summary>
         /// <remarks>This value has no effect on an already playing sound.</remarks>
         public virtual bool IsLooped
@@ -109,6 +117,7 @@ namespace Microsoft.Xna.Framework.Audio
         /// </summary>
         ~SoundEffectInstance()
         {
+            Console.WriteLine("Disposing SoundEffectInstance");
             Dispose(false);
         }
 

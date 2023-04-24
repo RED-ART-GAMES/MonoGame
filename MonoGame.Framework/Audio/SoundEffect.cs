@@ -430,7 +430,11 @@ namespace Microsoft.Xna.Framework.Audio
             set
             {
                 if (value < 0.0f || value > 1.0f)
+#if PLAYSTATION4
+                    value *= 0.01f;
+#else
                     throw new ArgumentOutOfRangeException();
+#endif
 
                 if (_masterVolume == value)
                     return;
@@ -502,9 +506,9 @@ namespace Microsoft.Xna.Framework.Audio
             }
         }
 
-        #endregion
+#endregion
 
-        #region IDisposable Members
+#region IDisposable Members
 
         /// <summary>Indicates whether the object is disposed.</summary>
         public bool IsDisposed { get { return _isDisposed; } }
@@ -535,7 +539,7 @@ namespace Microsoft.Xna.Framework.Audio
             }
         }
 
-        #endregion
+#endregion
 
     }
 }
