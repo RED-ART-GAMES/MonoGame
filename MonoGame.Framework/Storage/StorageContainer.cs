@@ -123,11 +123,6 @@ namespace Microsoft.Xna.Framework.Storage
             _blocks = blocks;
         }
 
-        StorageContainer()
-        {
-            _containers.Add(this);
-        }
-
         ~StorageContainer()
         {
             sd.Unmount(true);
@@ -266,6 +261,7 @@ namespace Microsoft.Xna.Framework.Storage
             sd = new SaveData(UserService.GetUserByPlayerIndex((playerIndex.HasValue ? (int)playerIndex.Value : 0)), _titleId, name, _fingerprint);
             Mount(SaveDataMountMode.Create2 | SaveDataMountMode.CopyIcon);
             Unmount();
+            _containers.Add(this);
             return;
 #endif
 
