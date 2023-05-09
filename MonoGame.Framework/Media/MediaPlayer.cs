@@ -26,6 +26,15 @@ namespace Microsoft.Xna.Framework.Media
             PlatformInitialize();
         }
 
+        static public void Update()
+        {
+            if (callbackToCall)
+            {
+                callbackToCall = false;
+                OnSongFinishedPlaying(null, null);
+            }
+        }
+
         #region Properties
 
         public static MediaQueue Queue { get { return _queue; } }
@@ -176,6 +185,12 @@ namespace Microsoft.Xna.Framework.Media
 
 			MoveNext();
 		}
+
+        static private bool callbackToCall = false;
+        internal static void OnSongFinishedPlaying2(object sender, EventArgs args)
+        {
+            callbackToCall = true;
+        }
 
         public static void Resume()
         {
