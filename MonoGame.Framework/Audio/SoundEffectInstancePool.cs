@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace Microsoft.Xna.Framework.Audio
 {
-    internal static class SoundEffectInstancePool
+    public static class SoundEffectInstancePool
     {
         public static readonly List<SoundEffectInstance> _playingInstances;
         public static readonly List<SoundEffectInstance> _pooledInstances;
@@ -191,7 +191,32 @@ namespace Microsoft.Xna.Framework.Audio
                 inst.Volume = inst.Volume;
             }
         }
-
         } // lock (_locker)
+
+#if PLAYSTATION4
+        public static void PauseAll()
+        {
+            foreach (var inst in _playingInstances)
+            {
+                inst.Pause();
+            }
+        }
+
+        public static void ResumeAll()
+        {
+            foreach (var inst in _playingInstances)
+            {
+                inst.Resume();
+            }
+        }
+
+        public static void StopAll()
+        {
+            foreach (var inst in _playingInstances)
+            {
+                inst.Stop();
+            }
+        }
+#endif
     }
 }
