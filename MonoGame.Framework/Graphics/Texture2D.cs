@@ -397,10 +397,10 @@ namespace Microsoft.Xna.Framework.Graphics
             checkedRect = rect ?? textureBounds;
             if (level < 0 || level >= LevelCount)
                 throw new ArgumentException("level must be smaller than the number of levels in this texture.", "level");
-            if (arraySlice > 0 && !GraphicsDevice.GraphicsCapabilities.SupportsTextureArrays)
-                throw new ArgumentException("Texture arrays are not supported on this graphics device", "arraySlice");
-            if (arraySlice < 0 || arraySlice >= ArraySize)
-                throw new ArgumentException("arraySlice must be smaller than the ArraySize of this texture and larger than 0.", "arraySlice");
+           // if (arraySlice > 0 && !GraphicsDevice.GraphicsCapabilities.SupportsTextureArrays)
+           //     throw new ArgumentException("Texture arrays are not supported on this graphics device", "arraySlice");
+           // if (arraySlice < 0 || arraySlice >= ArraySize)
+           //     throw new ArgumentException("arraySlice must be smaller than the ArraySize of this texture and larger than 0.", "arraySlice");
             if (!textureBounds.Contains(checkedRect) || checkedRect.Width <= 0 || checkedRect.Height <= 0)
                 throw new ArgumentException("Rectangle must be inside the texture bounds", "rect");
             if (data == null)
