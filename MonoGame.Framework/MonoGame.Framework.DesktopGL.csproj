@@ -141,6 +141,12 @@
     <Content Include="MonoGame.Framework.DesktopGL.targets" PackagePath="build" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="Sce.PlayStation5">
+      <HintPath>..\PS5\Sce.PlayStation5\bin\Release\Sce.PlayStation5.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
   <Import Project="Platform\OpenGL.targets" />
   <Import Project="Platform\OpenAL.targets" />
 </Project>

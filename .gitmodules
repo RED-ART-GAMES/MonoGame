@@ -2,3 +2,6 @@
 	path = PS4
 	url = git@github.com:RED-ART-GAMES/MonoGame.PS4.git
 	branch = brute
+[submodule "PS5"]
+	path = PS5
+	url = git@github.com:RED-ART-GAMES/MonoGamePS5.git

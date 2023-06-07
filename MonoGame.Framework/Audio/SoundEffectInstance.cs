@@ -21,7 +21,7 @@ namespace Microsoft.Xna.Framework.Audio
         private float _volume;
         private float _pitch;
 
-#if PLAYSTATION4
+#if PLAYSTATION5
         public bool xAct
         {
             get { return _isXAct; }

@@ -430,7 +430,7 @@ namespace Microsoft.Xna.Framework.Audio
             set
             {
                 if (value < 0.0f || value > 1.0f)
-#if PLAYSTATION4
+#if PLAYSTATION5
                     value *= 0.01f;
 #else
                     throw new ArgumentOutOfRangeException();

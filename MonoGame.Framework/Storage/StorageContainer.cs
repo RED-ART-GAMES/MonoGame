@@ -44,7 +44,7 @@ purpose and non-infringement.
 using Microsoft.Xna.Framework;
 using System;
 using System.IO;
-using Sce.PlayStation4.System;
+using Sce.PlayStation5.System;
 
 using System.Runtime.InteropServices;
 
@@ -106,7 +106,7 @@ namespace Microsoft.Xna.Framework.Storage
 		private readonly StorageDevice _device;
 		private readonly string _name;
 
-#if PLAYSTATION4
+#if PLAYSTATION5
         private static string _titleId;
         private static string _fingerprint;
         private static ulong _blocks;
@@ -184,11 +184,11 @@ namespace Microsoft.Xna.Framework.Storage
                 switch (res)
                 {
                     case SaveDataResult.ErrorBroken:
-                        var resd = PS4GamePlatform.saveDataDialog.OpenSystemMsg(((int)SaveDataDialogType.Save), sd, ((int)SaveDataDialogSysMsg.FileCorrupted), 0, null, 0);
+                        var resd = PS5GamePlatform.saveDataDialog.OpenSystemMsg(((int)SaveDataDialogType.Save), sd, ((int)SaveDataDialogSysMsg.FileCorrupted), 0, null, 0);
                         Console.WriteLine($"Broken: {resd}");
                         break;
                     case SaveDataResult.ErrorOutOfMemory:
-                        var resde = PS4GamePlatform.saveDataDialog.OpenSystemMsg(((int)SaveDataDialogType.Save), sd, ((int)SaveDataDialogSysMsg.NoSpace), _blocks, null, 0);
+                        var resde = PS5GamePlatform.saveDataDialog.OpenSystemMsg(((int)SaveDataDialogType.Save), sd, ((int)SaveDataDialogSysMsg.NoSpace), _blocks, null, 0);
                         Console.WriteLine($"Out of memory: {resde}");
                         break;
                     case SaveDataResult.ErrorBackupBusy:
@@ -208,10 +208,10 @@ namespace Microsoft.Xna.Framework.Storage
         {
             unsafe
             {
-                if (!_mounted || _lastMountMode != SaveDataMountMode.ReadWrite)
+                if (!_mounted || _lastMountMode != SaveDataMountMode.Create2)
                 {
                     if (_mounted) Unmount();
-                    Mount(SaveDataMountMode.ReadWrite);
+                    Mount(SaveDataMountMode.Create2);
                 }
                 var arg0 = Marshal.StringToHGlobalAnsi(content);
                 var ret = sd.Write(filePath, arg0.ToPointer(), ((ulong)content.Length + 1));
@@ -255,7 +255,7 @@ namespace Microsoft.Xna.Framework.Storage
 			_device = device;
 			_name = name;
 
-#if PLAYSTATION4
+#if PLAYSTATION5
             if (string.IsNullOrEmpty(_fingerprint) || string.IsNullOrEmpty(_titleId))
                 throw new InvalidOperationException("StorageContainer/SaveData not initialized with fingerprint and title id.");
             sd = new SaveData(UserService.GetUserByPlayerIndex((playerIndex.HasValue ? (int)playerIndex.Value : 0)), _titleId, name, _fingerprint);
@@ -414,11 +414,11 @@ namespace Microsoft.Xna.Framework.Storage
             var folder = ApplicationData.Current.LocalFolder;
             var deleteFile = folder.GetFileAsync(filePath).AsTask().GetAwaiter().GetResult();
             deleteFile.DeleteAsync().AsTask().Wait();
-#elif PLAYSTATION4
-            if (!_mounted || _lastMountMode != SaveDataMountMode.ReadWrite)
+#elif PLAYSTATION5
+            if (!_mounted || _lastMountMode != SaveDataMountMode.Create2)
             {
                 if (_mounted) Unmount();
-                Mount(SaveDataMountMode.ReadWrite);
+                Mount(SaveDataMountMode.Create2);
             }
             sd.DeleteFile(file);
 #else
@@ -479,7 +479,7 @@ namespace Microsoft.Xna.Framework.Storage
 			if (string.IsNullOrEmpty(file))
 				throw new ArgumentNullException("Parameter file must contain a value.");
 
-#if PLAYSTATION4
+#if PLAYSTATION5
             unsafe
             {
                 if (!_mounted) Mount(SaveDataMountMode.ReadOnly);

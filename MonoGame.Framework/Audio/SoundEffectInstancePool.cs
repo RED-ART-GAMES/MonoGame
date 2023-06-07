@@ -193,7 +193,7 @@ namespace Microsoft.Xna.Framework.Audio
         }
         } // lock (_locker)
 
-#if PLAYSTATION4
+#if PLAYSTATION5
         public static void PauseAll()
         {
             foreach (var inst in _playingInstances)
